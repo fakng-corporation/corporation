@@ -10,4 +10,8 @@ public class TestController {
     public String getUser() {
         return "Vlad Mishustin";
     }
+
+    private void greet() {
+        System.out.println("Hello");
+    }
 }
