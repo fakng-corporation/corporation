@@ -1,14 +1,4 @@
 CREATE TABLE skill (
-    id int GENERATED ALWAYS AS IDENTITY UNIQUE,
-    title varchar(30)
+    id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY UNIQUE,
+    title varchar(32) UNIQUE NOT NULL
 );
-
-INSERT INTO skill(title)
-VALUES
-    ('java'),
-    ('javascript'),
-    ('postgresql'),
-    ('monogodb'),
-    ('git'),
-    ('maven'),
-    ('junit');

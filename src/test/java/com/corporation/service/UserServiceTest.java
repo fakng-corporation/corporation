@@ -1,32 +1,31 @@
-package com.corporation;
+package com.corporation.service;
 
 import com.corporation.model.User;
 import com.corporation.repository.UserRepository;
-import com.corporation.service.impl.UserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
 /**
  * @author Bleschunov Dmitry
  */
-@ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
 
     @Mock
-    private UserRepository userRepositoryMock;
+    private UserRepository userRepository;
 
     @InjectMocks
     private UserService userService;
 
     @Test
-    public void getExistingUserById() {
+    public void shouldReturnUserById() {
 
         int desiredId = 1;
         String nickname = "boba";
@@ -34,8 +33,17 @@ public class UserServiceTest {
         String password = "1234";
         String aboutMe = "I am boba!";
 
-        Mockito.when(userRepositoryMock.findById(desiredId))
-                        .thenReturn(Optional.of(new User(desiredId, nickname, email, password, aboutMe)));
+        User mockUser = User
+                .builder()
+                .id(desiredId)
+                .nickname(nickname)
+                .email(email)
+                .password(password)
+                .aboutMe(aboutMe)
+                .build();
+
+        Mockito.when(userRepository.findById(desiredId))
+                        .thenReturn(Optional.of(mockUser));
 
         Optional<User> optionalUser = userService.findById(desiredId);
 
@@ -51,12 +59,12 @@ public class UserServiceTest {
     }
 
     @Test
-    public void getNotExistingUserById() {
+    public void shouldReturnNull() {
 
         int desiredId = 100;
 
-        Mockito.when(userRepositoryMock.findById(desiredId))
-                .thenReturn(Optional.ofNullable(null));
+        Mockito.when(userRepository.findById(desiredId))
+                .thenReturn(Optional.empty());
 
         Optional<User> optionalUser = userService.findById(desiredId);
 

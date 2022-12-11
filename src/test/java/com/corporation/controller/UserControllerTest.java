@@ -1,41 +1,49 @@
-package com.corporation;
+package com.corporation.controller;
 
-import com.corporation.controller.UserController;
 import com.corporation.model.User;
-import com.corporation.service.impl.UserService;
+import com.corporation.service.UserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
 
 /**
  * @author Bleschunov Dmitry
  */
-@ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
 public class UserControllerTest {
 
     @Mock
-    private UserService userServiceMock;
+    private UserService userService;
 
     @InjectMocks
     private UserController userController;
 
     @Test
-    public void getExistingUserById() {
+    public void shouldReturnUserByIdAndStatus200() {
         int desiredId = 1;
         String nickname = "boba";
         String email = "boba@boba.com";
         String password = "1234";
         String aboutMe = "I am boba!";
 
-        Mockito.when(userServiceMock.findById(desiredId))
-                .thenReturn(Optional.of(new User(desiredId, nickname, email, password, aboutMe)));
+        User mockUser = User
+                .builder()
+                .id(desiredId)
+                .nickname(nickname)
+                .email(email)
+                .password(password)
+                .aboutMe(aboutMe)
+                .build();
+
+        Mockito.when(userService.findById(desiredId))
+                .thenReturn(Optional.of(mockUser));
 
         ResponseEntity<User> userResponseEntity = userController.getUserById(desiredId);
 
@@ -51,12 +59,12 @@ public class UserControllerTest {
     }
 
     @Test
-    public void getNotExistingUserById() {
+    public void shouldReturnNullAndStatus404() {
 
         int desiredId = 100;
 
-        Mockito.when(userServiceMock.findById(desiredId))
-                .thenReturn(Optional.ofNullable(null));
+        Mockito.when(userService.findById(desiredId))
+                .thenReturn(Optional.empty());
 
         ResponseEntity<User> userResponseEntity = userController.getUserById(desiredId);
 

@@ -1,38 +1,28 @@
 package com.corporation.model;
 
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.Data;
 
 /**
  * @author Bleschunov Dmitry
  */
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 @Entity
 @Table(name = "project")
 public class Project {
-
-    public static final Project NULL_PROJECT = new Project(0, "", "");
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
-    @Column(name = "title")
+    @Column(name = "title", length = 128, nullable = false, unique = true)
     private String title;
 
-    @Column(name = "description")
+    @Column(name = "description", length = 4096)
     private String description;
-
-//    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "projects")
-//    private Set<User> users;
-
-    public Project(int id, String title, String description) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-    }
 }

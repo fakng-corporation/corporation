@@ -1,9 +1,9 @@
-package com.corporation.service.impl;
+package com.corporation.service;
 
 import com.corporation.model.User;
 import com.corporation.repository.UserRepository;
-import com.corporation.service.UserServiceInterface;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -11,17 +11,13 @@ import java.util.Optional;
 /**
  * @author Bleschunov Dmitry
  */
+@RequiredArgsConstructor
 @Service
-public class UserService implements UserServiceInterface {
+public class UserService {
 
     private final UserRepository userRepository;
 
-    @Autowired
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    @Override
+    @Transactional
     public Optional<User> findById(int id) {
         return userRepository.findById(id);
     }

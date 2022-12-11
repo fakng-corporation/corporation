@@ -1,34 +1,24 @@
 package com.corporation.model;
 
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.Data;
 
 /**
  * @author Bleschunov Dmitry
  */
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 @Entity
 @Table(name = "skill")
 public class Skill {
-
-    public static final Skill NULL_SKILL = new Skill(0, "");
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
-    @Column(name = "title")
+    @Column(name = "title", length = 32, nullable = false, unique = true)
     private String title;
-
-//    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "skills")
-//    private Set<User> users;
-
-    public Skill(int id, String title) {
-        this.id = id;
-        this.title = title;
-    }
 }

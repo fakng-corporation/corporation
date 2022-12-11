@@ -1,13 +1,13 @@
 CREATE TABLE users_projects (
-    user_id int REFERENCES "user"(id),
-    project_id int references project(id),
-    PRIMARY KEY(user_id, project_id)
+    id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY UNIQUE,
+    user_id bigint,
+    project_id bigint,
+    CONSTRAINT fk_user
+        FOREIGN KEY (user_id)
+            REFERENCES "user" (id)
+                ON DELETE CASCADE,
+    CONSTRAINT fk_project
+        FOREIGN KEY (project_id)
+            REFERENCES project (id)
+                ON DELETE CASCADE
 );
-
-INSERT INTO users_projects(user_id, project_id)
-VALUES
-    (1, 1),
-    (2, 1),
-    (3, 1),
-    (3, 2),
-    (4, 2);
