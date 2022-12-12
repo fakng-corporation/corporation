@@ -1,5 +1,6 @@
 package com.corporation.controller;
 
+import com.corporation.dto.UserDto;
 import com.corporation.model.User;
 import com.corporation.service.UserService;
 import org.junit.jupiter.api.Assertions;
@@ -26,7 +27,7 @@ public class UserControllerTest {
     private UserController userController;
 
     @Test
-    public void shouldReturnUserByIdAndStatus200() {
+    public void shouldReturnUserDtoByIdAndStatus200() {
         int desiredId = 1;
         String nickname = "boba";
         String email = "boba@boba.com";
@@ -45,17 +46,17 @@ public class UserControllerTest {
         Mockito.when(userService.findById(desiredId))
                 .thenReturn(Optional.of(mockUser));
 
-        ResponseEntity<User> userResponseEntity = userController.getUserById(desiredId);
+        ResponseEntity<UserDto> userResponseEntity = userController.getUserById(desiredId);
 
         Assertions.assertEquals(200, userResponseEntity.getStatusCode().value());
 
-        User user = userResponseEntity.getBody();
+        UserDto userDto = userResponseEntity.getBody();
 
-        Assertions.assertEquals(desiredId, user.getId());
-        Assertions.assertEquals(nickname, user.getNickname());
-        Assertions.assertEquals(email, user.getEmail());
-        Assertions.assertEquals(password, user.getPassword());
-        Assertions.assertEquals(aboutMe, user.getAboutMe());
+        Assertions.assertEquals(nickname, userDto.getNickname());
+        Assertions.assertEquals(aboutMe, userDto.getAboutMe());
+        Assertions.assertEquals(email, userDto.getEmail());
+        Assertions.assertEquals(password, userDto.getPassword());
+        Assertions.assertEquals(desiredId, userDto.getId());
     }
 
     @Test
@@ -66,7 +67,7 @@ public class UserControllerTest {
         Mockito.when(userService.findById(desiredId))
                 .thenReturn(Optional.empty());
 
-        ResponseEntity<User> userResponseEntity = userController.getUserById(desiredId);
+        ResponseEntity<UserDto> userResponseEntity = userController.getUserById(desiredId);
 
         Assertions.assertEquals(404, userResponseEntity.getStatusCode().value());
     }

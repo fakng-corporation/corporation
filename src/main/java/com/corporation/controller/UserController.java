@@ -1,5 +1,7 @@
 package com.corporation.controller;
 
+import com.corporation.dto.UserDto;
+import com.corporation.mapper.UserMapper;
 import com.corporation.model.User;
 import com.corporation.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -21,9 +23,9 @@ public class UserController {
     private final UserService UserService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable("id") int id) {
+    public ResponseEntity<UserDto> getUserById(@PathVariable("id") int id) {
         Optional<User> optionalUser = UserService.findById(id);
 
-        return optionalUser.map(ResponseEntity::ok).orElse(ResponseEntity.status(404).body(null));
+        return optionalUser.map(user -> ResponseEntity.ok(UserMapper.INSTANCE.userToUserDto(user))).orElse(ResponseEntity.status(404).body(null));
     }
 }
