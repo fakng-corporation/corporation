@@ -1,14 +1,17 @@
 package com.corporation.controller;
 
 import com.corporation.dto.UserDto;
+import com.corporation.mapper.UserMapperImpl;
 import com.corporation.model.User;
 import com.corporation.service.UserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Optional;
@@ -16,12 +19,15 @@ import java.util.Optional;
 /**
  * @author Bleschunov Dmitry
  */
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class UserControllerTest {
-    @MockBean
+    @Mock
     private UserService userService;
 
-    @Autowired
+    @Spy
+    private UserMapperImpl userMapper;
+
+    @InjectMocks
     private UserController userController;
 
     @Test
@@ -45,6 +51,8 @@ public class UserControllerTest {
                 .thenReturn(Optional.of(mockUser));
 
         ResponseEntity<UserDto> userResponseEntity = userController.getUserById(desiredId);
+
+        Mockito.verify(userMapper).toUserDto(mockUser);
 
         Assertions.assertEquals(200, userResponseEntity.getStatusCode().value());
 
