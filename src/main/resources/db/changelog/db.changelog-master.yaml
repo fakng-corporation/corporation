@@ -3,3 +3,5 @@ databaseChangeLog:
       file: db/changelog/init.sql
   - include:
       file: db/changelog/init-skill.sql
+  - include:
+      file: db/changelog/init-skill-index.sql

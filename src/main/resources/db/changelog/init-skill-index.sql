@@ -1,0 +1,1 @@
+CREATE INDEX skill_title_index ON skill (title);

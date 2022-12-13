@@ -2,16 +2,14 @@ package com.corporation.mapper;
 
 import com.corporation.dto.SkillDto;
 import com.corporation.model.Skill;
+import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 
 /**
  * @author Bleschunov Dmitry
  */
-@Mapper
+@Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.FIELD)
 public interface SkillMapper {
-
-    SkillMapper INSTANCE = Mappers.getMapper(SkillMapper.class);
-
-    SkillDto skillToSkillDto(Skill skill);
+    SkillDto toDto(Skill skill);
+    Skill toEntity(SkillDto skillDto);
 }

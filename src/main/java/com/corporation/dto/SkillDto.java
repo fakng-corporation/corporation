@@ -1,7 +1,6 @@
 package com.corporation.dto;
 
 import lombok.Data;
-
 /**
  * @author Bleschunov Dmitry
  */

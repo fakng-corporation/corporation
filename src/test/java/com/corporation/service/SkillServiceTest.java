@@ -11,6 +11,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
 /**
  * @author Bleschunov Dmitry
  */
@@ -24,7 +26,7 @@ public class SkillServiceTest {
     private SkillService skillService;
 
     @Test
-    public void shouldReturnCreatedSkill() throws NotUniqueSkillException {
+    public void shouldReturnCreatedSkill() {
 
         long id = 1;
         String title = "java";
@@ -32,11 +34,26 @@ public class SkillServiceTest {
         Skill skill = Skill.builder().title(title).build();
         Skill skillWithId = Skill.builder().id(id).title(title).build();
 
+        Mockito.when(skillRepository.findSkillByTitle(skill.getTitle()))
+                .thenReturn(Optional.empty());
+
         Mockito.when(skillRepository.save(skill)).thenReturn(skillWithId);
 
         Skill createdSkill = skillService.save(skill);
 
         Assertions.assertEquals(id, createdSkill.getId());
         Assertions.assertEquals(title, createdSkill.getTitle());
+    }
+
+    @Test
+    public void shouldThrowNotUniqueSkillException() {
+        String title = "java";
+
+        Skill skill = Skill.builder().title(title).build();
+
+        Mockito.when(skillRepository.findSkillByTitle(skill.getTitle()))
+                .thenReturn(Optional.of(skill));
+
+        Assertions.assertThrows(NotUniqueSkillException.class, () -> skillService.save(skill));
     }
 }

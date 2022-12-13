@@ -3,7 +3,7 @@ package com.corporation.service;
 import com.corporation.exception.NotUniqueSkillException;
 import com.corporation.model.Skill;
 import com.corporation.repository.SkillRepository;
-import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -11,7 +11,7 @@ import java.util.Optional;
 /**
  * @author Bleschunov Dmitry
  */
-@Data
+@RequiredArgsConstructor
 @Service
 public class SkillService {
 
@@ -21,11 +21,12 @@ public class SkillService {
         return skillRepository.findSkillByTitle(title);
     }
 
-    public Skill save(Skill skill) throws NotUniqueSkillException {
+    public Skill save(Skill skill) {
         Optional<Skill> optionalSkill = findSkillByTitle(skill.getTitle());
 
-        if (optionalSkill.isPresent())
-            throw new NotUniqueSkillException();
+        optionalSkill.ifPresent(
+                s -> { throw new NotUniqueSkillException(s.getTitle()); }
+        );
 
         return skillRepository.save(skill);
     }
