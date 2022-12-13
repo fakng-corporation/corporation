@@ -3,11 +3,3 @@ databaseChangeLog:
       file: db/changelog/init.sql
   - include:
       file: db/changelog/init-user.sql
-  - include:
-      file: db/changelog/init-skill.sql
-  - include:
-      file: db/changelog/init-project.sql
-  - include:
-      file: db/changelog/init-users_projects.sql
-  - include:
-      file: db/changelog/init-users_skills.sql

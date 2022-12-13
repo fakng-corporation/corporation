@@ -26,6 +26,7 @@ dependencies {
 	implementation 'org.liquibase:liquibase-core'
 	implementation 'org.hibernate:hibernate-validator:8.0.0.Final'
 	implementation 'org.springdoc:springdoc-openapi-ui:1.6.13'
+	testImplementation 'org.projectlombok:lombok:1.18.22'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'org.postgresql:postgresql'

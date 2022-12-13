@@ -22,10 +22,14 @@ import java.util.Optional;
 public class UserController {
     private final UserService UserService;
 
+    private final UserMapper userMapper;
+
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> getUserById(@PathVariable("id") int id) {
         Optional<User> optionalUser = UserService.findById(id);
 
-        return optionalUser.map(user -> ResponseEntity.ok(UserMapper.INSTANCE.userToUserDto(user))).orElse(ResponseEntity.status(404).body(null));
+        return optionalUser
+                .map(user -> ResponseEntity.ok(userMapper.toUserDto(user)))
+                .orElse(ResponseEntity.status(404).build());
     }
 }
