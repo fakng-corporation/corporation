@@ -3,11 +3,17 @@ package com.corporation.controller;
 import com.corporation.dto.SkillDto;
 import com.corporation.exception.NotUniqueSkillException;
 import com.corporation.mapper.SkillMapper;
+import com.corporation.mapper.SkillMapperImpl;
 import com.corporation.model.Skill;
 import com.corporation.service.SkillService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -16,17 +22,17 @@ import org.springframework.http.ResponseEntity;
 /**
  * @author Bleschunov Dmitry
  */
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class SkillControllerTest {
 
-    @MockBean
+    @Mock
     private SkillService skillService;
 
-    @Autowired
-    private SkillController skillController;
+    @Spy
+    private SkillMapperImpl skillMapper;
 
-    @Autowired
-    private SkillMapper skillMapper;
+    @InjectMocks
+    private SkillController skillController;
 
     @Test
     public void shouldReturnCreatedSkillDtoAndStatus200() {
@@ -41,6 +47,8 @@ public class SkillControllerTest {
         Mockito.when(skillService.save(skill)).thenReturn(skillWithId);
 
         ResponseEntity<SkillDto> responseEntity = skillController.createSkill(skillDto);
+
+        Mockito.verify(skillMapper).toEntity(skillDto);
 
         Assertions.assertEquals(200, responseEntity.getStatusCode().value());
 
