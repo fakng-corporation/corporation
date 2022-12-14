@@ -1,6 +1,7 @@
 package com.corporation.service;
 
 import com.corporation.exception.NotUniqueProjectException;
+import com.corporation.exception.NotUniqueSkillException;
 import com.corporation.model.Project;
 import com.corporation.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,12 +22,15 @@ public class ProjectService {
     public Project save(Project project) {
         Optional<Project> optionalProject = findProjectByTitle(project.getTitle());
 
-        optionalProject.ifPresent(
-                s -> {
-                    throw new NotUniqueProjectException(s.getTitle());
-                }
-        );
+//        optionalProject.ifPresent(
+//                s -> {
+//                    throw new NotUniqueProjectException(s.getTitle());
+//                }
+//        );
 
-        return projectRepository.save(project);
+        return optionalProject.map(projectRepository::save)
+                .orElseThrow(() -> new NotUniqueProjectException(project.getTitle()));
+
+//        return projectRepository.save(project);
     }
 }
