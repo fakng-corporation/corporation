@@ -1,6 +1,7 @@
 package com.corporation.controller;
 
 import com.corporation.dto.UserDto;
+import com.corporation.exception.UserNotFoundException;
 import com.corporation.mapper.UserMapperImpl;
 import com.corporation.model.User;
 import com.corporation.service.UserService;
@@ -13,8 +14,6 @@ import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
-
-import java.util.Optional;
 
 /**
  * @author Bleschunov Dmitry
@@ -48,7 +47,7 @@ public class UserControllerTest {
                 .build();
 
         Mockito.when(userService.findById(desiredId))
-                .thenReturn(Optional.of(mockUser));
+                .thenReturn(mockUser);
 
         ResponseEntity<UserDto> userResponseEntity = userController.getUserById(desiredId);
 
@@ -66,15 +65,13 @@ public class UserControllerTest {
     }
 
     @Test
-    public void shouldReturnNullAndStatus404() {
+    public void shouldThrowUserNotFoundException() {
 
         int desiredId = 100;
 
         Mockito.when(userService.findById(desiredId))
-                .thenReturn(Optional.empty());
+                .thenThrow(UserNotFoundException.class);
 
-        ResponseEntity<UserDto> userResponseEntity = userController.getUserById(desiredId);
-
-        Assertions.assertEquals(404, userResponseEntity.getStatusCode().value());
+        Assertions.assertThrows(UserNotFoundException.class, () -> userController.getUserById(desiredId));
     }
 }
