@@ -1,8 +1,6 @@
 package com.corporation.controller;
 
 import com.corporation.dto.SkillDto;
-import com.corporation.exception.NotUniqueSkillException;
-import com.corporation.mapper.SkillMapper;
 import com.corporation.mapper.SkillMapperImpl;
 import com.corporation.model.Skill;
 import com.corporation.service.SkillService;
@@ -14,9 +12,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.ResponseEntity;
 
 /**
@@ -56,19 +51,5 @@ public class SkillControllerTest {
 
         Assertions.assertEquals(id, createdSkillDto.getId());
         Assertions.assertEquals(title, createdSkillDto.getTitle());
-    }
-
-    @Test
-    public void shouldReturnStatus400() {
-        String title = "java";
-
-        Skill skill = Skill.builder().title(title).build();
-        SkillDto skillDto = skillMapper.toDto(skill);
-
-        Mockito.when(skillService.save(skill)).thenThrow(NotUniqueSkillException.class);
-
-        ResponseEntity<SkillDto> responseEntity = skillController.createSkill(skillDto);
-
-        Assertions.assertEquals(400, responseEntity.getStatusCode().value());
     }
 }
