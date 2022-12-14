@@ -14,6 +14,8 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Optional;
+
 /**
  * @author Bleschunov Dmitry
  */
@@ -46,7 +48,7 @@ public class UserControllerTest {
                 .build();
 
         Mockito.when(userService.findById(desiredId))
-                .thenReturn(mockUser);
+                .thenReturn(Optional.of(mockUser));
 
         ResponseEntity<UserDto> userResponseEntity = userController.getUserById(desiredId);
 
@@ -61,5 +63,18 @@ public class UserControllerTest {
         Assertions.assertEquals(email, userDto.getEmail());
         Assertions.assertEquals(password, userDto.getPassword());
         Assertions.assertEquals(desiredId, userDto.getId());
+    }
+
+    @Test
+    public void shouldReturnNullAndStatus404() {
+
+        int desiredId = 100;
+
+        Mockito.when(userService.findById(desiredId))
+                .thenReturn(Optional.empty());
+
+        ResponseEntity<UserDto> userResponseEntity = userController.getUserById(desiredId);
+
+        Assertions.assertEquals(404, userResponseEntity.getStatusCode().value());
     }
 }

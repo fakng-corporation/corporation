@@ -1,13 +1,10 @@
 package com.corporation.exception;
 
-import lombok.Getter;
-
 /**
  * @author Bleschunov Dmitry
  */
-@Getter
-public class NotUniqueSkillException extends BusinessException {
-    public NotUniqueSkillException(Object... params) {
-        super(params);
+public class NotUniqueSkillException extends RuntimeException {
+    public NotUniqueSkillException(String skillTitle) {
+        super(String.format("A skill with the title %s already exists.", skillTitle));
     }
 }

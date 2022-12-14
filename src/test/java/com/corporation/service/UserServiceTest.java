@@ -1,6 +1,5 @@
 package com.corporation.service;
 
-import com.corporation.exception.UserNotFoundException;
 import com.corporation.model.User;
 import com.corporation.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
@@ -46,7 +45,11 @@ public class UserServiceTest {
         Mockito.when(userRepository.findById(desiredId))
                         .thenReturn(Optional.of(mockUser));
 
-        User user = userService.findById(desiredId);
+        Optional<User> optionalUser = userService.findById(desiredId);
+
+        Assertions.assertTrue(optionalUser.isPresent());
+
+        User user = optionalUser.get();
 
         Assertions.assertEquals(desiredId, user.getId());
         Assertions.assertEquals(nickname, user.getNickname());
@@ -56,13 +59,15 @@ public class UserServiceTest {
     }
 
     @Test
-    public void shouldThrowUserNotFoundException() {
+    public void shouldReturnNull() {
 
         int desiredId = 100;
 
         Mockito.when(userRepository.findById(desiredId))
-                .thenThrow(UserNotFoundException.class);
+                .thenReturn(Optional.empty());
 
-        Assertions.assertThrows(UserNotFoundException.class, () -> userService.findById(desiredId));
+        Optional<User> optionalUser = userService.findById(desiredId);
+
+        Assertions.assertFalse(optionalUser.isPresent());
     }
 }

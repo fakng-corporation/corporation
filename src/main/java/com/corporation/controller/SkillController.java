@@ -1,6 +1,7 @@
 package com.corporation.controller;
 
 import com.corporation.dto.SkillDto;
+import com.corporation.exception.NotUniqueSkillException;
 import com.corporation.mapper.SkillMapper;
 import com.corporation.model.Skill;
 import com.corporation.service.SkillService;
@@ -26,7 +27,14 @@ public class SkillController {
     @PostMapping
     public ResponseEntity<SkillDto> createSkill(@RequestBody SkillDto skillDto) {
         Skill skill = skillMapper.toEntity(skillDto);
-        skill = skillService.save(skill);
+        try {
+            skill = skillService.save(skill);
+        } catch (NotUniqueSkillException e) {
+            // Потом в отдельной задаче вынесем обработку ошибок наверх
+            // Пока в целях тестирования сделал так
+            return ResponseEntity.badRequest().build();
+        }
+
         return ResponseEntity.ok(skillMapper.toDto(skill));
     }
 }
