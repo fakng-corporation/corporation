@@ -22,15 +22,15 @@ public class ProjectService {
     public Project save(Project project) {
         Optional<Project> optionalProject = findProjectByTitle(project.getTitle());
 
-//        optionalProject.ifPresent(
-//                s -> {
-//                    throw new NotUniqueProjectException(s.getTitle());
-//                }
-//        );
+        optionalProject.ifPresent(
+                s -> {
+                    throw new NotUniqueProjectException(s.getTitle());
+                }
+        );
 
-        return optionalProject.map(projectRepository::save)
-                .orElseThrow(() -> new NotUniqueProjectException(project.getTitle()));
+//        return optionalProject.map(projectRepository::save)
+//                .orElseThrow(() -> new NotUniqueProjectException(project.getTitle()));
 
-//        return projectRepository.save(project);
+        return projectRepository.save(project);
     }
 }
