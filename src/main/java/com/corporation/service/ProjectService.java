@@ -28,9 +28,6 @@ public class ProjectService {
                 }
         );
 
-//        return optionalProject.map(projectRepository::save)
-//                .orElseThrow(() -> new NotUniqueProjectException(project.getTitle()));
-
         return projectRepository.save(project);
     }
 }

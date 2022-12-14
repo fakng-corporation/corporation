@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/project")
-@Tag(name="Управление проектами пользователей", description="Создание, поиск, модификация проектов")
+@Tag(name = "Управление проектами пользователей", description = "Создание, поиск, модификация проектов")
 public class ProjectController {
 
     private final ProjectService projectService;
@@ -25,12 +25,12 @@ public class ProjectController {
             description = "Позволяет создать новый проект"
     )
     @PutMapping
-    public ResponseEntity<ProjectDto> addProject(@RequestBody ProjectDto projectDto) {
+    public ResponseEntity<?> addProject(@RequestBody ProjectDto projectDto) {
         Project project = projectMapper.toEntity(projectDto);
         try {
             project = projectService.save(project);
         } catch (NotUniqueProjectException e) {
-            e.getMessage();
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
         return ResponseEntity.ok(projectMapper.toDto(project));
     }
