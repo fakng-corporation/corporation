@@ -5,8 +5,10 @@ import com.corporation.model.Project;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
-public abstract class ProjectMapper {
+public interface ProjectMapper {
 
-    public abstract Project projectFromProjectDto(ProjectDto projectDto);
+    Project toEntity(ProjectDto projectDto);
+
+    ProjectDto toDto(Project project);
 
 }

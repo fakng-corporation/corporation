@@ -1,25 +1,32 @@
 package com.corporation.service;
 
-import com.corporation.dao.ProjectDao;
+import com.corporation.exception.NotUniqueProjectException;
 import com.corporation.model.Project;
 import com.corporation.repository.ProjectRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
 public class ProjectService {
 
-    private final ProjectDao projectDao;
     private final ProjectRepository projectRepository;
 
-    @Transactional
-    public boolean existByTitle(String title) {
-        return projectDao.existByTitle(title);
+    private Optional<Project> findProjectByTitle(String title) {
+        return projectRepository.findProjectByTitle(title);
     }
 
-    public void createProject(Project project) {
-        projectRepository.save(project);
+    public Project save(Project project) {
+        Optional<Project> optionalProject = findProjectByTitle(project.getTitle());
+
+        optionalProject.ifPresent(
+                s -> {
+                    throw new NotUniqueProjectException(s.getTitle());
+                }
+        );
+
+        return projectRepository.save(project);
     }
 }
