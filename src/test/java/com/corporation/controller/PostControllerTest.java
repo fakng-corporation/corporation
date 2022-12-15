@@ -55,18 +55,4 @@ class PostControllerTest {
 
     }
 
-    @Test
-    public void shouldReturnStatus400() {
-        String title = "Это тоже никто не читает";
-        Post post = Post.builder().title(title).build();
-        PostDto postDto = postMapper.toDto(post);
-
-        Mockito.when(postService.save(post)).thenThrow(NotUniquePostException.class);
-
-        ResponseEntity<PostDto> responseEntity = postController.createPost(postDto);
-
-        Assertions.assertEquals(400, responseEntity.getStatusCode().value());
-    }
-
-
 }

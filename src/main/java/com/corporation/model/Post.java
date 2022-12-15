@@ -1,5 +1,6 @@
 package com.corporation.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,6 +28,13 @@ public class Post {
 
     @Column(name = "description", length = 10240, nullable = false)
     private String description;
+
+    @Column(name = "published")
+    private boolean published;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)

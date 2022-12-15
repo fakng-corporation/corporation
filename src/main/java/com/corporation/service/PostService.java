@@ -1,6 +1,5 @@
 package com.corporation.service;
 
-import com.corporation.exception.NotUniquePostException;
 import com.corporation.model.Post;
 import com.corporation.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,12 +19,6 @@ public class PostService {
     }
 
     public Post save(Post post) {
-        Optional<Post> optionalPost = postRepository.findPostByTitle(post.getTitle());
-
-        optionalPost.ifPresent(p -> {
-            throw new NotUniquePostException(p.getTitle());
-        });
-
         return postRepository.save(post);
     }
 
