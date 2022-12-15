@@ -25,12 +25,12 @@ public class ProjectController {
             description = "Позволяет создать новый проект"
     )
     @PutMapping
-    public ResponseEntity<?> addProject(@RequestBody ProjectDto projectDto) {
+    public ResponseEntity<ProjectDto> addProject(@RequestBody ProjectDto projectDto) {
         Project project = projectMapper.toEntity(projectDto);
         try {
             project = projectService.save(project);
         } catch (NotUniqueProjectException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(projectMapper.toDto(project));
     }
