@@ -1,11 +1,11 @@
 package com.corporation.controller;
 
 import com.corporation.dto.PostDto;
-import com.corporation.exception.NotUniquePostException;
-import com.corporation.mapper.PostMapper;
 import com.corporation.mapper.PostMapperImpl;
 import com.corporation.model.Post;
+import com.corporation.model.User;
 import com.corporation.service.PostService;
+import com.corporation.service.UserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,6 +22,9 @@ class PostControllerTest {
     @Mock
     private PostService postService;
 
+    @Mock
+    private UserService userService;
+
     @Spy
     private PostMapperImpl postMapper;
 
@@ -35,9 +38,25 @@ class PostControllerTest {
         String title = "Король Тайтлов";
         String description = "Это всё равно никто не читает, чтобы тут не было написано";
 
-        Post post = Post.builder().title(title).description(description).build();
+        int desiredId = 1;
+        String nickname = "boba";
+        String email = "boba@boba.com";
+        String password = "1234";
+        String aboutMe = "I am boba!";
+
+        User mockUser = User
+                .builder()
+                .id(desiredId)
+                .nickname(nickname)
+                .email(email)
+                .password(password)
+                .aboutMe(aboutMe)
+                .build();
+
+        Post post = Post.builder().title(title).description(description).user(mockUser).build();
         PostDto postDto = postMapper.toDto(post);
-        Post postWithId = Post.builder().id(id).title(title).description(description).build();
+        Post postWithId = Post.builder().id(id).title(title).description(description).user(mockUser).build();
+
 
         Mockito.when(postService.save(post)).thenReturn(postWithId);
 

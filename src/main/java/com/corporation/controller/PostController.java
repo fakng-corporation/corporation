@@ -1,11 +1,9 @@
 package com.corporation.controller;
 
 import com.corporation.dto.PostDto;
-import com.corporation.exception.UserNotFoundException;
 import com.corporation.mapper.PostMapper;
 import com.corporation.model.Post;
 import com.corporation.model.User;
-import com.corporation.repository.UserRepository;
 import com.corporation.service.PostService;
 import com.corporation.service.UserService;
 import lombok.RequiredArgsConstructor;
