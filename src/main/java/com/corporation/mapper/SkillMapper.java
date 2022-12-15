@@ -11,5 +11,6 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.FIELD)
 public interface SkillMapper {
     SkillDto toDto(Skill skill);
+
     Skill toEntity(SkillDto skillDto);
 }
