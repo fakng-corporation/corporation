@@ -1,6 +1,7 @@
 package com.corporation.controller;
 
 import com.corporation.dto.PostDto;
+import com.corporation.exception.NotUniquePostException;
 import com.corporation.mapper.PostMapper;
 import com.corporation.model.Post;
 import com.corporation.service.PostService;
@@ -22,7 +23,11 @@ public class PostController {
     @PostMapping
     public ResponseEntity<PostDto> createPost(@RequestBody PostDto postDto) {
         Post post = postMapper.toEntity(postDto);
-        post = postService.save(post);
+        try {
+            post = postService.save(post);
+        } catch (NotUniquePostException e) {
+            return ResponseEntity.badRequest().build();
+        }
         return ResponseEntity.ok(postMapper.toDto(post));
     }
 

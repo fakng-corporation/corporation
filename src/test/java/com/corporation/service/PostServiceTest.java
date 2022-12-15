@@ -46,11 +46,7 @@ class PostServiceTest {
 
         Post mockPost = Post.builder().id(id).title(title).description(description).build();
 
-        Mockito.when(postRepository.findPostByTitle(title)).thenReturn(Optional.of(mockPost));
-
-        Optional<Post> optionalPost = postService.findPostByTitle(title);
-
-        Assertions.assertTrue(optionalPost.isPresent());
+        Mockito.when(postRepository.findPostByTitle(title)).thenReturn(Optional.empty());
 
         Mockito.when(postRepository.save(mockPost)).thenReturn(mockPost);
 
