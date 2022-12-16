@@ -10,10 +10,11 @@ public class PostDto {
 
     private long id;
     private String title;
-    private String description;
-    private boolean published;
+    private String body;
+    private boolean isPublished;
     private User user;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private LocalDateTime publishedAt;
 
 }

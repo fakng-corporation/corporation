@@ -26,14 +26,14 @@ public class Post {
     @Column(name = "title", length = 64, nullable = false, unique = true)
     private String title;
 
-    @Column(name = "description", length = 10240, nullable = false)
-    private String description;
+    @Column(name = "body", length = 10240, nullable = false)
+    private String body;
 
-    @Column(name = "published")
-    private boolean published;
+    @Column(name = "is_published")
+    private boolean isPublished;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "fk_user_id")
     private User user;
 
     @CreationTimestamp
@@ -45,5 +45,8 @@ public class Post {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @Column(name = "published_at")
+    private LocalDateTime publishedAt;
 
 }

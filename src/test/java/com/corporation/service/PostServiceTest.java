@@ -26,9 +26,9 @@ class PostServiceTest {
 
         long id = 322;
         String title = "Some Title";
-        String description = "Здесь мог быть Ваш код";
+        String body = "Здесь мог быть Ваш код";
 
-        Post mockPost = Post.builder().id(id).title(title).description(description).build();
+        Post mockPost = Post.builder().id(id).title(title).body(body).build();
 
         Mockito.when(postRepository.findPostByTitle(title)).thenReturn(Optional.empty());
 
@@ -38,7 +38,7 @@ class PostServiceTest {
 
         Assertions.assertEquals(id, createdPost.getId());
         Assertions.assertEquals(title, createdPost.getTitle());
-        Assertions.assertEquals(description, createdPost.getDescription());
+        Assertions.assertEquals(body, createdPost.getBody());
 
     }
 

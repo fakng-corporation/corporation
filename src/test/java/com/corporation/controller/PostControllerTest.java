@@ -36,7 +36,7 @@ class PostControllerTest {
 
         long id = 7;
         String title = "Король Тайтлов";
-        String description = "Это всё равно никто не читает, чтобы тут не было написано";
+        String body = "Это всё равно никто не читает, чтобы тут не было написано";
 
         int desiredId = 1;
         String nickname = "boba";
@@ -53,9 +53,9 @@ class PostControllerTest {
                 .aboutMe(aboutMe)
                 .build();
 
-        Post post = Post.builder().title(title).description(description).user(mockUser).build();
+        Post post = Post.builder().title(title).body(body).user(mockUser).build();
         PostDto postDto = postMapper.toDto(post);
-        Post postWithId = Post.builder().id(id).title(title).description(description).user(mockUser).build();
+        Post postWithId = Post.builder().id(id).title(title).body(body).user(mockUser).build();
 
 
         Mockito.when(postService.save(post)).thenReturn(postWithId);
@@ -70,7 +70,7 @@ class PostControllerTest {
 
         Assertions.assertEquals(id, createdPostDto.getId());
         Assertions.assertEquals(title, createdPostDto.getTitle());
-        Assertions.assertEquals(description, createdPostDto.getDescription());
+        Assertions.assertEquals(body, createdPostDto.getBody());
 
     }
 
