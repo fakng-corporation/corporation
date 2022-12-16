@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -16,6 +18,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author Bleschunov Dmitry
@@ -43,6 +46,10 @@ public class User {
 
     @Column(name = "about_me", length = 4096)
     private String aboutMe;
+
+    @OneToMany
+    @JoinColumn(name = "post_id")
+    private List<Post> posts;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
