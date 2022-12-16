@@ -7,7 +7,6 @@ import com.corporation.model.User;
 import com.corporation.service.PostService;
 import com.corporation.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,16 +25,12 @@ public class PostController {
 
 
     @PostMapping
-    public ResponseEntity<PostDto> createPost(@RequestBody PostDto postDto) {
+    public PostDto createPost(@RequestBody PostDto postDto) {
+        Optional<User> userOptional = userService.findById(postDto.getUserId());
         Post post = postMapper.toEntity(postDto);
-        //Получаем User со всеми полями по Id
-        Optional<User> userOptional = userService.findById((int) postDto.getUser().getId());
-        // Вставляем все поля по Foreign Key существующего User (чтобы не писать все строки руками)
-        // Если такого нет, то кидаем UserNotFoundException, чтобы пост не остался без автора
-        // userOptional.ifPresentOrElse(post::setUser, () -> { throw new UserNotFoundException(postDto.getUser().getId()); });
         userOptional.ifPresent(post::setUser);
         post = postService.save(post);
-        return ResponseEntity.ok(postMapper.toDto(post));
+        return postMapper.toDto(post);
     }
 
 }
