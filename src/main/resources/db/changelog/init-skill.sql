@@ -1,0 +1,4 @@
+CREATE TABLE skill (
+    id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY UNIQUE,
+    title varchar(32) UNIQUE NOT NULL
+);

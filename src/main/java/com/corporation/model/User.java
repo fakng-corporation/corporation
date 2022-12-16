@@ -1,0 +1,53 @@
+package com.corporation.model;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+/**
+ * @author Bleschunov Dmitry
+ */
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "user", schema = "public")
+public class User {
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column(name = "nickname", length = 64, nullable = false, unique = true)
+    private String nickname;
+
+    @Column(name = "email", length = 32, nullable = false, unique = true)
+    private String email;
+
+    @Column(name = "password", length = 128, nullable = false, unique = true)
+    private String password;
+
+    @Column(name = "about_me", length = 4096)
+    private String aboutMe;
+
+    @OneToMany(mappedBy = "owner")
+    private List<Project> projects;
+
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+}
