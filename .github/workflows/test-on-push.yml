@@ -22,7 +22,7 @@ jobs:
       - name: Grant Permissions to gradlew
         run: chmod +x gradlew
       - name: Test
-        run: ./gradlew test --tests "*"
+        run: ./gradlew test
 
       - name: Test Success
         if: success()
