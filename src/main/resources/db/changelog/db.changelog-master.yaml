@@ -7,4 +7,6 @@ databaseChangeLog:
       file: db/changelog/init-skill.sql
   - include:
       file: db/changelog/init-skill-index.sql
+  - include:
+      file: db/changelog/init-post.sql
   
