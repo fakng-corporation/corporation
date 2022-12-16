@@ -24,9 +24,11 @@ public class SkillService {
     public Skill save(Skill skill) {
         Optional<Skill> optionalSkill = findSkillByTitle(skill.getTitle());
 
-        optionalSkill.ifPresent(
-                s -> { throw new NotUniqueSkillException(s.getTitle()); }
-        );
+        optionalSkill.ifPresent(s -> {
+            throw new NotUniqueSkillException(
+                    String.format("Skill with title %s already exists", s.getTitle())
+            );
+        });
 
         return skillRepository.save(skill);
     }

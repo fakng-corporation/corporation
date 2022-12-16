@@ -1,8 +1,8 @@
 package com.corporation.service;
 
+import com.corporation.exception.UserNotFoundException;
 import com.corporation.model.User;
 import com.corporation.repository.UserRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +17,11 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    @Transactional
-    public Optional<User> findById(int id) {
-        return userRepository.findById(id);
+    public User findById(int id) {
+        Optional<User> optionalUser = userRepository.findById(id);
+        return optionalUser
+                .orElseThrow(() -> new UserNotFoundException(
+                        String.format("User with id %d does not exist.", id)
+                ));
     }
 }
