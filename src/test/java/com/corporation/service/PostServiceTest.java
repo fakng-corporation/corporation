@@ -30,8 +30,6 @@ class PostServiceTest {
 
         Post mockPost = Post.builder().id(id).title(title).body(body).build();
 
-        Mockito.when(postRepository.findPostByTitle(title)).thenReturn(Optional.empty());
-
         Mockito.when(postRepository.save(mockPost)).thenReturn(mockPost);
 
         Post createdPost = postService.save(mockPost);

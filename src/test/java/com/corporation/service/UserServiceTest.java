@@ -27,7 +27,7 @@ public class UserServiceTest {
     @Test
     public void shouldReturnUserById() {
 
-        int desiredId = 1;
+        long desiredId = 1;
         String nickname = "boba";
         String email = "boba@boba.com";
         String password = "1234";
@@ -63,7 +63,7 @@ public class UserServiceTest {
 
         int desiredId = 100;
 
-        Mockito.when(userRepository.findById(desiredId))
+        Mockito.when(userService.findById(desiredId))
                 .thenReturn(Optional.empty());
 
         Optional<User> optionalUser = userService.findById(desiredId);

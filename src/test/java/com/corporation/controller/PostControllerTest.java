@@ -32,7 +32,7 @@ class PostControllerTest {
     private PostController postController;
 
     @Test
-    void shouldReturnCreatedPostDtoAndStatus200() {
+    void shouldReturnCreatedPostDto() {
 
         long id = 7;
         String title = "Король Тайтлов";
@@ -53,24 +53,20 @@ class PostControllerTest {
                 .aboutMe(aboutMe)
                 .build();
 
-        Post post = Post.builder().title(title).body(body).user(mockUser).build();
+        Post post = Post.builder().title(title).body(body).build();
         PostDto postDto = postMapper.toDto(post);
         Post postWithId = Post.builder().id(id).title(title).body(body).user(mockUser).build();
 
-
         Mockito.when(postService.save(post)).thenReturn(postWithId);
 
-        ResponseEntity<PostDto> responseEntity = postController.createPost(postDto);
+        PostDto createdPostDto = postController.createPost(postDto);
 
         Mockito.verify(postMapper).toEntity(postDto);
-
-        Assertions.assertEquals(200, responseEntity.getStatusCode().value());
-
-        PostDto createdPostDto = responseEntity.getBody();
 
         Assertions.assertEquals(id, createdPostDto.getId());
         Assertions.assertEquals(title, createdPostDto.getTitle());
         Assertions.assertEquals(body, createdPostDto.getBody());
+        Assertions.assertEquals(desiredId, createdPostDto.getUserId());
 
     }
 
