@@ -19,5 +19,7 @@ public class ProjectDto {
     private LocalDateTime createdAt;
     @Schema(description = "Дата последнего изменения")
     private LocalDateTime updatedAt;
+    @Schema(description = "ID Владелеца")
+    private long ownerId;
 
 }

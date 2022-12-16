@@ -1,7 +1,6 @@
 package com.corporation.controller;
 
 import com.corporation.dto.ProjectDto;
-import com.corporation.exception.NotUniqueProjectException;
 import com.corporation.mapper.ProjectMapperImpl;
 import com.corporation.model.Project;
 import com.corporation.service.ProjectService;
@@ -13,7 +12,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.ResponseEntity;
 
 @ExtendWith(MockitoExtension.class)
 public class ProjectControllerTest {
@@ -28,7 +26,7 @@ public class ProjectControllerTest {
     private ProjectController projectController;
 
     @Test
-    public void shouldReturnCreatedProjectDtoAndStatus200() {
+    public void shouldReturnCreatedProjectDto() {
 
         long id = 777;
         String title = "bigproject";
@@ -39,31 +37,9 @@ public class ProjectControllerTest {
 
         Mockito.when(projectService.save(project)).thenReturn(projectWithId);
 
-        ResponseEntity<ProjectDto> responseEntity
-                = projectController.addProject(projectDto);
+        ProjectDto createdProjectDto = projectController.addProject(projectDto);
 
-        Mockito.verify(projectMapper).toEntity(projectDto);
-
-        Assertions.assertEquals(200, responseEntity.getStatusCode().value());
-
-        ProjectDto createdProjectDto = responseEntity.getBody();
-
-        assert createdProjectDto != null;
         Assertions.assertEquals(id, createdProjectDto.getId());
         Assertions.assertEquals(title, createdProjectDto.getTitle());
-    }
-
-    @Test
-    public void shouldReturnStatus400() {
-        String title = "bigproject";
-
-        Project project = Project.builder().title(title).build();
-        ProjectDto projectDto = projectMapper.toDto(project);
-
-        Mockito.when(projectService.save(project)).thenThrow(NotUniqueProjectException.class);
-
-        ResponseEntity<ProjectDto> responseEntity = projectController.addProject(projectDto);
-
-        Assertions.assertEquals(400, responseEntity.getStatusCode().value());
     }
 }

@@ -1,14 +1,12 @@
 package com.corporation.controller;
 
 import com.corporation.dto.ProjectDto;
-import com.corporation.exception.NotUniqueProjectException;
 import com.corporation.mapper.ProjectMapper;
 import com.corporation.model.Project;
 import com.corporation.service.ProjectService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -25,13 +23,9 @@ public class ProjectController {
             description = "Позволяет создать новый проект"
     )
     @PutMapping
-    public ResponseEntity<ProjectDto> addProject(@RequestBody ProjectDto projectDto) {
+    public ProjectDto addProject(@RequestBody ProjectDto projectDto) {
         Project project = projectMapper.toEntity(projectDto);
-        try {
-            project = projectService.save(project);
-        } catch (NotUniqueProjectException e) {
-            return ResponseEntity.badRequest().build();
-        }
-        return ResponseEntity.ok(projectMapper.toDto(project));
+        project = projectService.save(project);
+        return projectMapper.toDto(project);
     }
 }
