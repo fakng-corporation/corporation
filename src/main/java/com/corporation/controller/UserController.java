@@ -20,16 +20,13 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-    private final UserService UserService;
+    private final UserService userService;
 
     private final UserMapper userMapper;
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> getUserById(@PathVariable("id") long id) {
-        Optional<User> optionalUser = UserService.findById(id);
-
-        return optionalUser
-                .map(user -> ResponseEntity.ok(userMapper.toUserDto(user)))
-                .orElse(ResponseEntity.status(404).build());
+        User user = userService.findById(id);
+        return ResponseEntity.ok(userMapper.toUserDto(user));
     }
 }

@@ -46,6 +46,9 @@ public class User {
     @Column(name = "about_me", length = 4096)
     private String aboutMe;
 
+    @OneToMany(mappedBy = "owner")
+    private List<Project> projects;
+
     @OneToMany(mappedBy = "user")
     private List<Post> posts;
 
