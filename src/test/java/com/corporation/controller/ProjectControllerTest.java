@@ -42,4 +42,21 @@ public class ProjectControllerTest {
         Assertions.assertEquals(id, createdProjectDto.getId());
         Assertions.assertEquals(title, createdProjectDto.getTitle());
     }
+
+    @Test
+    public void shouldReturnUpdatedProjectDto() {
+
+        long id = 777;
+        String newTitle = "bigproject1";
+
+        ProjectDto createdProjectDto = ProjectDto.builder().id(id).title(newTitle).build();
+        Project projectWithNewTitle = Project.builder().id(id).title(newTitle).build();
+
+        Mockito.when(projectService.update(id, createdProjectDto)).thenReturn(projectWithNewTitle);
+
+        ProjectDto finalProjectDto = projectController.updateProject(id, createdProjectDto);
+
+        Assertions.assertEquals(id, finalProjectDto.getId());
+        Assertions.assertEquals(newTitle, finalProjectDto.getTitle());
+    }
 }
