@@ -29,7 +29,7 @@ public class PostController {
         Optional<User> userOptional = userService.findById(postDto.getUserId());
         Post post = postMapper.toEntity(postDto);
         userOptional.ifPresent(post::setUser);
-        post = postService.save(post);
+        post = postService.savePostDraft(post);
         PostDto postDtoToReturn = postMapper.toDto(post);
         postDtoToReturn.setUserId(post.getUser().getId());
         return postDtoToReturn;

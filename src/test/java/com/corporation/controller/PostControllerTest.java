@@ -14,7 +14,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.ResponseEntity;
 
 @ExtendWith(MockitoExtension.class)
 class PostControllerTest {
@@ -37,6 +36,7 @@ class PostControllerTest {
         long id = 7;
         String title = "Король Тайтлов";
         String body = "Это всё равно никто не читает, чтобы тут не было написано";
+        boolean isPublished = false;
 
         int desiredId = 1;
         String nickname = "boba";
@@ -57,7 +57,7 @@ class PostControllerTest {
         PostDto postDto = postMapper.toDto(post);
         Post postWithId = Post.builder().id(id).title(title).body(body).user(mockUser).build();
 
-        Mockito.when(postService.save(post)).thenReturn(postWithId);
+        Mockito.when(postService.savePostDraft(post)).thenReturn(postWithId);
 
         PostDto createdPostDto = postController.createPost(postDto);
 
@@ -67,6 +67,7 @@ class PostControllerTest {
         Assertions.assertEquals(title, createdPostDto.getTitle());
         Assertions.assertEquals(body, createdPostDto.getBody());
         Assertions.assertEquals(desiredId, createdPostDto.getUserId());
+        Assertions.assertEquals(isPublished, createdPostDto.isPublished());
 
     }
 
