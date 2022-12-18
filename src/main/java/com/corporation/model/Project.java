@@ -5,11 +5,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +18,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * @author Bleschunov Dmitry
@@ -28,30 +27,21 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "user", schema = "public")
-public class User {
+@Table(name = "project")
+public class Project {
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "nickname", length = 64, nullable = false, unique = true)
-    private String nickname;
+    @Column(name = "title", length = 128, nullable = false, unique = true)
+    private String title;
 
-    @Column(name = "email", length = 32, nullable = false, unique = true)
-    private String email;
+    @Column(name = "description", length = 4096)
+    private String description;
 
-    @Column(name = "password", length = 128, nullable = false, unique = true)
-    private String password;
-
-    @Column(name = "about_me", length = 4096)
-    private String aboutMe;
-
-    @OneToMany(mappedBy = "owner")
-    private List<Project> projects;
-
-    @OneToMany(mappedBy = "user")
-    private List<Post> posts;
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    private User owner;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
