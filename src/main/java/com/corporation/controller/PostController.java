@@ -7,12 +7,11 @@ import com.corporation.model.User;
 import com.corporation.service.PostService;
 import com.corporation.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,7 +23,7 @@ public class PostController {
     private final PostMapper postMapper;
 
 
-    @PostMapping
+    @PutMapping
     public PostDto createPost(@RequestBody PostDto postDto) {
         User user = userService.findById(postDto.getUserId());
         Post post = postMapper.toEntity(postDto);
