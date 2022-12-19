@@ -1,12 +1,11 @@
 package com.corporation.repository;
 
-import com.corporation.model.User;
+import com.corporation.model.Post;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-/**
- * @author Bleschunov Dmitry
- */
+
 @Repository
-public interface UserRepository extends CrudRepository<User, Long> {
+public interface PostRepository extends CrudRepository<Post, Long> {
+
 }

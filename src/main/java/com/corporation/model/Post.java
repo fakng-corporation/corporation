@@ -5,11 +5,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,40 +18,31 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-/**
- * @author Bleschunov Dmitry
- */
 @Data
+@Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "user", schema = "public")
-public class User {
+@Table(name = "post")
+public class Post {
+
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "nickname", length = 64, nullable = false, unique = true)
-    private String nickname;
+    @Column(name = "title", length = 64, nullable = false, unique = true)
+    private String title;
 
-    @Column(name = "email", length = 32, nullable = false, unique = true)
-    private String email;
+    @Column(name = "body", length = 10240, nullable = false)
+    private String body;
 
-    @Column(name = "password", length = 128, nullable = false, unique = true)
-    private String password;
+    @Column(name = "is_published")
+    private boolean isPublished;
 
-    @Column(name = "about_me", length = 4096)
-    private String aboutMe;
-
-    @OneToMany(mappedBy = "owner")
-    private List<Project> projects;
-
-    @OneToMany(mappedBy = "user")
-    private List<Post> posts;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
@@ -62,4 +53,8 @@ public class User {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @Column(name = "published_at")
+    private LocalDateTime publishedAt;
+
 }

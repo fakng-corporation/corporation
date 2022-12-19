@@ -17,7 +17,7 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public User findById(int id) {
+    public User findById(long id) {
         Optional<User> optionalUser = userRepository.findById(id);
         return optionalUser
                 .orElseThrow(() -> new UserNotFoundException(
