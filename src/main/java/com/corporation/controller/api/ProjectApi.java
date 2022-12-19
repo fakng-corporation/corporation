@@ -3,7 +3,7 @@ package com.corporation.controller.api;
 import com.corporation.dto.ProjectDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +17,6 @@ public interface ProjectApi {
     ProjectDto addProject(@RequestBody ProjectDto projectDto);
 
     @Operation(summary = "Изменение проекта", description = "Позволяет внести изменения в проект")
-    @PutMapping("/{id}")
-    ProjectDto updateProject(@PathVariable Long id, @RequestBody ProjectDto projectDto);
+    @PostMapping
+    ProjectDto updateProject(@RequestBody ProjectDto projectDto);
 }

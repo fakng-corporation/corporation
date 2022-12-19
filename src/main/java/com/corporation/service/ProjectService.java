@@ -8,6 +8,8 @@ import com.corporation.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
 @Service
 public class ProjectService {
@@ -16,18 +18,23 @@ public class ProjectService {
 
     private final ProjectMapper projectMapper;
 
-    public Project save(Project project) {
-        return projectRepository.save(project);
+    public ProjectDto add(ProjectDto projectDto) {
+        Project project = projectMapper.toEntity(projectDto);
+        return saveEntityAndReturnDto(project);
     }
 
-    public Project update(Long id, ProjectDto projectDto) {
-        if (projectRepository.existsById(id)) {
-            projectDto.setId(id);
-            Project project = projectMapper.toEntity(projectDto);
-            return projectRepository.save(project);
-        } else {
+    public ProjectDto update(ProjectDto projectDto) {
+        Optional<Project> project = projectRepository.findById(projectDto.getId());
+        if (project.isEmpty()) {
             throw new ProjectNotFoundException(
-                    String.format("Project with id %d does not exist.", id));
+                    String.format("Project with id %d does not exist.", projectDto.getId()));
         }
+        projectMapper.updateFromDto(projectDto, project.get());
+        return saveEntityAndReturnDto(project.get());
+    }
+
+    private ProjectDto saveEntityAndReturnDto(Project project) {
+        project = projectRepository.save(project);
+        return projectMapper.toDto(project);
     }
 }
