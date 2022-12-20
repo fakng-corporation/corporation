@@ -25,38 +25,39 @@ public class ProjectControllerTest {
     @InjectMocks
     private ProjectController projectController;
 
-//    @Test
-//    public void shouldReturnCreatedProjectDto() {
-//
-//        long id = 777;
-//        String title = "bigproject";
-//
-//        Project project = Project.builder().title(title).build();
-//        ProjectDto projectDto = projectMapper.toDto(project);
-//        Project projectWithId = Project.builder().id(id).title(title).build();
-//
-//        Mockito.when(projectService.add(project)).thenReturn(projectWithId);
-//
-//        ProjectDto createdProjectDto = projectController.addProject(projectDto);
-//
-//        Assertions.assertEquals(id, createdProjectDto.getId());
-//        Assertions.assertEquals(title, createdProjectDto.getTitle());
-//    }
+    @Test
+    public void shouldReturnCreatedProjectDto() {
 
-//    @Test
-//    public void shouldReturnUpdatedProjectDto() {
-//
-//        long id = 777;
-//        String newTitle = "bigproject1";
-//
-//        ProjectDto createdProjectDto = ProjectDto.builder().id(id).title(newTitle).build();
-//        Project projectWithNewTitle = Project.builder().id(id).title(newTitle).build();
-//
-//        Mockito.when(projectService.update(id, createdProjectDto)).thenReturn(projectWithNewTitle);
-//
-//        ProjectDto finalProjectDto = projectController.updateProject(id, createdProjectDto);
-//
-//        Assertions.assertEquals(id, finalProjectDto.getId());
-//        Assertions.assertEquals(newTitle, finalProjectDto.getTitle());
-//    }
+        long id = 777;
+        String title = "bigproject";
+
+        Project project = Project.builder().title(title).build();
+        ProjectDto projectDto = projectMapper.toDto(project);
+        Project projectWithId = Project.builder().id(id).title(title).build();
+        ProjectDto addedProjectDto = projectMapper.toDto(projectWithId);
+
+        Mockito.when(projectService.add(projectDto)).thenReturn(addedProjectDto);
+
+        ProjectDto createdProjectDto = projectController.addProject(projectDto);
+
+        Assertions.assertEquals(id, createdProjectDto.getId());
+        Assertions.assertEquals(title, createdProjectDto.getTitle());
+    }
+
+    @Test
+    public void shouldReturnUpdatedProjectDto() {
+
+        long id = 777;
+        String newTitle = "bigproject1";
+
+        Project projectWithNewTitle = Project.builder().id(id).title(newTitle).build();
+        ProjectDto projectDto = projectMapper.toDto(projectWithNewTitle);
+
+        Mockito.when(projectService.update(projectDto)).thenReturn(projectDto);
+
+        ProjectDto resultProjectDto = projectController.updateProject(projectDto);
+
+        Assertions.assertEquals(id, resultProjectDto.getId());
+        Assertions.assertEquals(newTitle, resultProjectDto.getTitle());
+    }
 }
