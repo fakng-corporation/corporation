@@ -27,11 +27,9 @@ public class ProjectService {
 
     public ProjectDto update(ProjectDto projectDto) {
         Optional<Project> project = projectRepository.findById(projectDto.getId());
-        if (project.isEmpty()) {
-            throw new ProjectNotFoundException(
-                    String.format("Project with id %d does not exist.", projectDto.getId()));
-        }
-        projectMapper.updateFromDto(projectDto, project.get());
+        project.ifPresentOrElse(p -> projectMapper.updateFromDto(projectDto, project.get()),
+                () -> {throw new ProjectNotFoundException(
+                        String.format("Project with id %d does not exist.", projectDto.getId()));});
         setUserToProjectByIdFromDto(project, projectDto.getOwnerId());
         return saveEntityAndReturnDto(project.get());
     }
@@ -42,7 +40,9 @@ public class ProjectService {
     }
 
     private void setUserToProjectByIdFromDto(Optional<Project> project, long ownerId) {
-        User user = userService.findById(ownerId);
-        project.get().setOwner(user);
+        if(project.get().getOwner().getId() != ownerId) {
+            User user = userService.findById(ownerId);
+            project.get().setOwner(user);
+        }
     }
 }
