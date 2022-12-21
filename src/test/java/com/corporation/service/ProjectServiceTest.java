@@ -18,6 +18,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
+
 @ExtendWith(MockitoExtension.class)
 public class ProjectServiceTest {
     @Mock
@@ -80,7 +82,7 @@ public class ProjectServiceTest {
         Project project = Project.builder().id(id).build();
         ProjectDto projectDto = projectMapper.toDto(project);
 
-        Mockito.when(projectRepository.findById(Mockito.any(long.class)))
+        Mockito.when(projectRepository.findById(any(long.class)))
                 .thenReturn(Optional.empty());
 
         Assertions.assertThrows(
@@ -89,4 +91,15 @@ public class ProjectServiceTest {
         );
     }
 
+    @Test
+    public void shouldDeleteProject() {
+
+        Project project = Project.builder().id(any(Long.class)).build();
+        ProjectDto projectDto = projectMapper.toDto(project);
+        Mockito.when(projectRepository.findById(project.getId()))
+                .thenReturn(Optional.of(project));
+        projectService.delete(projectDto);
+
+        Mockito.verify(projectRepository).delete(project);
+    }
 }
