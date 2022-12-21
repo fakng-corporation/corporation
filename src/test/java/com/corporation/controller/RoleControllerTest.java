@@ -2,9 +2,7 @@ package com.corporation.controller;
 
 import com.corporation.dto.RoleDto;
 import com.corporation.mapper.RoleMapperImpl;
-import com.corporation.model.Project;
 import com.corporation.model.Role;
-import com.corporation.service.ProjectService;
 import com.corporation.service.RoleService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -21,9 +19,6 @@ public class RoleControllerTest {
     @Mock
     private RoleService roleService;
 
-    @Mock
-    private ProjectService projectService;
-
     @Spy
     private RoleMapperImpl roleMapper;
 
@@ -31,48 +26,20 @@ public class RoleControllerTest {
     private RoleController roleController;
 
     @Test
-    void shouldReturnCreatedPostDto() {
-
+    public void shouldReturnCreatedRoleDto() {
         long id = 1;
-        String title = "roleTitle";
-        String description = "roleDescription";
+        String title = "cool role";
 
-        int projectId = 1;
-        String projectTitle = "projectTitle";
-        String projectDescription = "projectDescription";
-
-        Project mockProject = Project
-                .builder()
-                .id(projectId)
-                .title(projectTitle)
-                .description(projectDescription)
-                .build();
-
-        Role role = Role
-                .builder()
-                .title(title)
-                .description(description)
-                .build();
-
-        Role roleWithId = Role
-                .builder()
-                .id(id)
-                .title(title)
-                .description(description)
-                .project(mockProject)
-                .build();
-
+        Role role = Role.builder().title(title).build();
         RoleDto roleDto = roleMapper.toDto(role);
+        Role roleWithId = Role.builder().id(id).title(title).build();
+        RoleDto roleDtoWithId = roleMapper.toDto(roleWithId);
 
-        Mockito.when(roleService.saveRole(role)).thenReturn(roleWithId);
+        Mockito.when(roleService.add(roleDto)).thenReturn(roleDtoWithId);
 
-        RoleDto createdRoleDto = roleController.createRole(roleDto);
-
-        Mockito.verify(roleMapper).toEntity(roleDto);
+        RoleDto createdRoleDto = roleController.addRole(roleDto);
 
         Assertions.assertEquals(id, createdRoleDto.getId());
         Assertions.assertEquals(title, createdRoleDto.getTitle());
-        Assertions.assertEquals(description, createdRoleDto.getDescription());
-        Assertions.assertEquals(projectId, createdRoleDto.getProjectId());
     }
 }

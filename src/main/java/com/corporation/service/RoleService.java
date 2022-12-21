@@ -2,7 +2,6 @@ package com.corporation.service;
 
 import com.corporation.dto.RoleDto;
 import com.corporation.mapper.RoleMapper;
-import com.corporation.model.Project;
 import com.corporation.model.Role;
 import com.corporation.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,21 +16,14 @@ public class RoleService {
     private final RoleMapper roleMapper;
 
     private final ProjectService projectService;
-
-    public Role saveRole(Role role) {
-        return roleRepository.save(role);
-    }
-
-    public RoleDto formatToDto(Role role) {
-        RoleDto roleDto = roleMapper.toDto(role);
-        roleDto.setProjectId(role.getProject().getId());
-        return roleDto;
-    }
-
-    public Role setUpRole(RoleDto roleDto) {
-        Project project = projectService.findById(roleDto.getProjectId());
+    public RoleDto add(RoleDto roleDto) {
         Role role = roleMapper.toEntity(roleDto);
-        role.setProject(project);
-        return role;
+        role.setProject(projectService.findById(roleDto.getProjectId()));
+        return saveEntityAndReturnDto(role);
+    }
+
+    private RoleDto saveEntityAndReturnDto(Role role) {
+        role = roleRepository.save(role);
+        return roleMapper.toDto(role);
     }
 }
