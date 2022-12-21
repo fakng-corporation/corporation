@@ -1,10 +1,7 @@
 package com.corporation.controller;
 
 import com.corporation.dto.RoleDto;
-import com.corporation.mapper.RoleMapper;
-import com.corporation.model.Project;
 import com.corporation.model.Role;
-import com.corporation.service.ProjectService;
 import com.corporation.service.RoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -19,18 +16,10 @@ public class RoleController {
 
     private final RoleService roleService;
 
-    private final RoleMapper roleMapper;
-
-    private final ProjectService projectService;
-
     @PutMapping
     public RoleDto createRole(@RequestBody RoleDto roleDto) {
-        Project project = projectService.findById(roleDto.getProjectId());
-        Role role = roleMapper.toEntity(roleDto);
-        role.setProject(project);
+        Role role = roleService.setUpRole(roleDto);
         role = roleService.saveRole(role);
-        RoleDto roleDtoToReturn = roleMapper.toDto(role);
-        roleDtoToReturn.setProjectId(role.getProject().getId());
-        return roleDtoToReturn;
+        return roleService.formatToDto(role);
     }
 }
