@@ -19,30 +19,29 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
+/**
+ * @author Bleschunov Dmitry
+ */
 @Data
-@Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "post")
-public class Post {
-
+@Entity
+@Table(name = "project")
+public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "title", length = 64, nullable = false, unique = true)
+    @Column(name = "title", length = 128, nullable = false, unique = true)
     private String title;
 
-    @Column(name = "body", length = 10240, nullable = false)
-    private String body;
-
-    @Column(name = "is_published")
-    private boolean isPublished;
+    @Column(name = "description", length = 4096)
+    private String description;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "owner_id")
+    private User owner;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
@@ -53,8 +52,4 @@ public class Post {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-
-    @Column(name = "published_at")
-    private LocalDateTime publishedAt;
-
 }

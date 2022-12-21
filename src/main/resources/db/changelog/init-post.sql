@@ -1,9 +1,11 @@
-CREATE TABLE IF NOT EXISTS post (
-    id BIGSERIAL PRIMARY KEY,
-    title VARCHAR(128) NOT NULL,
-    body VARCHAR(8192) NOT NULL,
-    created_at TIMESTAMPTZ DEFAULT current_timestamp,
-    updated_at TIMESTAMPTZ DEFAULT current_timestamp,
-    published_at TIMESTAMPTZ DEFAULT current_timestamp,
-    user_id BIGSERIAL NOT NULL references post(id)
-);
+CREATE TABLE post (
+    id  BIGSERIAL PRIMARY KEY,
+    title varchar(128) not null,
+    body varchar(10240) not null,
+    user_id bigint,
+    is_published boolean,
+    created_at timestamptz DEFAULT current_timestamp,
+    updated_at timestamptz DEFAULT current_timestamp,
+    published_at timestamptz DEFAULT current_timestamp,
+    FOREIGN KEY (user_id) REFERENCES "user"(id) ON DELETE CASCADE
+)

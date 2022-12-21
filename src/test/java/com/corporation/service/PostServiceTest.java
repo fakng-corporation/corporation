@@ -12,15 +12,17 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.EmptyResultDataAccessException;
+
 import java.time.LocalDateTime;
 
 @ExtendWith(MockitoExtension.class)
-public class PostServiceTest {
+class PostServiceTest {
+
     @Mock
-    PostRepository postRepository;
+    private PostRepository postRepository;
 
     @InjectMocks
-    PostService postService;
+    private PostService postService;
 
     private Long existingId;
     private Long nonExistingId;
@@ -31,7 +33,7 @@ public class PostServiceTest {
     public void setUp () {
         existingId = 12L;
         nonExistingId = 100L;
-         mockUser = User
+        mockUser = User
                 .builder()
                 .id(existingId)
                 .nickname("jonnyrocket")
@@ -49,6 +51,27 @@ public class PostServiceTest {
                 .is_published(true)
                 .user(mockUser)
                 .build();
+    }
+
+    @Test
+    public void shouldReturnCreatedPost() {
+
+        long id = 322;
+        String title = "Some Title";
+        String body = "Здесь мог быть Ваш код";
+        boolean isPublished = false;
+
+        Post mockPost = Post.builder().id(id).title(title).body(body).build();
+
+        Mockito.when(postRepository.save(mockPost)).thenReturn(mockPost);
+
+        Post createdPost = postService.savePostDraft(mockPost);
+
+        Assertions.assertEquals(id, createdPost.getId());
+        Assertions.assertEquals(title, createdPost.getTitle());
+        Assertions.assertEquals(body, createdPost.getBody());
+        Assertions.assertEquals(isPublished, createdPost.isPublished());
+
     }
 
     @Test
