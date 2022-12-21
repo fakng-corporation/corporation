@@ -34,12 +34,30 @@ public class ProjectControllerTest {
         Project project = Project.builder().title(title).build();
         ProjectDto projectDto = projectMapper.toDto(project);
         Project projectWithId = Project.builder().id(id).title(title).build();
+        ProjectDto addedProjectDto = projectMapper.toDto(projectWithId);
 
-        Mockito.when(projectService.save(project)).thenReturn(projectWithId);
+        Mockito.when(projectService.add(projectDto)).thenReturn(addedProjectDto);
 
         ProjectDto createdProjectDto = projectController.addProject(projectDto);
 
         Assertions.assertEquals(id, createdProjectDto.getId());
         Assertions.assertEquals(title, createdProjectDto.getTitle());
+    }
+
+    @Test
+    public void shouldReturnUpdatedProjectDto() {
+
+        long id = 777;
+        String newTitle = "bigproject1";
+
+        Project projectWithNewTitle = Project.builder().id(id).title(newTitle).build();
+        ProjectDto projectDto = projectMapper.toDto(projectWithNewTitle);
+
+        Mockito.when(projectService.update(projectDto)).thenReturn(projectDto);
+
+        ProjectDto resultProjectDto = projectController.updateProject(projectDto);
+
+        Assertions.assertEquals(id, resultProjectDto.getId());
+        Assertions.assertEquals(newTitle, resultProjectDto.getTitle());
     }
 }

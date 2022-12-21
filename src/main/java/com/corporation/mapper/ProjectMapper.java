@@ -4,6 +4,7 @@ import com.corporation.dto.ProjectDto;
 import com.corporation.model.Project;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface ProjectMapper {
@@ -11,6 +12,10 @@ public interface ProjectMapper {
     @Mapping(target = "owner", ignore = true)
     Project toEntity(ProjectDto projectDto);
 
-    @Mapping(target = "ownerId", ignore = true)
+    @Mapping(source = "owner.id", target = "ownerId")
     ProjectDto toDto(Project project);
+
+    @Mapping(target = "owner", ignore = true)
+    void updateFromDto(ProjectDto projectDto, @MappingTarget Project project);
+
 }
