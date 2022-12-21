@@ -1,5 +1,6 @@
 package com.corporation.service;
 
+import com.corporation.exception.ProjectNotFoundException;
 import com.corporation.dto.ProjectDto;
 import com.corporation.exception.ProjectNotFoundException;
 import com.corporation.mapper.ProjectMapper;
@@ -7,6 +8,7 @@ import com.corporation.model.Project;
 import com.corporation.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -35,5 +37,13 @@ public class ProjectService {
     private ProjectDto saveEntityAndReturnDto(Project project) {
         project = projectRepository.save(project);
         return projectMapper.toDto(project);
+    }
+
+    public Project findById(long id) {
+        Optional<Project> optionalProject = projectRepository.findById(id);
+        return optionalProject
+                .orElseThrow(() -> new ProjectNotFoundException(
+                        String.format("Project with id %d does not exist.", id)
+                ));
     }
 }
