@@ -13,6 +13,10 @@ import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
+import static org.mockito.ArgumentMatchers.any;
+
 @ExtendWith(MockitoExtension.class)
 public class ProjectControllerTest {
 
@@ -59,5 +63,14 @@ public class ProjectControllerTest {
 
         Assertions.assertEquals(id, resultProjectDto.getId());
         Assertions.assertEquals(newTitle, resultProjectDto.getTitle());
+    }
+
+    @Test
+    public void shouldDeleteProject() {
+        Project project = Project.builder().id(any(Long.class)).build();
+        ProjectDto projectDto = projectMapper.toDto(project);
+        projectController.deleteProject(projectDto);
+
+        Mockito.verify(projectService).delete(projectDto);
     }
 }
