@@ -32,6 +32,10 @@ public class ProjectService {
                         String.format("Project with id %d does not exist.", projectDto.getId())));
     }
 
+    public void delete(Long id) {
+        projectRepository.deleteById(id);
+    }
+
     private ProjectDto saveEntityAndReturnDto(Project project) {
         project = projectRepository.save(project);
         return projectMapper.toDto(project);
