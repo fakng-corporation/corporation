@@ -4,12 +4,9 @@ import com.corporation.dto.ProjectDto;
 import com.corporation.exception.ProjectNotFoundException;
 import com.corporation.mapper.ProjectMapper;
 import com.corporation.model.Project;
-import com.corporation.model.User;
 import com.corporation.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -26,17 +23,13 @@ public class ProjectService {
     }
 
     public ProjectDto update(ProjectDto projectDto) {
-        Optional<Project> project = projectRepository.findById(projectDto.getId());
-        project.ifPresentOrElse(p -> projectMapper.updateFromDto(projectDto, project.get()),
-                () -> {
-                    throw new ProjectNotFoundException(
-                            String.format("Project with id %d does not exist.", projectDto.getId()));
-                });
-        if (project.get().getOwner().getId() != projectDto.getOwnerId()) {
-            User user = userService.findById(projectDto.getOwnerId());
-            project.get().setOwner(user);
-        }
-        return saveEntityAndReturnDto(project.get());
+        return projectRepository.findById(projectDto.getId())
+                .map(project -> {
+                    projectMapper.updateFromDto(projectDto, project);
+                    return saveEntityAndReturnDto(project);
+                })
+                .orElseThrow(() -> new ProjectNotFoundException(
+                        String.format("Project with id %d does not exist.", projectDto.getId())));
     }
 
     private ProjectDto saveEntityAndReturnDto(Project project) {

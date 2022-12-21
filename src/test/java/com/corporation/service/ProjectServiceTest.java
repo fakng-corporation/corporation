@@ -58,25 +58,18 @@ public class ProjectServiceTest {
         long projectId = 10;
         String oldTitle = "old title";
         String newTitle = "new title";
-        long oldOwnerId = 5;
-        long newOwnerId = 15;
-        User oldOwner = User.builder().id(oldOwnerId).build();
-        User newOwner = User.builder().id(newOwnerId).build();
-        Project project = Project.builder().id(projectId).title(oldTitle).owner(oldOwner).build();
-        Project updatedProject = Project.builder().id(projectId).title(newTitle).owner(newOwner).build();
+        Project project = Project.builder().id(projectId).title(oldTitle).build();
+        Project updatedProject = Project.builder().id(projectId).title(newTitle).build();
         ProjectDto projectDto = projectMapper.toDto(updatedProject);
 
         Mockito.when(projectRepository.findById(projectId))
                 .thenReturn(Optional.of(project));
-        Mockito.when(userService.findById(newOwnerId))
-                .thenReturn(newOwner);
         Mockito.when(projectRepository.save(project))
                 .thenReturn(updatedProject);
         ProjectDto returnedProject = projectService.update(projectDto);
 
         Assertions.assertEquals(projectId, returnedProject.getId());
         Assertions.assertEquals(newTitle, returnedProject.getTitle());
-        Assertions.assertEquals(newOwnerId, returnedProject.getOwnerId());
     }
 
     @Test
