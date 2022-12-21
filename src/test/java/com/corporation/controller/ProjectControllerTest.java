@@ -13,8 +13,6 @@ import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Optional;
-
 import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)
@@ -68,9 +66,8 @@ public class ProjectControllerTest {
     @Test
     public void shouldDeleteProject() {
         Project project = Project.builder().id(any(Long.class)).build();
-        ProjectDto projectDto = projectMapper.toDto(project);
-        projectController.deleteProject(projectDto);
+        projectController.deleteProject(project.getId());
 
-        Mockito.verify(projectService).delete(projectDto);
+        Mockito.verify(projectService).delete(project.getId());
     }
 }

@@ -95,25 +95,8 @@ public class ProjectServiceTest {
     public void shouldDeleteProject() {
 
         Project project = Project.builder().id(any(Long.class)).build();
-        ProjectDto projectDto = projectMapper.toDto(project);
-        Mockito.when(projectRepository.findById(project.getId()))
-                .thenReturn(Optional.of(project));
-        projectService.delete(projectDto);
+        projectService.delete(project.getId());
 
-        Mockito.verify(projectRepository).delete(project);
-    }
-
-    @Test
-    public void shouldThrowProjectNotFoundExceptionWhenDeleting() {
-
-        Project project = Project.builder().id(any(Long.class)).build();
-        ProjectDto projectDto = projectMapper.toDto(project);
-        Mockito.when(projectRepository.findById(any(Long.class)))
-                .thenReturn(Optional.empty());
-
-        Assertions.assertThrows(
-                ProjectNotFoundException.class,
-                () -> projectService.delete(projectDto)
-        );
+        Mockito.verify(projectRepository).deleteById(project.getId());
     }
 }

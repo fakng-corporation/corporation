@@ -4,6 +4,7 @@ import com.corporation.dto.ProjectDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,6 +23,6 @@ public interface ProjectApi {
     ProjectDto updateProject(@RequestBody ProjectDto projectDto);
 
     @Operation(summary = "Удаление проекта", description = "Позволяет удалить проект по Id")
-    @DeleteMapping
-    void deleteProject(@RequestBody ProjectDto projectDto);
+    @DeleteMapping("/{id}")
+    void deleteProject(@PathVariable("id") Long id);
 }

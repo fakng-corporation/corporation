@@ -22,7 +22,7 @@ public class ProjectController implements ProjectApi {
     }
 
     @Override
-    public void deleteProject(ProjectDto projectDto) {
-        projectService.delete(projectDto);
+    public void deleteProject(Long id) {
+        projectService.delete(id);
     }
 }
