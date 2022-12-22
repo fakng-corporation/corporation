@@ -12,3 +12,5 @@ spring:
   properties:
     hibernate:
       format_sql: true
+email:
+  from: fakng-corporation@proton.me
