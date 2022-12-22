@@ -41,7 +41,7 @@ public class TokenProviderTest {
 
     @Test
     public void shouldReturnAuthentication() {
-        String token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib2JhIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY3MTcyNzA3OX0.8IVTattW_6uSelcdwCs8W0RHZ78MDOuzw7Wfe-9o9iw";
+        String token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib2JhIiwiYXV0aCI6IlJPTEVfVVNFUiJ9.r4YIpClbz47ZgPsTBApKGjnyXqW7cZfpFw_8t13heKI";
 
         Authentication authentication = tokenProvider.getAuthentication(token);
 
@@ -57,7 +57,7 @@ public class TokenProviderTest {
 
     @Test
     public void shouldReturnTrue() {
-        String token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib2JhIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY3MTcyNzA3OX0.8IVTattW_6uSelcdwCs8W0RHZ78MDOuzw7Wfe-9o9iw";
+        String token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib2JhIiwiYXV0aCI6IlJPTEVfVVNFUiJ9.r4YIpClbz47ZgPsTBApKGjnyXqW7cZfpFw_8t13heKI";
 
         Assertions.assertTrue(tokenProvider.validateToken(token));
     }
