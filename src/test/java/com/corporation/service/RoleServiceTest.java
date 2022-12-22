@@ -15,6 +15,8 @@ import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static org.mockito.ArgumentMatchers.any;
+
 @ExtendWith(MockitoExtension.class)
 public class RoleServiceTest {
 
@@ -48,5 +50,14 @@ public class RoleServiceTest {
         Assertions.assertEquals(roleId, returnedRole.getId());
         Assertions.assertEquals(title, returnedRole.getTitle());
         Assertions.assertEquals(projectId, returnedRole.getProjectId());
+    }
+
+    @Test
+    public void shouldDeleteProject() {
+
+        Role role = Role.builder().id(any(Long.class)).build();
+        roleService.delete(role.getId());
+
+        Mockito.verify(roleRepository).deleteById(role.getId());
     }
 }

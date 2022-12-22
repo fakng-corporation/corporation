@@ -26,4 +26,8 @@ public class RoleService {
         role = roleRepository.save(role);
         return roleMapper.toDto(role);
     }
+
+    public void delete(Long id) {
+        roleRepository.deleteById(id);
+    }
 }
