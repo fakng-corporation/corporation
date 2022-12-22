@@ -10,5 +10,5 @@ import org.mapstruct.Mapper;
  */
 @Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.FIELD)
 public interface UserMapper {
-    UserDto toUserDto(User user);
+    UserDto toDto(User user);
 }

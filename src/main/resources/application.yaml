@@ -6,9 +6,13 @@ spring:
     url: jdbc:postgresql://localhost:5432/fakng-db?allowPublicKeyRetrieval=true&useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
     username: postgres
     password: admin
+  security:
+    secret: ZG1pdHJ5Ymxlc2NodW5vdl9pc19zdXBlcl9wdXBlcl9jbGFzcwo
   jpa:
     show-sql: true
     open-in-view: false
   properties:
     hibernate:
       format_sql: true
+
+

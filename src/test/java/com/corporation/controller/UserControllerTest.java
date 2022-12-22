@@ -51,7 +51,7 @@ public class UserControllerTest {
 
         ResponseEntity<UserDto> userResponseEntity = userController.getUserById(desiredId);
 
-        Mockito.verify(userMapper).toUserDto(mockUser);
+        Mockito.verify(userMapper).toDto(mockUser);
 
         Assertions.assertEquals(200, userResponseEntity.getStatusCode().value());
 
