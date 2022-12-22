@@ -8,11 +8,18 @@ import com.amazonaws.services.simpleemail.model.Content;
 import com.amazonaws.services.simpleemail.model.Destination;
 import com.amazonaws.services.simpleemail.model.Message;
 import com.amazonaws.services.simpleemail.model.SendEmailRequest;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 /**
  * @author Bleschunov Dmitry
  */
+@Service
 public class EmailService {
+
+    @Value("${email.from}")
+    private String from;
+
     public void sendEmail(Email email) {
         try {
             AmazonSimpleEmailService client =
@@ -21,15 +28,7 @@ public class EmailService {
             SendEmailRequest request = new SendEmailRequest()
                     .withDestination(
                             new Destination().withToAddresses(email.getTo()))
-//                    .withMessage(new Message()
-//                            .withBody(new Body()
-//                                    .withHtml(new Content()
-//                                            .withCharset("UTF-8").withData(email.getHtmlBody()))
-//                                    .withText(new Content()
-//                                            .withCharset("UTF-8").withData(email.getTextBody())))
-//                            .withSubject(new Content()
-//                                    .withCharset("UTF-8").withData(email.getSubject())))
-                    .withSource(email.getFrom());
+                    .withSource(from);
 
             if (email.getTextBody() != null) {
                 request.withMessage(new Message()

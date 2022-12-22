@@ -9,7 +9,6 @@ import lombok.Getter;
 @Builder
 @Getter
 public class Email {
-    private String from;
     private String to;
     private String subject;
     private String htmlBody;
