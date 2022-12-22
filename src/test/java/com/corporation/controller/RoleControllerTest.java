@@ -13,6 +13,8 @@ import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static org.mockito.ArgumentMatchers.any;
+
 @ExtendWith(MockitoExtension.class)
 public class RoleControllerTest {
 
@@ -27,7 +29,7 @@ public class RoleControllerTest {
 
     @Test
     public void shouldReturnCreatedRoleDto() {
-        long id = 1;
+        long id = any(Long.class);
         String title = "cool role";
 
         Role role = Role.builder().title(title).build();
@@ -41,5 +43,13 @@ public class RoleControllerTest {
 
         Assertions.assertEquals(id, createdRoleDto.getId());
         Assertions.assertEquals(title, createdRoleDto.getTitle());
+    }
+
+    @Test
+    public void shouldDeleteRole() {
+        Role role = Role.builder().id(any(Long.class)).build();
+        roleController.deleteRole(role.getId());
+
+        Mockito.verify(roleService).delete(role.getId());
     }
 }

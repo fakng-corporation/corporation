@@ -17,4 +17,9 @@ public class RoleController implements RoleApi {
     public RoleDto addRole(RoleDto roleDto) {
         return roleService.add(roleDto);
     }
+
+    @Override
+    public void deleteRole(Long id) {
+        roleService.delete(id);
+    }
 }
