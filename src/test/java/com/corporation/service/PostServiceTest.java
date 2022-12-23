@@ -25,7 +25,7 @@ public class PostServiceTest {
     private Long nonExistingId;
 
     @BeforeEach
-    public void setUp () {
+    public void setUp() {
         existingId = 12L;
         nonExistingId = 100L;
     }
@@ -52,16 +52,9 @@ public class PostServiceTest {
     }
 
     @Test
-    public void shouldDeleteById () {
+    public void shouldDeleteById() {
         Mockito.doNothing().when(postRepository).deleteById(existingId);
         Assertions.assertDoesNotThrow(() -> postRepository.deleteById(existingId));
         Mockito.verify(postRepository, Mockito.times(1)).deleteById(existingId);
-    }
-
-    @Test
-    public void shouldThrowExceptionDeleteById () {
-        Mockito.doThrow(EmptyResultDataAccessException.class).when(postRepository).deleteById(nonExistingId);
-        Assertions.assertThrows(EmptyResultDataAccessException.class, (() -> postService.deleteById(nonExistingId)));
-        Mockito.verify(postRepository, Mockito.times(1)).deleteById(nonExistingId);
     }
 }

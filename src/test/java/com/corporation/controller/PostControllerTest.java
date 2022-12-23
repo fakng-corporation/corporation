@@ -15,7 +15,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.dao.EmptyResultDataAccessException;
 
 @ExtendWith(MockitoExtension.class)
 class PostControllerTest {
@@ -33,12 +32,10 @@ class PostControllerTest {
     private PostController postController;
 
     private Long existingId;
-    private Long nonExistingId;
 
     @BeforeEach
-    public void setUp () {
+    public void setUp() {
         existingId = 12L;
-        nonExistingId = 100L;
     }
 
     @Test
@@ -82,18 +79,10 @@ class PostControllerTest {
     }
 
     @Test
-    public void shoudDeleteById () {
+    public void shoudDeleteById() {
         Mockito.doNothing().when(postService).deleteById(existingId);
         Assertions.assertDoesNotThrow(() -> postService.deleteById(existingId));
         Mockito.verify(postService, Mockito.times(1)).deleteById(existingId);
     }
-
-    @Test
-    public void shouldThrowExceptionDeleteById () {
-        Mockito.doThrow(EmptyResultDataAccessException.class).when(postService).deleteById(nonExistingId);
-        Assertions.assertThrows(EmptyResultDataAccessException.class, (() -> postService.deleteById(nonExistingId)));
-        Mockito.verify(postService, Mockito.times(1)).deleteById(nonExistingId);
-    }
-
 
 }
