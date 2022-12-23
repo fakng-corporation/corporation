@@ -1,4 +1,4 @@
-package com.corporation.controller;
+package com.corporation.controller.auth;
 
 import com.corporation.configuration.jwt.TokenProvider;
 import com.corporation.dto.AuthDto;
