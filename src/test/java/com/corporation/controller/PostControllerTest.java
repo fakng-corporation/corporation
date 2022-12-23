@@ -5,6 +5,7 @@ import com.corporation.mapper.PostMapperImpl;
 import com.corporation.model.Post;
 import com.corporation.model.User;
 import com.corporation.service.PostService;
+import com.corporation.service.UserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,10 +18,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.EmptyResultDataAccessException;
 
 @ExtendWith(MockitoExtension.class)
-public class PostControllerTest {
+class PostControllerTest {
 
     @Mock
     private PostService postService;
+
+    @Mock
+    private UserService userService;
 
     @Spy
     private PostMapperImpl postMapper;
