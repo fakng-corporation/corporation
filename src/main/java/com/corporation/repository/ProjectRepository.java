@@ -1,10 +1,14 @@
 package com.corporation.repository;
 
 import com.corporation.model.Project;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface ProjectRepository extends CrudRepository<Project, Long> {
+import java.util.List;
 
+@Repository
+public interface ProjectRepository extends JpaRepository<Project, Long> {
+
+    List<Project> findByTitleLikeIgnoreCase(String keyword, Pageable pageable);
 }

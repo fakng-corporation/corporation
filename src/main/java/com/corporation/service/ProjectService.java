@@ -2,12 +2,16 @@ package com.corporation.service;
 
 import com.corporation.exception.ProjectNotFoundException;
 import com.corporation.dto.ProjectDto;
-import com.corporation.exception.ProjectNotFoundException;
 import com.corporation.mapper.ProjectMapper;
 import com.corporation.model.Project;
 import com.corporation.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -49,5 +53,11 @@ public class ProjectService {
                 .orElseThrow(() -> new ProjectNotFoundException(
                         String.format("Project with id %d does not exist.", id)
                 ));
+    }
+
+    public List<ProjectDto> getProjectsByTitle(String keyword, int pageNumber, int pageSize) {
+        Sort sort = Sort.by(Sort.DEFAULT_DIRECTION, "title");
+        Pageable pages = PageRequest.of(pageNumber, pageSize, sort);
+        return projectRepository.findByTitleLikeIgnoreCase(keyword, pages).stream().map(projectMapper::toDto).toList();
     }
 }
