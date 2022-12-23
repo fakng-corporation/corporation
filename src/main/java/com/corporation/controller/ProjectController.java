@@ -20,4 +20,9 @@ public class ProjectController implements ProjectApi {
     public ProjectDto updateProject(ProjectDto projectDto) {
         return projectService.update(projectDto);
     }
+
+    @Override
+    public void deleteProject(Long id) {
+        projectService.delete(id);
+    }
 }
