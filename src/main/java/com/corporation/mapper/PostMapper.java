@@ -12,5 +12,6 @@ public interface PostMapper {
     PostDto toDto(Post post);
 
     @Mapping(target = "user", ignore = true)
+    @Mapping(target = "isPublished", ignore = true)
     Post toEntity(PostDto postDto);
 }
