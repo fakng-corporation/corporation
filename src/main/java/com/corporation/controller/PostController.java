@@ -30,6 +30,7 @@ public class PostController {
         post.setUser(user);
         post = postService.savePostDraft(post);
         PostDto postDtoToReturn = postMapper.toDto(post);
+        postDtoToReturn.setIsPublished(false);
         postDtoToReturn.setUserId(post.getUser().getId());
         return postDtoToReturn;
     }

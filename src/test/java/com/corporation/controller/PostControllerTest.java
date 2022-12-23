@@ -36,7 +36,7 @@ class PostControllerTest {
         long id = 7;
         String title = "Король Тайтлов";
         String body = "Это всё равно никто не читает, чтобы тут не было написано";
-        boolean isPublished = false;
+        Boolean isPublished = false;
 
         int desiredId = 1;
         String nickname = "boba";
@@ -67,7 +67,7 @@ class PostControllerTest {
         Assertions.assertEquals(title, createdPostDto.getTitle());
         Assertions.assertEquals(body, createdPostDto.getBody());
         Assertions.assertEquals(desiredId, createdPostDto.getUserId());
-        Assertions.assertEquals(isPublished, createdPostDto.isPublished());
+        Assertions.assertEquals(isPublished, createdPostDto.getIsPublished());
 
     }
 
