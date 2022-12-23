@@ -1,6 +1,8 @@
 package com.corporation.service;
 
+import com.corporation.dto.UserDto;
 import com.corporation.exception.UserNotFoundException;
+import com.corporation.mapper.UserMapperImpl;
 import com.corporation.model.User;
 import com.corporation.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
@@ -9,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
@@ -21,6 +24,9 @@ public class UserServiceTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Spy
+    private UserMapperImpl userMapper;
 
     @InjectMocks
     private UserService userService;
@@ -52,6 +58,41 @@ public class UserServiceTest {
         Assertions.assertEquals(email, user.getEmail());
         Assertions.assertEquals(password, user.getPassword());
         Assertions.assertEquals(aboutMe, user.getAboutMe());
+    }
+
+    @Test
+    public void shouldReturnUpdatedUser() {
+        long desiredId = 1;
+        String oldNickname = "boba";
+        String oldEmail = "boba@boba.com";
+        String oldAboutMe = "I am boba!";
+        String newNickname = "new boba";
+        String newEmail = "new_boba@boba.com";
+        String newAboutMe = "I am new boba!";
+        User oldUser = User
+                .builder()
+                .id(desiredId)
+                .nickname(oldNickname)
+                .email(oldEmail)
+                .aboutMe(oldAboutMe)
+                .build();
+        User newUser = User
+                .builder()
+                .id(desiredId)
+                .nickname(newNickname)
+                .email(newEmail)
+                .aboutMe(newAboutMe)
+                .build();
+        UserDto newUserDto = userMapper.toUserDto(newUser);
+
+        Mockito.when(userRepository.findById(desiredId))
+                .thenReturn(Optional.of(oldUser));
+        User user = userService.update(desiredId, newUserDto);
+
+        Assertions.assertEquals(desiredId, user.getId());
+        Assertions.assertEquals(newNickname, user.getNickname());
+        Assertions.assertEquals(newEmail, user.getEmail());
+        Assertions.assertEquals(newAboutMe, user.getAboutMe());
     }
 
     @Test
