@@ -36,7 +36,7 @@ class PostServiceTest {
         Assertions.assertEquals(id, createdPost.getId());
         Assertions.assertEquals(title, createdPost.getTitle());
         Assertions.assertEquals(body, createdPost.getBody());
-        Assertions.assertEquals(isPublished, createdPost.isPublished());
+        Assertions.assertEquals(isPublished, createdPost.getIsPublished());
 
     }
 

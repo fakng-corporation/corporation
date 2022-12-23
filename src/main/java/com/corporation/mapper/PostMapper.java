@@ -9,6 +9,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.FIELD)
 public interface PostMapper {
     @Mapping(source = "user.id", target = "userId")
+    @Mapping(source = "isPublished", target = "isPublished")
     PostDto toDto(Post post);
 
     @Mapping(target = "user", ignore = true)

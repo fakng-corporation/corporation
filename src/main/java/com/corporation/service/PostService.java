@@ -13,7 +13,7 @@ public class PostService {
     private final PostRepository postRepository;
 
     public Post savePostDraft(Post post) {
-        post.setPublished(false);
+        post.setIsPublished(false);
         return postRepository.save(post);
     }
 }
