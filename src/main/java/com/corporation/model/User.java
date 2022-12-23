@@ -50,8 +50,11 @@ public class User implements UserDetails {
     @Column(name = "password", length = 128, nullable = false, unique = true)
     private String password;
 
+    @Column(name = "enabled", nullable = false)
+    private boolean enabled;
+
     @ManyToOne
-    @JoinColumn(name = "authority", referencedColumnName = "authority")
+    @JoinColumn(name = "authority_id", referencedColumnName = "id")
     private Authority authority;
 
     @Column(name = "about_me", length = 4096)
@@ -75,7 +78,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority(authority.getUserRole()));
+        return Collections.singletonList(new SimpleGrantedAuthority(authority.getAuthority()));
     }
 
     @Override
@@ -100,6 +103,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 }

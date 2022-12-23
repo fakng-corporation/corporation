@@ -1,5 +1,6 @@
 package com.corporation.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -18,9 +19,13 @@ import java.util.List;
 public class Authority {
 
     @Id
-    @Column(name = "authority")
-    private String userRole;
+    @Column(name = "id")
+    private short id;
 
+    @Column(name = "authority")
+    private String authority;
+
+    @JsonIgnore
     @OneToMany(mappedBy = "authority")
     private List<User> user;
 }

@@ -1,4 +1,4 @@
-package com.corporation.service;
+package com.corporation.service.auth;
 
 import com.corporation.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  */
 @RequiredArgsConstructor
 @Service
-public class DbUserDetailsService implements UserDetailsService {
+public class AuthUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
 

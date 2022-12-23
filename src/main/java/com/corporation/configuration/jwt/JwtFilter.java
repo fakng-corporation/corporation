@@ -32,9 +32,7 @@ public class JwtFilter extends GenericFilterBean {
         try {
             tokenProvider.validateToken(jwt);
             isValid = true;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception ignored) {}
 
         if (jwt != null && isValid) {
             Authentication authentication = tokenProvider.getAuthentication(jwt);
@@ -46,9 +44,8 @@ public class JwtFilter extends GenericFilterBean {
 
     private String resolveToken(String token) {
         if (token != null && token.startsWith("Bearer ")) {
-            return token.split(" ")[1];
+            return token.substring(7);
         }
-
         return null;
     }
 }

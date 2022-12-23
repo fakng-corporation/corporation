@@ -2,11 +2,6 @@ package com.corporation.controller;
 
 import com.corporation.configuration.jwt.TokenProvider;
 import com.corporation.dto.AuthDto;
-import com.corporation.dto.UserDto;
-import com.corporation.exception.UserNotFoundException;
-import com.corporation.mapper.UserMapperImpl;
-import com.corporation.model.User;
-import com.corporation.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -28,18 +23,9 @@ public class AuthController {
 
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
-    private final UserRepository userRepository;
-    private final UserMapperImpl userMapper;
 
     @PostMapping("/login")
-    public ResponseEntity<UserDto> login(@RequestBody AuthDto authDto) {
-
-        User user = userRepository.findByNickname(authDto.getUsername())
-                .orElseThrow(() -> new UserNotFoundException(
-                        String.format("User with nickname %s does not exist.", authDto.getUsername())
-                ));
-
-        UserDto userDto = userMapper.toDto(user);
+    public ResponseEntity<String> login(@RequestBody AuthDto authDto) {
 
         UsernamePasswordAuthenticationToken authenticationToken
                 = new UsernamePasswordAuthenticationToken(
@@ -55,6 +41,6 @@ public class AuthController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + jwt);
 
-        return new ResponseEntity<>(userDto, headers, HttpStatus.OK);
+        return new ResponseEntity<>("", headers, HttpStatus.OK);
     }
 }
