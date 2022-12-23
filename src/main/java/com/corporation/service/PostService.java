@@ -20,6 +20,7 @@ public class PostService {
     }
 
     @Transactional
-    public void deleteById (Long id) throws EmptyResultDataAccessException {
+    public void deleteById(Long id) throws EmptyResultDataAccessException {
         postRepository.deleteById(id);
+    }
 }

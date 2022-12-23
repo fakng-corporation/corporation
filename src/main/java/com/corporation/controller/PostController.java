@@ -7,8 +7,6 @@ import com.corporation.model.User;
 import com.corporation.service.PostService;
 import com.corporation.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -39,13 +37,10 @@ public class PostController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> deleteById (@PathVariable Long id) {
-        try{
+    public void deleteById (@PathVariable Long id) {
+
             postService.deleteById(id);
-            return ResponseEntity.ok().build();
-        } catch (EmptyResultDataAccessException e) {
-            return ResponseEntity.notFound().build();
-        }
+
     }
 
 }

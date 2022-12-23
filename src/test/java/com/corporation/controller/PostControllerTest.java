@@ -5,8 +5,8 @@ import com.corporation.mapper.PostMapperImpl;
 import com.corporation.model.Post;
 import com.corporation.model.User;
 import com.corporation.service.PostService;
-import com.corporation.service.UserService;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,21 +14,28 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 @ExtendWith(MockitoExtension.class)
-class PostControllerTest {
+public class PostControllerTest {
 
     @Mock
     private PostService postService;
-
-    @Mock
-    private UserService userService;
 
     @Spy
     private PostMapperImpl postMapper;
 
     @InjectMocks
     private PostController postController;
+
+    private Long existingId;
+    private Long nonExistingId;
+
+    @BeforeEach
+    public void setUp () {
+        existingId = 12L;
+        nonExistingId = 100L;
+    }
 
     @Test
     void shouldReturnCreatedPostDto() {
@@ -68,7 +75,21 @@ class PostControllerTest {
         Assertions.assertEquals(body, createdPostDto.getBody());
         Assertions.assertEquals(desiredId, createdPostDto.getUserId());
         Assertions.assertEquals(isPublished, createdPostDto.isPublished());
-
     }
+
+    @Test
+    public void shoudDeleteById () {
+        Mockito.doNothing().when(postService).deleteById(existingId);
+        Assertions.assertDoesNotThrow(() -> postService.deleteById(existingId));
+        Mockito.verify(postService, Mockito.times(1)).deleteById(existingId);
+    }
+
+    @Test
+    public void shouldThrowExceptionDeleteById () {
+        Mockito.doThrow(EmptyResultDataAccessException.class).when(postService).deleteById(nonExistingId);
+        Assertions.assertThrows(EmptyResultDataAccessException.class, (() -> postService.deleteById(nonExistingId)));
+        Mockito.verify(postService, Mockito.times(1)).deleteById(nonExistingId);
+    }
+
 
 }
