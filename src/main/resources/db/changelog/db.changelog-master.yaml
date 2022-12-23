@@ -13,3 +13,5 @@ databaseChangeLog:
       file: db/changelog/init-post.sql
   - include:
       file: db/changelog/init-project-foreignkey-user.sql
+  - include:
+      file: db/changelog/init-role.sql
