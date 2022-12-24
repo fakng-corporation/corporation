@@ -12,7 +12,6 @@ public class UserDto {
     private int id;
     private String nickname;
     private String email;
-    private String password;
     private String aboutMe;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

@@ -4,6 +4,9 @@ import com.corporation.exception.UserNotFoundException;
 import com.corporation.model.User;
 import com.corporation.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -13,7 +16,7 @@ import java.util.Optional;
  */
 @RequiredArgsConstructor
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
@@ -22,6 +25,14 @@ public class UserService {
         return optionalUser
                 .orElseThrow(() -> new UserNotFoundException(
                         String.format("User with id %d does not exist.", id)
+                ));
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByNickname(username)
+                .orElseThrow(() -> new UsernameNotFoundException(
+                        String.format("User with nickname %s does not exist.", username)
                 ));
     }
 }

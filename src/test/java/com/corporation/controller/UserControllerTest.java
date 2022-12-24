@@ -51,7 +51,7 @@ public class UserControllerTest {
 
         ResponseEntity<UserDto> userResponseEntity = userController.getUserById(desiredId);
 
-        Mockito.verify(userMapper).toUserDto(mockUser);
+        Mockito.verify(userMapper).toDto(mockUser);
 
         Assertions.assertEquals(200, userResponseEntity.getStatusCode().value());
 
@@ -60,7 +60,6 @@ public class UserControllerTest {
         Assertions.assertEquals(nickname, userDto.getNickname());
         Assertions.assertEquals(aboutMe, userDto.getAboutMe());
         Assertions.assertEquals(email, userDto.getEmail());
-        Assertions.assertEquals(password, userDto.getPassword());
         Assertions.assertEquals(desiredId, userDto.getId());
     }
 
