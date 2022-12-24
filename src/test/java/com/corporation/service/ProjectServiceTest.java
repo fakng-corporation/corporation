@@ -15,7 +15,13 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -98,5 +104,27 @@ public class ProjectServiceTest {
         projectService.delete(project.getId());
 
         Mockito.verify(projectRepository).deleteById(project.getId());
+    }
+
+    @Test
+    public void shouldReturnProjectByTitle() {
+        long projectId = 10;
+        String title = "title";
+        long ownerId = 5;
+        User owner = User.builder().id(ownerId).build();
+        Project mockProject = Project.builder().id(projectId).title(title).owner(owner).build();
+        List<Project> projectList = Collections.singletonList(mockProject);
+        Page<Project> projectPage = new PageImpl<>(projectList);
+        ProjectDto mockProjectDto = projectMapper.toDto(mockProject);
+        List<ProjectDto> projectDtoList = Collections.singletonList(mockProjectDto);
+        Pageable pageable = PageRequest.of(0, 5);
+
+        Mockito.when(projectRepository.findByTitleContainingIgnoreCase(title, pageable))
+                .thenReturn(projectPage);
+        Page<ProjectDto> page = projectService.getProjectsByTitle(title, 0, 5);
+
+        Assertions.assertEquals(page.getTotalElements(), 1);
+        Assertions.assertEquals(page.getContent(), projectDtoList);
+
     }
 }

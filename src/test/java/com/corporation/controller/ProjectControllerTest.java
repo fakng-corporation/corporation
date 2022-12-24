@@ -12,6 +12,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+
+import java.util.Collections;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 
@@ -69,5 +74,22 @@ public class ProjectControllerTest {
         projectController.deleteProject(project.getId());
 
         Mockito.verify(projectService).delete(project.getId());
+    }
+
+    @Test
+    public void shouldReturnProjectByTitle() {
+        long projectId = 10;
+        String title = "title";
+        Project mockProject = Project.builder().id(projectId).title(title).build();
+        ProjectDto mockProjectDto = projectMapper.toDto(mockProject);
+        List<ProjectDto> projectDtoList = Collections.singletonList(mockProjectDto);
+        Page<ProjectDto> projectDtoPage = new PageImpl<>(projectDtoList);
+
+        Mockito.when(projectService.getProjectsByTitle(title, 0, 5))
+                .thenReturn(projectDtoPage);
+        Page<ProjectDto> page = projectController.getProjects(title, 0, 5);
+
+        Assertions.assertEquals(page.getTotalElements(), projectDtoPage.getTotalElements());
+        Assertions.assertEquals(page.getContent(), projectDtoPage.getContent());
     }
 }
