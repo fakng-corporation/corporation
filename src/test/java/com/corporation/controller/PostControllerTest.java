@@ -7,6 +7,7 @@ import com.corporation.model.User;
 import com.corporation.service.PostService;
 import com.corporation.service.UserService;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -29,6 +30,13 @@ class PostControllerTest {
 
     @InjectMocks
     private PostController postController;
+
+    private Long existingId;
+
+    @BeforeEach
+    public void setUp() {
+        existingId = 12L;
+    }
 
     @Test
     void shouldReturnCreatedPostDto() {
@@ -68,7 +76,13 @@ class PostControllerTest {
         Assertions.assertEquals(body, createdPostDto.getBody());
         Assertions.assertEquals(desiredId, createdPostDto.getUserId());
         Assertions.assertEquals(isPublished, createdPostDto.isPublished());
+    }
 
+    @Test
+    public void shoudDeleteById() {
+        Mockito.doNothing().when(postService).deleteById(existingId);
+        Assertions.assertDoesNotThrow(() -> postService.deleteById(existingId));
+        Mockito.verify(postService, Mockito.times(1)).deleteById(existingId);
     }
 
 }

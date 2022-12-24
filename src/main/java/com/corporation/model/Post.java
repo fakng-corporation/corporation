@@ -56,5 +56,4 @@ public class Post {
 
     @Column(name = "published_at")
     private LocalDateTime publishedAt;
-
 }
