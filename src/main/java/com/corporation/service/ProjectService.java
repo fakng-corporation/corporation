@@ -6,12 +6,11 @@ import com.corporation.mapper.ProjectMapper;
 import com.corporation.model.Project;
 import com.corporation.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -55,9 +54,8 @@ public class ProjectService {
                 ));
     }
 
-    public List<ProjectDto> getProjectsByTitle(String keyword, int pageNumber, int pageSize) {
-        Sort sort = Sort.by(Sort.DEFAULT_DIRECTION, "title");
-        Pageable pages = PageRequest.of(pageNumber, pageSize, sort);
-        return projectRepository.findByTitleLikeIgnoreCase(keyword, pages).stream().map(projectMapper::toDto).toList();
+    public Page<ProjectDto> getProjectsByTitle(String keyword, int pageNumber, int pageSize) {
+        Pageable page = PageRequest.of(pageNumber, pageSize);
+        return projectRepository.findByTitleContainingIgnoreCase(keyword, page).map(projectMapper::toDto);
     }
 }

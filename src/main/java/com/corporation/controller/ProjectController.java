@@ -4,9 +4,8 @@ import com.corporation.controller.api.ProjectApi;
 import com.corporation.dto.ProjectDto;
 import com.corporation.service.ProjectService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -29,7 +28,7 @@ public class ProjectController implements ProjectApi {
     }
 
     @Override
-    public List<ProjectDto> getProjects(String keyword, int pageNumber, int pageSize) {
+    public Page<ProjectDto> getProjects(String keyword, int pageNumber, int pageSize) {
         return projectService.getProjectsByTitle(keyword, pageNumber, pageSize);
     }
 }
