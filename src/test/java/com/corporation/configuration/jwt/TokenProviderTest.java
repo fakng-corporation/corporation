@@ -56,7 +56,7 @@ public class TokenProviderTest {
     }
 
     @Test
-    public void shouldReturnTrue() {
+    public void shouldSuccessfullyValidateToken() {
         String token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib2JhIiwiYXV0aCI6IlJPTEVfVVNFUiJ9.r4YIpClbz47ZgPsTBApKGjnyXqW7cZfpFw_8t13heKI";
 
         Assertions.assertTrue(tokenProvider.validateToken(token));

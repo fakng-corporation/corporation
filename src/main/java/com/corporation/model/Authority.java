@@ -1,6 +1,5 @@
 package com.corporation.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -25,7 +24,6 @@ public class Authority {
     @Column(name = "authority")
     private String authority;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "authority")
     private List<User> user;
 }

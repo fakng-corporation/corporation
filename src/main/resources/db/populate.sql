@@ -1,6 +1,3 @@
-INSERT INTO authority (authority)
-VALUES ('ROLE_USER');
-
 -- password is nickname hashed with bcrypt algorithm
 -- with salt abc and work factor 10
 INSERT INTO "user" (nickname, email, password, about_me, enabled)

@@ -1,8 +1,8 @@
 databaseChangeLog:
   - include:
-      file: db/changelog/init-project.sql
+      file: db/changelog/init.sql
   - include:
-      file: db/changelog/init-authority.sql
+      file: db/changelog/init-project.sql
   - include:
       file: db/changelog/init-user.sql
   - include:
@@ -15,4 +15,5 @@ databaseChangeLog:
       file: db/changelog/init-project-foreignkey-user.sql
   - include:
       file: db/changelog/init-role.sql
-      
+  - include:
+      file: db/changelog/init-authority.sql

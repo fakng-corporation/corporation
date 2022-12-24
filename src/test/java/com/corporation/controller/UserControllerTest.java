@@ -60,7 +60,6 @@ public class UserControllerTest {
         Assertions.assertEquals(nickname, userDto.getNickname());
         Assertions.assertEquals(aboutMe, userDto.getAboutMe());
         Assertions.assertEquals(email, userDto.getEmail());
-        Assertions.assertEquals(password, userDto.getPassword());
         Assertions.assertEquals(desiredId, userDto.getId());
     }
 
