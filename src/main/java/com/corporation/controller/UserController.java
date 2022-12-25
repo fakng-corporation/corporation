@@ -45,8 +45,6 @@ public class UserController {
     public void uploadUserAvatar(
             @PathVariable("id") long id,
             @RequestParam("userAvatar") MultipartFile userAvatar) {
-        String url = s3Service.upload(userAvatar);
-        UserDto userDto = UserDto.builder().avatarUrl(url).build();
-        updateUser(id, userDto);
+        userService.updateUserAvatar(id, userAvatar);
     }
 }

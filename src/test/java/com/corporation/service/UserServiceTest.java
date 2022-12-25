@@ -61,7 +61,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void shouldReturnUpdatedUser() {
+    public void shouldUpdateUser() {
         long desiredId = 1;
         String oldNickname = "boba";
         String oldEmail = "boba@boba.com";

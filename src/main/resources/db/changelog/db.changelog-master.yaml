@@ -15,3 +15,5 @@ databaseChangeLog:
       file: db/changelog/init-project-foreignkey-user.sql
   - include:
       file: db/changelog/init-role.sql
+  - include:
+      file: db/changelog/alter-user-add-column-avatar-url.sql
