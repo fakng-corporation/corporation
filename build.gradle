@@ -20,9 +20,9 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-log4j2:3.0.0'
+	implementation 'org.springframework.boot:spring-boot-starter-log4j2'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	//implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.liquibase:liquibase-core'
 	implementation 'org.hibernate:hibernate-validator:8.0.0.Final'
@@ -32,9 +32,13 @@ dependencies {
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	//testImplementation 'org.springframework.security:spring-security-test'
+	testImplementation 'org.springframework.security:spring-security-test'
 	implementation 'org.mapstruct:mapstruct:1.5.3.Final'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
 }
 
 configurations.implementation {
@@ -52,4 +56,3 @@ hibernate {
 		associationManagement true
 	}
 }
-

@@ -12,8 +12,8 @@ import org.mapstruct.MappingTarget;
  */
 @Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.FIELD)
 public interface UserMapper {
-    UserDto toUserDto(User user);
 
-    @Mapping(target = "id", ignore = true)
     void updateEntity(UserDto userDto, @MappingTarget User user);
+    
+    UserDto toDto(User user);
 }

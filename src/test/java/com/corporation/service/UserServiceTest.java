@@ -90,6 +90,35 @@ public class UserServiceTest {
         Assertions.assertEquals(newEmail, user.getEmail());
         Assertions.assertEquals(newAboutMe, user.getAboutMe());
     }
+    
+    @Test
+    public void shouldReturnUserDetails() {
+        long desiredId = 1;
+        String nickname = "boba";
+        String email = "boba@boba.com";
+        String password = "1234";
+        String aboutMe = "I am boba!";
+
+        User mockUser = User
+                .builder()
+                .id(desiredId)
+                .nickname(nickname)
+                .email(email)
+                .password(password)
+                .aboutMe(aboutMe)
+                .build();
+
+        Mockito.when(userRepository.findByNickname(nickname))
+                .thenReturn(Optional.of(mockUser));
+
+        User user = (User) userService.loadUserByUsername(nickname);
+
+        Assertions.assertEquals(desiredId, user.getId());
+        Assertions.assertEquals(nickname, user.getNickname());
+        Assertions.assertEquals(email, user.getEmail());
+        Assertions.assertEquals(password, user.getPassword());
+        Assertions.assertEquals(aboutMe, user.getAboutMe());
+    }
 
     @Test
     public void shouldThrowUserNotFoundException() {

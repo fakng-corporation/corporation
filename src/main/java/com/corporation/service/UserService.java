@@ -7,6 +7,9 @@ import com.corporation.model.User;
 import com.corporation.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,7 +20,7 @@ import java.util.Optional;
  */
 @RequiredArgsConstructor
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
@@ -31,11 +34,20 @@ public class UserService {
                 ));
     }
 
+
     @Transactional
     public User update(UserDto userDto) {
         User user = findById(userDto.getId());
         userMapper.updateEntity(userDto, user);
         userRepository.save(user);
         return user;
+    }
+    
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByNickname(username)
+                .orElseThrow(() -> new UsernameNotFoundException(
+                        String.format("User with nickname %s does not exist.", username)
+                ));
     }
 }

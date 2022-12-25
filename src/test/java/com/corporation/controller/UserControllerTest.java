@@ -50,7 +50,7 @@ public class UserControllerTest {
 
         UserDto userDto = userController.getUserById(desiredId);
 
-        Mockito.verify(userMapper).toUserDto(mockUser);
+        Mockito.verify(userMapper).toDto(mockUser);
 
         Assertions.assertEquals(nickname, userDto.getNickname());
         Assertions.assertEquals(aboutMe, userDto.getAboutMe());
