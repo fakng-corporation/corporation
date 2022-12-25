@@ -5,8 +5,9 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.corporation.exception.UploadUserAvatarException;
+import com.corporation.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
 /**
  * @author Bleschunov Dmitry
  */
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class S3Service {
@@ -43,9 +45,13 @@ public class S3Service {
 
             return amazonS3.getUrl(bucketName, objectName).toString();
         } catch (IOException | IllegalArgumentException e) {
-            throw new UploadUserAvatarException("Server exception", e);
+            String message = "Server exception";
+            log.error(message, e);
+            throw new BusinessException(message, e);
         } catch (AmazonServiceException e) {
-            throw new UploadUserAvatarException("Amazon exception", e);
+            String message = "Amazon exception";
+            log.error(message, e);
+            throw new BusinessException(message, e);
         }
     }
 

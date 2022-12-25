@@ -2,17 +2,20 @@ package com.corporation.controller;
 
 import com.corporation.dto.UserDto;
 import com.corporation.exception.UserNotFoundException;
-import com.corporation.mapper.UserMapperImpl;
+import com.corporation.mapper.UserMapper;
 import com.corporation.model.User;
 import com.corporation.service.UserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mapstruct.factory.Mappers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author Bleschunov Dmitry
@@ -23,7 +26,7 @@ public class UserControllerTest {
     private UserService userService;
 
     @Spy
-    private UserMapperImpl userMapper;
+    private UserMapper userMapper = Mappers.getMapper(UserMapper.class);
 
     @InjectMocks
     private UserController userController;
@@ -81,6 +84,16 @@ public class UserControllerTest {
         Assertions.assertEquals(newAboutMe, returnedUserDto.getAboutMe());
         Assertions.assertEquals(newEmail, returnedUserDto.getEmail());
         Assertions.assertEquals(desiredId, returnedUserDto.getId());
+    }
+
+    @Test
+    public void shouldUseUserService() {
+        long id = 10;
+        MultipartFile file = new MockMultipartFile("avatar.png", "avatar.png", "image/png", new byte[]{1, 2, 3});
+
+        userController.uploadUserAvatar(id, file);
+
+        Mockito.verify(userService).updateUserAvatar(id, file);
     }
 
     @Test
