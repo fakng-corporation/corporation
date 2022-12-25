@@ -30,9 +30,9 @@ public class UserController {
     }
 
     @PostMapping("/{id}")
-    public UserDto updateUser(@PathVariable("id") long id, @RequestBody UserDto userDto) {
+    public UserDto updateUser(@RequestBody UserDto userDto) {
         return userMapper.toUserDto(
-                userService.update(id, userDto)
+                userService.update(userDto)
         );
     }
 }

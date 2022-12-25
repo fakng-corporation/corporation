@@ -2,7 +2,6 @@ package com.corporation.service;
 
 import com.corporation.dto.UserDto;
 import com.corporation.exception.UserNotFoundException;
-import com.corporation.mapper.UserMapperImpl;
 import com.corporation.model.User;
 import com.corporation.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
@@ -11,7 +10,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
@@ -24,9 +22,6 @@ public class UserServiceTest {
 
     @Mock
     private UserRepository userRepository;
-
-    @Spy
-    private UserMapperImpl userMapper;
 
     @InjectMocks
     private UserService userService;
@@ -69,6 +64,7 @@ public class UserServiceTest {
         String newNickname = "new boba";
         String newEmail = "new_boba@boba.com";
         String newAboutMe = "I am new boba!";
+
         User oldUser = User
                 .builder()
                 .id(desiredId)
@@ -76,18 +72,18 @@ public class UserServiceTest {
                 .email(oldEmail)
                 .aboutMe(oldAboutMe)
                 .build();
-        User newUser = User
+
+        UserDto newUserDto = UserDto
                 .builder()
                 .id(desiredId)
                 .nickname(newNickname)
                 .email(newEmail)
                 .aboutMe(newAboutMe)
                 .build();
-        UserDto newUserDto = userMapper.toUserDto(newUser);
 
         Mockito.when(userRepository.findById(desiredId))
                 .thenReturn(Optional.of(oldUser));
-        User user = userService.update(desiredId, newUserDto);
+        User user = userService.update(newUserDto);
 
         Assertions.assertEquals(desiredId, user.getId());
         Assertions.assertEquals(newNickname, user.getNickname());
