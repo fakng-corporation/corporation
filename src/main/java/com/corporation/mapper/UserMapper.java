@@ -4,7 +4,6 @@ import com.corporation.dto.UserDto;
 import com.corporation.model.User;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 /**
@@ -14,6 +13,5 @@ import org.mapstruct.MappingTarget;
 public interface UserMapper {
 
     void updateEntity(UserDto userDto, @MappingTarget User user);
-    
     UserDto toDto(User user);
 }

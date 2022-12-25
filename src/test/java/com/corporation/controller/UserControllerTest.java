@@ -71,7 +71,7 @@ public class UserControllerTest {
                 .email(newEmail)
                 .aboutMe(newAboutMe)
                 .build();
-        UserDto newUserDto = userMapper.toUserDto(newUser);
+        UserDto newUserDto = userMapper.toDto(newUser);
 
         Mockito.when(userService.update(newUserDto))
                 .thenReturn(newUser);

@@ -26,12 +26,12 @@ public class UserController {
     @GetMapping("/{id}")
     public UserDto getUserById(@PathVariable("id") long id) {
         User user = userService.findById(id);
-        return userMapper.toUserDto(user);
+        return userMapper.toDto(user);
     }
 
     @PostMapping("/{id}")
     public UserDto updateUser(@RequestBody UserDto userDto) {
-        return userMapper.toUserDto(
+        return userMapper.toDto(
                 userService.update(userDto)
         );
     }
