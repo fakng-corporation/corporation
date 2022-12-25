@@ -38,7 +38,7 @@ public class Post {
     private String body;
 
     @Column(name = "is_published")
-    private boolean isPublished;
+    private boolean published;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -56,5 +56,4 @@ public class Post {
 
     @Column(name = "published_at")
     private LocalDateTime publishedAt;
-
 }

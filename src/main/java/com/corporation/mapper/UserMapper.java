@@ -4,11 +4,14 @@ import com.corporation.dto.UserDto;
 import com.corporation.model.User;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 
 /**
  * @author Bleschunov Dmitry
  */
 @Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.FIELD)
 public interface UserMapper {
-    UserDto toUserDto(User user);
+
+    void updateEntity(UserDto userDto, @MappingTarget User user);
+    UserDto toDto(User user);
 }

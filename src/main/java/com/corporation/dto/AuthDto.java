@@ -8,9 +8,7 @@ import lombok.Data;
  */
 @Data
 @Builder
-public class UserDto {
-    private long id;
-    private String nickname;
-    private String email;
-    private String aboutMe;
+public class AuthDto {
+    private String username;
+    private String password;
 }

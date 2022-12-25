@@ -2,12 +2,15 @@ package com.corporation.service;
 
 import com.corporation.exception.ProjectNotFoundException;
 import com.corporation.dto.ProjectDto;
-import com.corporation.exception.ProjectNotFoundException;
 import com.corporation.mapper.ProjectMapper;
 import com.corporation.model.Project;
 import com.corporation.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -34,6 +37,10 @@ public class ProjectService {
                         String.format("Project with id %d does not exist.", projectDto.getId())));
     }
 
+    public void delete(Long id) {
+        projectRepository.deleteById(id);
+    }
+
     private ProjectDto saveEntityAndReturnDto(Project project) {
         project = projectRepository.save(project);
         return projectMapper.toDto(project);
@@ -45,5 +52,10 @@ public class ProjectService {
                 .orElseThrow(() -> new ProjectNotFoundException(
                         String.format("Project with id %d does not exist.", id)
                 ));
+    }
+
+    public Page<ProjectDto> getProjectsByTitle(String keyword, int pageNumber, int pageSize) {
+        Pageable page = PageRequest.of(pageNumber, pageSize);
+        return projectRepository.findByTitleContainingIgnoreCase(keyword, page).map(projectMapper::toDto);
     }
 }
