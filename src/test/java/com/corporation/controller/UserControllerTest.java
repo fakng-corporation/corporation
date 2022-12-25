@@ -50,12 +50,11 @@ public class UserControllerTest {
 
         UserDto userDto = userController.getUserById(desiredId);
 
-        Mockito.verify(userMapper).toUserDto(mockUser);
+        Mockito.verify(userMapper).toDto(mockUser);
 
         Assertions.assertEquals(nickname, userDto.getNickname());
         Assertions.assertEquals(aboutMe, userDto.getAboutMe());
         Assertions.assertEquals(email, userDto.getEmail());
-        Assertions.assertEquals(password, userDto.getPassword());
         Assertions.assertEquals(desiredId, userDto.getId());
     }
 
@@ -72,11 +71,11 @@ public class UserControllerTest {
                 .email(newEmail)
                 .aboutMe(newAboutMe)
                 .build();
-        UserDto newUserDto = userMapper.toUserDto(newUser);
+        UserDto newUserDto = userMapper.toDto(newUser);
 
-        Mockito.when(userService.update(desiredId, newUserDto))
+        Mockito.when(userService.update(newUserDto))
                 .thenReturn(newUser);
-        UserDto returnedUserDto = userController.updateUser(desiredId, newUserDto);
+        UserDto returnedUserDto = userController.updateUser(newUserDto);
 
         Assertions.assertEquals(newNickname, returnedUserDto.getNickname());
         Assertions.assertEquals(newAboutMe, returnedUserDto.getAboutMe());

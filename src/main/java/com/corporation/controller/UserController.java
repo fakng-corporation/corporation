@@ -31,13 +31,13 @@ public class UserController {
     @GetMapping("/{id}")
     public UserDto getUserById(@PathVariable("id") long id) {
         User user = userService.findById(id);
-        return userMapper.toUserDto(user);
+        return userMapper.toDto(user);
     }
 
     @PostMapping("/{id}")
-    public UserDto updateUser(@PathVariable("id") long id, @RequestBody UserDto userDto) {
-        return userMapper.toUserDto(
-                userService.update(id, userDto)
+    public UserDto updateUser(@RequestBody UserDto userDto) {
+        return userMapper.toDto(
+                userService.update(userDto)
         );
     }
 

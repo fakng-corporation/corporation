@@ -3,6 +3,7 @@ package com.corporation.service;
 import com.corporation.model.Post;
 import com.corporation.repository.PostRepository;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -11,13 +12,22 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class PostServiceTest {
+public class PostServiceTest {
 
     @Mock
     private PostRepository postRepository;
 
     @InjectMocks
     private PostService postService;
+
+    private Long existingId;
+    private Long nonExistingId;
+
+    @BeforeEach
+    public void setUp() {
+        existingId = 12L;
+        nonExistingId = 100L;
+    }
 
     @Test
     public void shouldReturnCreatedPost() {
@@ -40,5 +50,10 @@ class PostServiceTest {
 
     }
 
-
+    @Test
+    public void shouldDeleteById() {
+        Mockito.doNothing().when(postRepository).deleteById(existingId);
+        Assertions.assertDoesNotThrow(() -> postRepository.deleteById(existingId));
+        Mockito.verify(postRepository, Mockito.times(1)).deleteById(existingId);
+    }
 }

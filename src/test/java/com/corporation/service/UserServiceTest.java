@@ -2,12 +2,13 @@ package com.corporation.service;
 
 import com.corporation.dto.UserDto;
 import com.corporation.exception.UserNotFoundException;
-import com.corporation.mapper.UserMapperImpl;
+import com.corporation.mapper.UserMapper;
 import com.corporation.model.User;
 import com.corporation.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mapstruct.factory.Mappers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -26,7 +27,7 @@ public class UserServiceTest {
     private UserRepository userRepository;
 
     @Spy
-    private UserMapperImpl userMapper;
+    private UserMapper userMapper = Mappers.getMapper(UserMapper.class);
 
     @InjectMocks
     private UserService userService;
@@ -69,6 +70,7 @@ public class UserServiceTest {
         String newNickname = "new boba";
         String newEmail = "new_boba@boba.com";
         String newAboutMe = "I am new boba!";
+
         User oldUser = User
                 .builder()
                 .id(desiredId)
@@ -76,23 +78,52 @@ public class UserServiceTest {
                 .email(oldEmail)
                 .aboutMe(oldAboutMe)
                 .build();
-        User newUser = User
+
+        UserDto newUserDto = UserDto
                 .builder()
                 .id(desiredId)
                 .nickname(newNickname)
                 .email(newEmail)
                 .aboutMe(newAboutMe)
                 .build();
-        UserDto newUserDto = userMapper.toUserDto(newUser);
 
         Mockito.when(userRepository.findById(desiredId))
                 .thenReturn(Optional.of(oldUser));
-        User user = userService.update(desiredId, newUserDto);
+        User user = userService.update(newUserDto);
 
         Assertions.assertEquals(desiredId, user.getId());
         Assertions.assertEquals(newNickname, user.getNickname());
         Assertions.assertEquals(newEmail, user.getEmail());
         Assertions.assertEquals(newAboutMe, user.getAboutMe());
+    }
+    
+    @Test
+    public void shouldReturnUserDetails() {
+        long desiredId = 1;
+        String nickname = "boba";
+        String email = "boba@boba.com";
+        String password = "1234";
+        String aboutMe = "I am boba!";
+
+        User mockUser = User
+                .builder()
+                .id(desiredId)
+                .nickname(nickname)
+                .email(email)
+                .password(password)
+                .aboutMe(aboutMe)
+                .build();
+
+        Mockito.when(userRepository.findByNickname(nickname))
+                .thenReturn(Optional.of(mockUser));
+
+        User user = (User) userService.loadUserByUsername(nickname);
+
+        Assertions.assertEquals(desiredId, user.getId());
+        Assertions.assertEquals(nickname, user.getNickname());
+        Assertions.assertEquals(email, user.getEmail());
+        Assertions.assertEquals(password, user.getPassword());
+        Assertions.assertEquals(aboutMe, user.getAboutMe());
     }
 
     @Test
