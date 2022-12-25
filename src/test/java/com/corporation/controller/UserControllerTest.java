@@ -13,7 +13,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.ResponseEntity;
 
 /**
  * @author Bleschunov Dmitry
@@ -30,7 +29,7 @@ public class UserControllerTest {
     private UserController userController;
 
     @Test
-    public void shouldReturnUserDtoByIdAndStatus200() {
+    public void shouldReturnUserDtoById() {
         int desiredId = 1;
         String nickname = "boba";
         String email = "boba@boba.com";
@@ -49,18 +48,39 @@ public class UserControllerTest {
         Mockito.when(userService.findById(desiredId))
                 .thenReturn(mockUser);
 
-        ResponseEntity<UserDto> userResponseEntity = userController.getUserById(desiredId);
+        UserDto userDto = userController.getUserById(desiredId);
 
         Mockito.verify(userMapper).toDto(mockUser);
-
-        Assertions.assertEquals(200, userResponseEntity.getStatusCode().value());
-
-        UserDto userDto = userResponseEntity.getBody();
 
         Assertions.assertEquals(nickname, userDto.getNickname());
         Assertions.assertEquals(aboutMe, userDto.getAboutMe());
         Assertions.assertEquals(email, userDto.getEmail());
         Assertions.assertEquals(desiredId, userDto.getId());
+    }
+
+    @Test
+    public void shouldReturnUpdatedUserDto() {
+        long desiredId = 1;
+        String newNickname = "new boba";
+        String newEmail = "new_boba@boba.com";
+        String newAboutMe = "I am new boba!";
+        User newUser = User
+                .builder()
+                .id(desiredId)
+                .nickname(newNickname)
+                .email(newEmail)
+                .aboutMe(newAboutMe)
+                .build();
+        UserDto newUserDto = userMapper.toDto(newUser);
+
+        Mockito.when(userService.update(newUserDto))
+                .thenReturn(newUser);
+        UserDto returnedUserDto = userController.updateUser(newUserDto);
+
+        Assertions.assertEquals(newNickname, returnedUserDto.getNickname());
+        Assertions.assertEquals(newAboutMe, returnedUserDto.getAboutMe());
+        Assertions.assertEquals(newEmail, returnedUserDto.getEmail());
+        Assertions.assertEquals(desiredId, returnedUserDto.getId());
     }
 
     @Test

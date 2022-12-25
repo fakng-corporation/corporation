@@ -1,6 +1,8 @@
 package com.corporation.service;
 
+import com.corporation.dto.UserDto;
 import com.corporation.exception.UserNotFoundException;
+import com.corporation.mapper.UserMapper;
 import com.corporation.model.User;
 import com.corporation.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -19,7 +22,9 @@ import java.util.Optional;
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
+    @Transactional
     public User findById(long id) {
         Optional<User> optionalUser = userRepository.findById(id);
         return optionalUser
@@ -28,6 +33,14 @@ public class UserService implements UserDetailsService {
                 ));
     }
 
+    @Transactional
+    public User update(UserDto userDto) {
+        User user = findById(userDto.getId());
+        userMapper.updateEntity(userDto, user);
+        userRepository.save(user);
+        return user;
+    }
+    
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByNickname(username)
