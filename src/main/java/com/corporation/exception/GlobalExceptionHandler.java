@@ -11,6 +11,14 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(NotUniqueAchievementException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ExceptionResponse handleNotUniqueAchievementException(
+            NotUniqueAchievementException exception
+    ) {
+        return new ExceptionResponse(exception.getMessage());
+    }
+
     @ExceptionHandler(NotUniqueSkillException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public ExceptionResponse handleNotUniqueSkillException(
