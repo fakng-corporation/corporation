@@ -16,4 +16,9 @@ public class AchievementController implements AchievementApi {
     public AchievementDto addAchievement(AchievementDto achievementDto) {
         return achievementService.add(achievementDto);
     }
+
+    @Override
+    public AchievementDto updateAchievement(AchievementDto achievementDto) {
+        return achievementService.update(achievementDto);
+    }
 }

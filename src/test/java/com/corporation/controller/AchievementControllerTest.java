@@ -40,4 +40,19 @@ public class AchievementControllerTest {
         Assertions.assertEquals(id, createdAchievementDto.getId());
         Assertions.assertEquals(title, createdAchievementDto.getTitle());
     }
+
+    @Test
+    public void shouldReturnUpdatedAchievementDto() {
+
+        long id = 777;
+        String newTitle = "new achievement";
+        AchievementDto addedAchievementDto = AchievementDto.builder().id(id).title(newTitle).build();
+
+        Mockito.when(achievementService.update(addedAchievementDto)).thenReturn(addedAchievementDto);
+
+        AchievementDto resultAchievementDto = achievementController.updateAchievement(addedAchievementDto);
+
+        Assertions.assertEquals(id, resultAchievementDto.getId());
+        Assertions.assertEquals(newTitle, resultAchievementDto.getTitle());
+    }
 }
