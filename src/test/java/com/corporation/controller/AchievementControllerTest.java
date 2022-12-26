@@ -2,7 +2,6 @@ package com.corporation.controller;
 
 import com.corporation.dto.AchievementDto;
 import com.corporation.mapper.AchievementMapperImpl;
-import com.corporation.model.Achievement;
 import com.corporation.service.AchievementService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -31,10 +30,8 @@ public class AchievementControllerTest {
         long id = 777;
         String title = "new achievement";
 
-        Achievement achievement = Achievement.builder().title(title).build();
-        AchievementDto achievementDto = achievementMapper.toDto(achievement);
-        Achievement achievementWithId = Achievement.builder().id(id).title(title).build();
-        AchievementDto addedAchievementDto = achievementMapper.toDto(achievementWithId);
+        AchievementDto achievementDto = AchievementDto.builder().title(title).build();
+        AchievementDto addedAchievementDto = AchievementDto.builder().id(id).title(title).build();
 
         Mockito.when(achievementService.add(achievementDto)).thenReturn(addedAchievementDto);
 

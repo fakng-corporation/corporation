@@ -47,7 +47,7 @@ public class Project {
     private User owner;
 
     @OneToMany(mappedBy = "project")
-    private List<Achievement> achievement;
+    private List<Achievement> achievements;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
