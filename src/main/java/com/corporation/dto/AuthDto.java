@@ -10,5 +10,6 @@ import lombok.Data;
 @Builder
 public class AuthDto {
     private String username;
+    private String email;
     private String password;
 }

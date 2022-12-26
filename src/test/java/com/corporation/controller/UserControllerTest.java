@@ -1,7 +1,7 @@
 package com.corporation.controller;
 
 import com.corporation.dto.UserDto;
-import com.corporation.exception.UserNotFoundException;
+import com.corporation.exception.EntityNotFoundException;
 import com.corporation.mapper.UserMapperImpl;
 import com.corporation.model.User;
 import com.corporation.service.UserService;
@@ -89,8 +89,8 @@ public class UserControllerTest {
         int desiredId = 100;
 
         Mockito.when(userService.findById(desiredId))
-                .thenThrow(UserNotFoundException.class);
+                .thenThrow(EntityNotFoundException.class);
 
-        Assertions.assertThrows(UserNotFoundException.class, () -> userController.getUserById(desiredId));
+        Assertions.assertThrows(EntityNotFoundException.class, () -> userController.getUserById(desiredId));
     }
 }

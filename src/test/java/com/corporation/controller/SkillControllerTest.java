@@ -1,7 +1,7 @@
 package com.corporation.controller;
 
 import com.corporation.dto.SkillDto;
-import com.corporation.exception.NotUniqueSkillException;
+import com.corporation.exception.EntityNotUniqueException;
 import com.corporation.mapper.SkillMapperImpl;
 import com.corporation.model.Skill;
 import com.corporation.service.SkillService;
@@ -61,8 +61,8 @@ public class SkillControllerTest {
         Skill skill = Skill.builder().title(title).build();
         SkillDto skillDto = skillMapper.toDto(skill);
 
-        Mockito.when(skillService.save(skill)).thenThrow(NotUniqueSkillException.class);
+        Mockito.when(skillService.save(skill)).thenThrow(EntityNotUniqueException.class);
 
-        Assertions.assertThrows(NotUniqueSkillException.class, () -> skillController.createSkill(skillDto));
+        Assertions.assertThrows(EntityNotUniqueException.class, () -> skillController.createSkill(skillDto));
     }
 }

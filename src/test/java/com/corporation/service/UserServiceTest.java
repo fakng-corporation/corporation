@@ -1,7 +1,7 @@
 package com.corporation.service;
 
 import com.corporation.dto.UserDto;
-import com.corporation.exception.UserNotFoundException;
+import com.corporation.exception.EntityNotFoundException;
 import com.corporation.mapper.UserMapper;
 import com.corporation.model.User;
 import com.corporation.repository.UserRepository;
@@ -133,6 +133,6 @@ public class UserServiceTest {
         Mockito.when(userRepository.findById(desiredId))
                 .thenReturn(Optional.empty());
 
-        Assertions.assertThrows(UserNotFoundException.class, () -> userService.findById(desiredId));
+        Assertions.assertThrows(EntityNotFoundException.class, () -> userService.findById(desiredId));
     }
 }

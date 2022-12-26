@@ -1,6 +1,6 @@
 package com.corporation.service;
 
-import com.corporation.exception.NotUniqueSkillException;
+import com.corporation.exception.EntityNotUniqueException;
 import com.corporation.model.Skill;
 import com.corporation.repository.SkillRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,10 +22,8 @@ public class SkillService {
     }
 
     public Skill save(Skill skill) {
-        Optional<Skill> optionalSkill = findSkillByTitle(skill.getTitle());
-
-        optionalSkill.ifPresent(s -> {
-            throw new NotUniqueSkillException(
+        findSkillByTitle(skill.getTitle()).ifPresent(s -> {
+            throw new EntityNotUniqueException(
                     String.format("Skill with title %s already exists", s.getTitle())
             );
         });
