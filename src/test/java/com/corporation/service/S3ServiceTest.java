@@ -1,18 +1,21 @@
 package com.corporation.service;
 
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.corporation.exception.BusinessException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * @author Bleschunov Dmitry
@@ -20,61 +23,30 @@ import java.util.regex.Pattern;
 @ExtendWith(MockitoExtension.class)
 public class S3ServiceTest {
 
-    @Value("${aws.s3.bucket}")
-    private String bucketName;
+    @Mock
+    private AmazonS3 amazonS3;
 
     @InjectMocks
     private S3Service s3Service;
 
     @Test
-    public void shouldReturnExtension() throws
-            NoSuchMethodException,
-            InvocationTargetException,
-            IllegalAccessException
-    {
+    public void shouldUploadUserAvatarToS3() throws MalformedURLException {
         MultipartFile file = new MockMultipartFile("avatar.png", "avatar.png", "image/png", new byte[]{1, 2, 3});
+        Mockito.when(amazonS3.getUrl(Mockito.any(), Mockito.any()))
+                .thenReturn(new URL("https://s3.com"));
 
-        Method getExtension = s3Service.getClass().getDeclaredMethod("getExtension", MultipartFile.class);
-        getExtension.setAccessible(true);
+        String url = s3Service.upload(file);
 
-        Assertions.assertEquals("png", getExtension.invoke(s3Service, file));
+        Assertions.assertNotNull(url);
+        Mockito.verify(amazonS3).putObject(Mockito.any(PutObjectRequest.class));
     }
 
     @Test
-    public void shouldReturnCorrectObjectName() throws
-            NoSuchMethodException,
-            InvocationTargetException,
-            IllegalAccessException
-    {
+    public void shouldThrowBusinessException() {
         MultipartFile file = new MockMultipartFile("avatar.png", "avatar.png", "image/png", new byte[]{1, 2, 3});
-        // "avatar/" + bucketName + "-" + LocalDateTime.now() + "." + extension;
-        // avatar/fakngcorporation-2022-12-25T10:34:05.359840.jpg
-        Pattern pattern = Pattern.compile(
-                "avatar\\/" + bucketName +"-\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{2}.\\d+.png"
-        );
-        Method createObjectName = s3Service.getClass().getDeclaredMethod("createObjectName", MultipartFile.class);
-        createObjectName.setAccessible(true);
+        Mockito.when(amazonS3.putObject(Mockito.any()))
+                .thenThrow(AmazonServiceException.class);
 
-        Object object = createObjectName.invoke(s3Service, file);
-        Assertions.assertNotNull(object);
-        String objectName = (String) object;
-        Matcher matcher = pattern.matcher(objectName);
-
-        Assertions.assertTrue(matcher.matches());
-    }
-
-    @Test
-    public void shouldReturnTempFile() throws
-            NoSuchMethodException,
-            InvocationTargetException,
-            IllegalAccessException
-    {
-        MultipartFile file = new MockMultipartFile("avatar.png", "avatar.png", "image/png", new byte[]{1, 2, 3});
-        Method createTempFileFrom = s3Service.getClass().getDeclaredMethod("createTempFileFrom", MultipartFile.class);
-        createTempFileFrom.setAccessible(true);
-
-        Object obj = createTempFileFrom.invoke(s3Service, file);
-
-        Assertions.assertNotNull(obj);
+        Assertions.assertThrows(BusinessException.class, () -> s3Service.upload(file));
     }
 }

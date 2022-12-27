@@ -14,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalDateTime;
 
 /**
  * @author Bleschunov Dmitry
@@ -45,11 +44,11 @@ public class S3Service {
 
             return amazonS3.getUrl(bucketName, objectName).toString();
         } catch (IOException | IllegalArgumentException e) {
-            String message = "Server exception";
+            String message = "Could not create or delete a temp file for user avatar in order to upload it to S3.";
             log.error(message, e);
             throw new BusinessException(message, e);
         } catch (AmazonServiceException e) {
-            String message = "Amazon exception";
+            String message = "Could not upload a file to S3 storage due to an error on Amazon side.";
             log.error(message, e);
             throw new BusinessException(message, e);
         }
@@ -58,8 +57,9 @@ public class S3Service {
     private String getExtension(MultipartFile file) {
         String fileName = file.getOriginalFilename();
 
-        if (fileName == null)
+        if (fileName == null) {
             throw new IllegalArgumentException();
+        }
 
         int lastDotIndex = fileName.lastIndexOf('.');
         return fileName.substring(lastDotIndex + 1);
@@ -67,7 +67,7 @@ public class S3Service {
 
     private String createObjectName(MultipartFile file) {
         String extension = getExtension(file);
-        return "avatar/" + bucketName + "-" + LocalDateTime.now() + "." + extension;
+        return "avatar/" + bucketName + "-" + System.currentTimeMillis() + "." + extension;
     }
 
     private File createTempFileFrom(MultipartFile file) throws IOException {

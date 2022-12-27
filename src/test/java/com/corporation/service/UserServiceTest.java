@@ -2,13 +2,12 @@ package com.corporation.service;
 
 import com.corporation.dto.UserDto;
 import com.corporation.exception.UserNotFoundException;
-import com.corporation.mapper.UserMapper;
+import com.corporation.mapper.UserMapperImpl;
 import com.corporation.model.User;
 import com.corporation.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mapstruct.factory.Mappers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -27,7 +26,7 @@ public class UserServiceTest {
     private UserRepository userRepository;
 
     @Spy
-    private UserMapper userMapper = Mappers.getMapper(UserMapper.class);
+    private UserMapperImpl userMapper;
 
     @InjectMocks
     private UserService userService;
