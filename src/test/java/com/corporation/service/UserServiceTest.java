@@ -1,9 +1,7 @@
 package com.corporation.service;
 
-import com.corporation.dto.AuthDto;
 import com.corporation.dto.UserDto;
-import com.corporation.exception.EntityNotFoundException;
-import com.corporation.exception.EntityNotUniqueException;
+import com.corporation.exception.NotFoundEntityException;
 import com.corporation.mapper.UserMapper;
 import com.corporation.model.User;
 import com.corporation.repository.UserRepository;
@@ -16,7 +14,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
@@ -28,9 +25,6 @@ public class UserServiceTest {
 
     @Mock
     private UserRepository userRepository;
-
-    @Mock
-    private PasswordEncoder passwordEncoder;
 
     @Spy
     private UserMapper userMapper = Mappers.getMapper(UserMapper.class);
@@ -133,59 +127,12 @@ public class UserServiceTest {
     }
 
     @Test
-    public void shouldSaveUser() {
-        AuthDto authDto = AuthDto.builder()
-                .username("boba")
-                .password("qwerty")
-                .email("boba@boba.ru")
-                .build();
-
-        Mockito.when(userRepository.findByNickname(authDto.getUsername()))
-                .thenReturn(Optional.empty());
-        Mockito.when(userRepository.findByEmail(authDto.getEmail()))
-                .thenReturn(Optional.empty());
-        userService.register(authDto);
-
-        Mockito.verify(userRepository).save(Mockito.any(User.class));
-    }
-
-    @Test
-    public void shouldThrowEntityNotUniqueByNickname() {
-        AuthDto authDto = AuthDto.builder()
-                .username("boba")
-                .password("qwerty")
-                .email("boba@boba.ru")
-                .build();
-        User user = User.builder().build();
-
-        Mockito.when(userRepository.findByNickname(authDto.getUsername()))
-                .thenReturn(Optional.of(user));
-        Assertions.assertThrows(EntityNotUniqueException.class, () -> userService.register(authDto));
-    }
-
-    @Test
-    public void shouldThrowEntityNotUniqueByEmail() {
-        AuthDto authDto = AuthDto.builder()
-                .username("boba")
-                .password("qwerty")
-                .email("boba@boba.ru")
-                .build();
-        User user = User.builder().build();
-
-        Mockito.when(userRepository.findByNickname(authDto.getUsername()))
-                .thenReturn(Optional.empty());
-        Mockito.when(userRepository.findByNickname(authDto.getUsername()))
-                .thenReturn(Optional.of(user));
-        Assertions.assertThrows(EntityNotUniqueException.class, () -> userService.register(authDto));
-    }
-
-    @Test
     public void shouldThrowUserNotFoundException() {
         long desiredId = 100;
 
         Mockito.when(userRepository.findById(desiredId))
                 .thenReturn(Optional.empty());
 
-        Assertions.assertThrows(EntityNotFoundException.class, () -> userService.findById(desiredId));
+        Assertions.assertThrows(NotFoundEntityException.class, () -> userService.findById(desiredId));
     }
 }

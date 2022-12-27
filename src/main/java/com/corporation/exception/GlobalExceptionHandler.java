@@ -13,16 +13,16 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NotUniqueEntityException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ExceptionResponse handleNotUniqueAchievementException(
+    public ExceptionResponse handleNotUniqueEntityException(
             NotUniqueEntityException exception
     ) {
         return new ExceptionResponse(exception.getMessage());
     }
 
-    @ExceptionHandler(EntityNotFoundException.class)
+    @ExceptionHandler(NotFoundEntityException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ExceptionResponse handleUserNotFoundException(
-            EntityNotFoundException exception
+    public ExceptionResponse handleNotFoundEntityException(
+            NotFoundEntityException exception
     ) {
         return new ExceptionResponse(exception.getMessage());
     }

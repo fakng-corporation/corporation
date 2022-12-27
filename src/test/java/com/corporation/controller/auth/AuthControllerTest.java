@@ -1,7 +1,6 @@
 package com.corporation.controller.auth;
 
 import com.corporation.dto.AuthDto;
-import com.corporation.service.UserService;
 import com.corporation.service.auth.AuthService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -19,9 +18,6 @@ import org.springframework.http.ResponseEntity;
 public class AuthControllerTest {
 
     @Mock
-    private UserService userService;
-
-    @Mock
     private AuthService authService;
 
     @InjectMocks
@@ -33,7 +29,7 @@ public class AuthControllerTest {
 
         authController.register(authDto);
 
-        Mockito.verify(userService).register(authDto);
+        Mockito.verify(authService).register(authDto);
     }
 
     @Test

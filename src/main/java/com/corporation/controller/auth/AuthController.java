@@ -1,7 +1,6 @@
 package com.corporation.controller.auth;
 
 import com.corporation.dto.AuthDto;
-import com.corporation.service.UserService;
 import com.corporation.service.auth.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -20,11 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthService authService;
-    private final UserService userService;
 
     @PutMapping("/register")
     public void register(@RequestBody AuthDto authDto) {
-        userService.register(authDto);
+        authService.register(authDto);
     }
 
     @PostMapping("/login")
