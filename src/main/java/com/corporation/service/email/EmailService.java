@@ -9,17 +9,19 @@ import com.amazonaws.services.simpleemail.model.MessageRejectedException;
 import com.amazonaws.services.simpleemail.model.SendEmailRequest;
 import com.corporation.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /**
  * @author Bleschunov Dmitry
  */
-@Log4j2
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class EmailService {
+
+    private static final String ENCODING = "UTF-8";
 
     @Value("${email.from}")
     private String from;
@@ -42,7 +44,7 @@ public class EmailService {
         } catch (MessageRejectedException e) {
             String message = "SES crashed trying to send email";
             log.error(message, e);
-            throw new BusinessException("SES crashed trying to send email");
+            throw new BusinessException(message);
         }
     }
 
@@ -57,17 +59,17 @@ public class EmailService {
         request.withMessage(new Message()
                 .withBody(new Body()
                         .withText(new Content()
-                                .withCharset("UTF-8").withData(email.getTextBody())))
+                                .withCharset(ENCODING).withData(email.getTextBody())))
                 .withSubject(new Content()
-                        .withCharset("UTF-8").withData(email.getSubject())));
+                        .withCharset(ENCODING).withData(email.getSubject())));
     }
 
     private void addHtmlBody(SendEmailRequest request, Email email) {
         request.withMessage(new Message()
                 .withBody(new Body()
                         .withHtml(new Content()
-                                .withCharset("UTF-8").withData(email.getHtmlBody())))
+                                .withCharset(ENCODING).withData(email.getHtmlBody())))
                 .withSubject(new Content()
-                        .withCharset("UTF-8").withData(email.getSubject())));
+                        .withCharset(ENCODING).withData(email.getSubject())));
     }
 }

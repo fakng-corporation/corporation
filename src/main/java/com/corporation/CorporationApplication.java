@@ -19,13 +19,13 @@ public class CorporationApplication {
     }
 
     @Value("${aws.credentials.aws_access_key_id}")
-    String awsAccessKey;
+    private String awsAccessKey;
 
     @Value("${aws.credentials.aws_secret_access_key}")
-    String awsSecretKey;
+    private String awsSecretKey;
 
     @Value("${aws.region}")
-    String awsRegion;
+    private String awsRegion;
 
     @Bean
     public AmazonSimpleEmailService amazonSes() {
