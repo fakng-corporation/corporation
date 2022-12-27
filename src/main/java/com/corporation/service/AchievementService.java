@@ -3,9 +3,13 @@ package com.corporation.service;
 import com.corporation.dto.AchievementDto;
 import com.corporation.mapper.AchievementMapper;
 import com.corporation.model.Achievement;
+import com.corporation.model.Project;
 import com.corporation.repository.AchievementRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -30,6 +34,16 @@ public class AchievementService {
                 })
                 .orElseThrow(() -> new EntityNotFoundException(
                         String.format("Achievement with id %d does not exist.", achievementDto.getId())));
+    }
+
+    public void delete(Long id) {
+        achievementRepository.deleteById(id);
+    }
+
+    public Page<AchievementDto> getAchievementsByTitle(long projectId, String keyword, int pageNumber, int pageSize) {
+        Project project = projectService.findById(projectId);
+        Pageable page = PageRequest.of(pageNumber, pageSize);
+        return achievementRepository.findByProjectAndTitleContainingIgnoreCase(project, keyword, page).map(achievementMapper::toDto);
     }
 
     private AchievementDto saveEntityAndReturnDto(Achievement achievement) {
