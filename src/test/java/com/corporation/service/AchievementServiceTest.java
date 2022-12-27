@@ -15,7 +15,13 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -85,5 +91,37 @@ public class AchievementServiceTest {
         Assertions.assertThrows(
                 EntityNotFoundException.class, () -> achievementService.update(achievementDto)
         );
+    }
+
+    @Test
+    public void shouldDeleteAchievement() {
+
+        Achievement achievement = Achievement.builder().id(any(Long.class)).build();
+        achievementService.delete(achievement.getId());
+
+        Mockito.verify(achievementRepository).deleteById(achievement.getId());
+    }
+
+    @Test
+    public void shouldReturnAchievementByTitle() {
+        long achievementId = 10;
+        String title = "title";
+        long projectId = 5;
+        Project project = Project.builder().id(projectId).build();
+        Achievement mockAchievement = Achievement.builder().id(achievementId).title(title).project(project).build();
+        List<Achievement> achievementList = Collections.singletonList(mockAchievement);
+        Page<Achievement> achievementPage = new PageImpl<>(achievementList);
+        AchievementDto mockAchievementDto = achievementMapper.toDto(mockAchievement);
+        List<AchievementDto> achievementDtoList = Collections.singletonList(mockAchievementDto);
+        Pageable pageable = PageRequest.of(0, 5);
+
+        Mockito.when(projectService.findById(projectId)).thenReturn(project);
+        Mockito.when(achievementRepository.findByProjectAndTitleContainingIgnoreCase(project, title, pageable))
+                .thenReturn(achievementPage);
+        Page<AchievementDto> page = achievementService.getAchievementsByTitle(projectId, title, 0, 5);
+
+        Assertions.assertEquals(page.getTotalElements(), 1);
+        Assertions.assertEquals(page.getContent(), achievementDtoList);
+
     }
 }
