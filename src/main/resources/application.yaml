@@ -21,3 +21,5 @@ aws:
   region: US_EAST_1
   s3:
     bucket: fakngcorporation
+  ses:
+    from: fakng-corporation@proton.me
