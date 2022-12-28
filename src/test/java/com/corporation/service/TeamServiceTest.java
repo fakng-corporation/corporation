@@ -43,7 +43,7 @@ public class TeamServiceTest {
     private TeamService teamService;
 
     @Test
-    public void add_shouldReturnCreatedTeamWithOwner() {
+    public void addShouldReturnCreatedTeamWithOwner() {
         long teamId = 10;
         String title = "new team";
         long projectId = 5;
@@ -64,7 +64,7 @@ public class TeamServiceTest {
     }
 
     @Test
-    public void add_shouldThrowNotUniqueEntityException() {
+    public void addShouldThrowNotUniqueEntityException() {
         long teamId = 10;
         String title = "new team";
         long projectId = 5;
@@ -81,16 +81,19 @@ public class TeamServiceTest {
     }
 
     @Test
-    public void shouldReturnUpdatedTeamWithOwner() {
+    public void updateShouldReturnUpdatedTeamWithOwner() {
         long teamId = 10;
         String oldTitle = "old title";
         String newTitle = "new title";
-        Team team = Team.builder().id(teamId).title(oldTitle).build();
+        long projectId = 5;
+        Project project = Project.builder().id(projectId).build();
+        Team team = Team.builder().id(teamId).title(oldTitle).project(project).build();
         Team updatedTeam = Team.builder().id(teamId).title(newTitle).build();
         TeamDto teamDto = teamMapper.toDto(updatedTeam);
 
         Mockito.when(teamRepository.findById(teamId))
                 .thenReturn(Optional.of(team));
+        Mockito.when(teamRepository.existsByProjectAndTitle(project, newTitle)).thenReturn(false);
         Mockito.when(teamRepository.save(team))
                 .thenReturn(updatedTeam);
         TeamDto returnedTeamDto = teamService.update(teamDto);
@@ -100,7 +103,7 @@ public class TeamServiceTest {
     }
 
     @Test
-    public void shouldThrowEntityNotFoundException() {
+    public void updateShouldThrowEntityNotFoundException() {
 
         long id = 100;
         TeamDto teamDto = TeamDto.builder().id(id).build();

@@ -32,7 +32,7 @@ public interface TeamApi {
     @Operation(summary = "Получение списка команд проекта", description = "Позволяет получать команды по заданной маске")
     @GetMapping
     Page<TeamDto> getTeams(
-            @RequestParam(value = "ID проекта", defaultValue = "0") long projectId,
+            @RequestParam(value = "ID проекта") long projectId,
             @RequestParam(value = "Маска поиска", defaultValue = "") String keyword,
             @RequestParam(value = "Номер страницы", defaultValue = "0") int pageNumber,
             @RequestParam(value = "Элементов на странице", defaultValue = "10") int pageSize);

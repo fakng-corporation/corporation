@@ -37,8 +37,14 @@ public class TeamService {
     public TeamDto update(TeamDto teamDto) {
         return teamRepository.findById(teamDto.getId())
                 .map(team -> {
-                    teamMapper.updateFromDto(teamDto, team);
-                    return saveEntityAndReturnDto(team);
+                    if (!teamRepository.existsByProjectAndTitle(team.getProject(), teamDto.getTitle())) {
+                        teamMapper.updateFromDto(teamDto, team);
+                        return saveEntityAndReturnDto(team);
+                    } else {
+                        throw new NotUniqueEntityException(
+                                String.format("Team with title %s already exists", teamDto.getTitle())
+                        );
+                    }
                 })
                 .orElseThrow(() -> new EntityNotFoundException(
                         String.format("Team with id %d does not exist.", teamDto.getId())));
