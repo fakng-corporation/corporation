@@ -6,6 +6,8 @@ import com.corporation.mapper.UserMapper;
 import com.corporation.model.User;
 import com.corporation.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,6 +25,10 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+
+    public Page<User> findAll(int page, int pageSize) {
+        return userRepository.findAll(PageRequest.of(page, pageSize));
+    }
 
     @Transactional
     public User findById(long id) {

@@ -13,6 +13,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+
+import java.util.ArrayList;
 
 /**
  * @author Bleschunov Dmitry
@@ -27,6 +31,23 @@ public class UserControllerTest {
 
     @InjectMocks
     private UserController userController;
+
+    @Test
+    public void shouldReturnUserDtoPage() {
+        int page = 0;
+        int pageSize = 3;
+        Page<User> users = new PageImpl<>(new ArrayList<>(){{
+            add(new User());
+            add(new User());
+            add(new User());
+        }});
+        Mockito.when(userService.findAll(page, pageSize))
+                .thenReturn(users);
+
+        Page<UserDto> userDtos = userController.getAllUsers(page, pageSize);
+
+        Assertions.assertEquals(pageSize, userDtos.getSize());
+    }
 
     @Test
     public void shouldReturnUserDtoById() {
