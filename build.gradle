@@ -64,7 +64,6 @@ jacocoTestReport {
 	dependsOn test // tests are required to run before generating the report
 }
 jacocoTestReport {
-//	delete files("/src/main/resources/static/jacocoHtml")
 	reports {
 		xml.required = false
 		csv.required = false
