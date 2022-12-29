@@ -3,6 +3,7 @@ package com.corporation.service.auth;
 import com.corporation.Util.UserRole;
 import com.corporation.configuration.jwt.TokenProvider;
 import com.corporation.dto.AuthDto;
+import com.corporation.exception.BusinessException;
 import com.corporation.exception.NotUniqueEntityException;
 import com.corporation.model.Authority;
 import com.corporation.model.User;
@@ -30,7 +31,8 @@ public class AuthService {
     private final UserRepository userRepository;
 
     public void register(AuthDto authDto) {
-        isNicknameAndEmailUnique(authDto);
+        assertPasswordsMatch(authDto);
+        assertNicknameAndEmailUnique(authDto);
         userRepository.save(createNewUserToSave(authDto));
     }
 
@@ -47,7 +49,7 @@ public class AuthService {
         return tokenProvider.createToken(authentication);
     }
 
-    private void isNicknameAndEmailUnique(AuthDto authDto) {
+    private void assertNicknameAndEmailUnique(AuthDto authDto) {
         userService.findByNicknameOrEmail(authDto.getUsername(), authDto.getEmail())
                 .ifPresent(user -> {
                     throw new NotUniqueEntityException(
@@ -60,6 +62,12 @@ public class AuthService {
                 });
     }
 
+    private void assertPasswordsMatch(AuthDto authDto) {
+        if (!authDto.getPassword().equals(authDto.getConfirmedPassword())) {
+            throw new BusinessException("Passwords don't match.");
+        }
+    }
+
     private User createNewUserToSave(AuthDto authDto) {
         String hashedPassword = passwordEncoder.encode(authDto.getPassword());
 
@@ -69,7 +77,7 @@ public class AuthService {
                 .email(authDto.getEmail())
                 .password(hashedPassword)
                 .enabled(true)
-                .authority(Authority.builder().id(UserRole.ROLE_USER.id).build())
+                .authority(Authority.builder().id(UserRole.ROLE_USER.getId()).build())
                 .build();
     }
 }

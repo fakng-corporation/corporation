@@ -1,6 +1,7 @@
 package com.corporation.service.auth;
 
 import com.corporation.dto.AuthDto;
+import com.corporation.exception.BusinessException;
 import com.corporation.exception.NotUniqueEntityException;
 import com.corporation.model.User;
 import com.corporation.repository.UserRepository;
@@ -40,6 +41,7 @@ public class AuthServiceTest {
         AuthDto authDto = AuthDto.builder()
                 .username("boba")
                 .password("qwerty")
+                .confirmedPassword("qwerty")
                 .email("boba@boba.ru")
                 .build();
 
@@ -50,10 +52,11 @@ public class AuthServiceTest {
     }
 
     @Test
-    public void shouldThrowEntityNotUnique() {
+    public void shouldThrowNotUniqueEntityException() {
         AuthDto authDto = AuthDto.builder()
                 .username("boba")
                 .password("qwerty")
+                .confirmedPassword("qwerty")
                 .email("boba@boba.ru")
                 .build();
         User user = User.builder().build();
@@ -61,5 +64,17 @@ public class AuthServiceTest {
         Mockito.when(userService.findByNicknameOrEmail(authDto.getUsername(), authDto.getEmail()))
                 .thenReturn(Optional.of(user));
         Assertions.assertThrows(NotUniqueEntityException.class, () -> authService.register(authDto));
+    }
+
+    @Test
+    public void shouldThrowBusinessExceptionOnUnmatchedPasswords() {
+        AuthDto authDto = AuthDto.builder()
+                .username("boba")
+                .password("qwerty")
+                .confirmedPassword("1234")
+                .email("boba@boba.ru")
+                .build();
+
+        Assertions.assertThrows(BusinessException.class, () -> authService.register(authDto));
     }
 }

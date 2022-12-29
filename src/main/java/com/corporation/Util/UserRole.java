@@ -7,8 +7,11 @@ import lombok.RequiredArgsConstructor;
  */
 @RequiredArgsConstructor
 public enum UserRole {
-    ROLE_USER((short) 1, "ROLE_USER");
+    ROLE_USER("ROLE_USER");
 
-    public final short id;
     public final String value;
+
+    public short getId() {
+        return (short) (ordinal() + 1);
+    }
 }
