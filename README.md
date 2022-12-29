@@ -1,0 +1,1 @@
+Адрес страницы покрытия тестами: http://localhost:8080/testcoverage
