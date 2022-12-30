@@ -36,15 +36,16 @@ public class UserControllerTest {
     public void shouldReturnUserDtoPage() {
         int page = 0;
         int pageSize = 3;
+        String query = "";
         Page<User> users = new PageImpl<>(new ArrayList<>(){{
             add(new User());
             add(new User());
             add(new User());
         }});
-        Mockito.when(userService.findAll(page, pageSize))
+        Mockito.when(userService.findUsersByNickname(query, page, pageSize))
                 .thenReturn(users);
 
-        Page<UserDto> userDtos = userController.getAllUsers(page, pageSize);
+        Page<UserDto> userDtos = userController.getUsersByNickname(query, page, pageSize);
 
         Assertions.assertEquals(pageSize, userDtos.getSize());
     }

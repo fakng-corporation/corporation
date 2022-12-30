@@ -26,8 +26,11 @@ public class UserController {
     private final UserMapper userMapper;
 
     @GetMapping
-    public Page<UserDto> getAllUsers(@RequestParam("page") int page, @RequestParam("page_size") int pageSize) {
-        return userService.findAll(page, pageSize).map(userMapper::toDto);
+    public Page<UserDto> getUsersByNickname(
+            @RequestParam("query") String query,
+            @RequestParam("page") int page,
+            @RequestParam("page_size") int pageSize) {
+        return userService.findUsersByNickname(query, page, pageSize).map(userMapper::toDto);
     }
 
     @GetMapping("/{id}")

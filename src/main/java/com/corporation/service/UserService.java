@@ -26,8 +26,8 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
-    public Page<User> findAll(int page, int pageSize) {
-        return userRepository.findAll(PageRequest.of(page, pageSize));
+    public Page<User> findUsersByNickname(String query, int page, int pageSize) {
+        return userRepository.findByNicknameContainingIgnoreCase(query, PageRequest.of(page, pageSize));
     }
 
     @Transactional
