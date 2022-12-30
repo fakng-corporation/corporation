@@ -81,7 +81,7 @@ class PostControllerTest {
     @Test
     public void shoudDeleteById() {
         Mockito.doNothing().when(postService).deleteById(existingId);
-        Assertions.assertDoesNotThrow(() -> postService.deleteById(existingId));
+        Assertions.assertDoesNotThrow(() -> postController.deleteById(existingId));
         Mockito.verify(postService, Mockito.times(1)).deleteById(existingId);
     }
 

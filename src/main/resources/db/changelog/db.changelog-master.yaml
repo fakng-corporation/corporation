@@ -21,3 +21,5 @@ databaseChangeLog:
       file: db/changelog/init-achievement.sql
   - include:
       file: db/changelog/init-team.sql
+  - include:
+      file: db/changelog/init-user-email-index.sql
