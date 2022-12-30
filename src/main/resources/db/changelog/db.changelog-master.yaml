@@ -19,3 +19,5 @@ databaseChangeLog:
       file: db/changelog/init-authority.sql
   - include:
       file: db/changelog/init-achievement.sql
+  - include:
+      file: db/changelog/init-user-email-index.sql
