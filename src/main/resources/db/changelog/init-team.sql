@@ -4,3 +4,4 @@ CREATE TABLE team (
     description varchar(4096),
     project_id bigint REFERENCES project(id) ON DELETE SET NULL
 );
+CREATE INDEX team_project_id_title ON team (project_id, title);
