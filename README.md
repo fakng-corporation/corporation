@@ -1,1 +1,1 @@
-Адрес страницы покрытия тестами: http://localhost:8080/testcoverage
+Статистика покрытия тестами создается при сборке. Располагается в build/jacocoHtml/index.html
