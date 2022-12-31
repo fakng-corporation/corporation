@@ -14,7 +14,12 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 /**
@@ -31,6 +36,25 @@ public class UserServiceTest {
 
     @InjectMocks
     private UserService userService;
+
+    @Test
+    public void shouldReturnUserPage() {
+        int page = 0;
+        int pageSize = 3;
+        String query = "";
+        Page<User> users = new PageImpl<>(new ArrayList<>() {{
+            add(new User());
+            add(new User());
+            add(new User());
+        }});
+        Pageable pageable = PageRequest.of(page,  pageSize);
+        Mockito.when(userRepository.findByNicknameContainingIgnoreCase(query, pageable))
+                .thenReturn(users);
+
+        Page<User> returnedUsers = userService.findUsersByNickname(query, page, pageSize);
+
+        Assertions.assertEquals(3, returnedUsers.getSize());
+    }
 
     @Test
     public void shouldReturnUserById() {
