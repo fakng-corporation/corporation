@@ -1,6 +1,7 @@
 package com.corporation.controller;
 
 import com.corporation.dto.PostDto;
+import com.corporation.dto.UpdateDraftPostDto;
 import com.corporation.mapper.PostMapperImpl;
 import com.corporation.model.Post;
 import com.corporation.model.User;
@@ -32,18 +33,28 @@ class PostControllerTest {
     private PostController postController;
 
     private Long existingId;
+    private String title;
+    private String body;
+    private UpdateDraftPostDto existingUpdateDraftPostDto;
+    private String updatedTitle;
+    private String updatedBody;
+    private Post mockUpdatedPost;
 
     @BeforeEach
     public void setUp() {
         existingId = 12L;
+        title = "Король Тайтлов";
+        body = "Это всё равно никто не читает, чтобы тут не было написано";
+        updatedTitle = "Post title hes been updated";
+        updatedBody = "Post body has been updated";
+        existingUpdateDraftPostDto = UpdateDraftPostDto.builder().id(existingId).title(title).body(body).build();
+        mockUpdatedPost = Post.builder().id(existingId).title(updatedTitle).body(updatedBody).build();
     }
 
     @Test
     void shouldReturnCreatedPostDto() {
 
         long id = 7;
-        String title = "Король Тайтлов";
-        String body = "Это всё равно никто не читает, чтобы тут не было написано";
         boolean isPublished = false;
 
         int desiredId = 1;
@@ -79,10 +90,16 @@ class PostControllerTest {
     }
 
     @Test
-    public void shoudDeleteById() {
+    public void shouldDeleteById() {
         Mockito.doNothing().when(postService).deleteById(existingId);
         Assertions.assertDoesNotThrow(() -> postController.deleteById(existingId));
         Mockito.verify(postService, Mockito.times(1)).deleteById(existingId);
     }
 
+    @Test
+    public void shouldUpdateById() {
+        Mockito.doReturn(mockUpdatedPost).when(postService).updateDraftPost(existingUpdateDraftPostDto);
+        Assertions.assertDoesNotThrow(() -> postController.updateDraftPost(existingUpdateDraftPostDto));
+        Mockito.verify(postService, Mockito.times(1)).updateDraftPost(existingUpdateDraftPostDto);
+    }
 }
