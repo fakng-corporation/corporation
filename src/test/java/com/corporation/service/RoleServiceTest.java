@@ -1,5 +1,6 @@
 package com.corporation.service;
 
+import com.corporation.dto.ProjectDto;
 import com.corporation.dto.RoleDto;
 import com.corporation.mapper.RoleMapper;
 import com.corporation.model.Project;
@@ -14,6 +15,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 
@@ -50,6 +53,25 @@ public class RoleServiceTest {
         Assertions.assertEquals(roleId, returnedRole.getId());
         Assertions.assertEquals(title, returnedRole.getTitle());
         Assertions.assertEquals(projectId, returnedRole.getProjectId());
+    }
+
+    @Test
+    public void shouldReturnUpdatedProjectWithOwner() {
+        long roleId = 1;
+        String oldTitle = "old title";
+        String newTitle = "new title";
+        Role role = Role.builder().id(roleId).title(oldTitle).build();
+        Role updatedRole = Role.builder().id(roleId).title(newTitle).build();
+        RoleDto roleDto = roleMapper.toDto(updatedRole);
+
+        Mockito.when(roleRepository.findById(roleId))
+                .thenReturn(Optional.of(role));
+        Mockito.when(roleRepository.save(role))
+                .thenReturn(updatedRole);
+        RoleDto returnedRole = roleService.update(roleDto);
+
+        Assertions.assertEquals(roleId, returnedRole.getId());
+        Assertions.assertEquals(newTitle, returnedRole.getTitle());
     }
 
     @Test

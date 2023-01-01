@@ -1,6 +1,7 @@
 package com.corporation.controller;
 
 import com.corporation.controller.api.RoleApi;
+import com.corporation.dto.ProjectDto;
 import com.corporation.dto.RoleDto;
 import com.corporation.service.RoleService;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,11 @@ public class RoleController implements RoleApi {
 
     public RoleDto addRole(RoleDto roleDto) {
         return roleService.add(roleDto);
+    }
+
+    @Override
+    public RoleDto updateRole(RoleDto roleDto) {
+        return roleService.update(roleDto);
     }
 
     @Override

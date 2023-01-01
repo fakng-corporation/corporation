@@ -52,4 +52,21 @@ public class RoleControllerTest {
 
         Mockito.verify(roleService).delete(role.getId());
     }
+
+    @Test
+    public void shouldReturnUpdatedRoleDto() {
+
+        long id = 1;
+        String newTitle = "cool role";
+
+        Role roleWithNewTitle = Role.builder().id(id).title(newTitle).build();
+        RoleDto roleDto = roleMapper.toDto(roleWithNewTitle);
+
+        Mockito.when(roleService.update(roleDto)).thenReturn(roleDto);
+
+        RoleDto resultRoleDto = roleController.updateRole(roleDto);
+
+        Assertions.assertEquals(id, resultRoleDto.getId());
+        Assertions.assertEquals(newTitle, resultRoleDto.getTitle());
+    }
 }
