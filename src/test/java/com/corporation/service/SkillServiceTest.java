@@ -1,5 +1,6 @@
 package com.corporation.service;
 
+import com.corporation.exception.NotFoundEntityException;
 import com.corporation.exception.NotUniqueEntityException;
 import com.corporation.model.Skill;
 import com.corporation.repository.SkillRepository;
@@ -43,6 +44,26 @@ public class SkillServiceTest {
 
         Assertions.assertEquals(id, createdSkill.getId());
         Assertions.assertEquals(title, createdSkill.getTitle());
+    }
+
+    @Test
+    public void shouldReturnSkill() {
+        long skillId = 1;
+        String skillTitle = "skill";
+        Skill skill = Skill.builder().id(skillId).title(skillTitle).build();
+        Optional<Skill> optionalSkill = Optional.of(skill);
+        Mockito.when(skillRepository.findSkillById(skillId))
+                .thenReturn(optionalSkill);
+
+        Assertions.assertEquals(skill, skillService.findSkillById(skillId));
+    }
+
+    @Test
+    public void shouldThrowNotFoundEntityException() {
+        Mockito.when(skillRepository.findSkillById(Mockito.anyLong()))
+                .thenReturn(Optional.empty());
+
+        Assertions.assertThrows(NotFoundEntityException.class, () -> skillService.findSkillById(Mockito.anyLong()));
     }
 
     @Test

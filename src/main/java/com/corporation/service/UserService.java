@@ -3,6 +3,7 @@ package com.corporation.service;
 import com.corporation.dto.UserDto;
 import com.corporation.exception.NotFoundEntityException;
 import com.corporation.mapper.UserMapper;
+import com.corporation.model.Skill;
 import com.corporation.model.User;
 import com.corporation.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -25,6 +28,8 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+
+    private final SkillService skillService;
 
     public Page<User> findUsersByNickname(String query, int page, int pageSize) {
         return userRepository.findByNicknameContainingIgnoreCase(query, PageRequest.of(page, pageSize));
@@ -40,6 +45,14 @@ public class UserService implements UserDetailsService {
 
     public Optional<User> findByNicknameOrEmail(String nickname, String email) {
         return userRepository.findByNicknameOrEmail(nickname, email);
+    }
+
+    @Transactional
+    public void updateUserSkillList(long userId, List<Long> skillIdList) {
+        User user = findById(userId);
+        List<Skill> skillsToAssign = new ArrayList<>();
+        skillIdList.forEach(skillId -> skillsToAssign.add(skillService.findSkillById(skillId)));
+        user.setSkills(skillsToAssign);
     }
 
     @Transactional

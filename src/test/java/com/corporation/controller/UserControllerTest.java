@@ -1,9 +1,13 @@
 package com.corporation.controller;
 
+import com.corporation.dto.SkillDto;
 import com.corporation.dto.UserDto;
 import com.corporation.exception.NotFoundEntityException;
+import com.corporation.mapper.SkillMapperImpl;
 import com.corporation.mapper.UserMapperImpl;
+import com.corporation.model.Skill;
 import com.corporation.model.User;
+import com.corporation.service.SkillService;
 import com.corporation.service.UserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -15,8 +19,8 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Bleschunov Dmitry
@@ -28,6 +32,12 @@ public class UserControllerTest {
 
     @Spy
     private UserMapperImpl userMapper;
+
+    @Mock
+    private SkillService skillService;
+
+    @Spy
+    private SkillMapperImpl skillMapper;
 
     @InjectMocks
     private UserController userController;
@@ -103,6 +113,32 @@ public class UserControllerTest {
         Assertions.assertEquals(newAboutMe, returnedUserDto.getAboutMe());
         Assertions.assertEquals(newEmail, returnedUserDto.getEmail());
         Assertions.assertEquals(desiredId, returnedUserDto.getId());
+    }
+
+    @Test
+    public void shouldReturnSkillDtoList() {
+        long userId = 1;
+        long skillId = 1;
+        String skillTitle = "skill";
+        Skill skill = Skill.builder().id(skillId).title(skillTitle).build();
+        List<Skill> skillList = new ArrayList<>();
+        skillList.add(skill);
+        List<SkillDto> skillDtoList = new ArrayList<>();
+        skillDtoList.add(skillMapper.toDto(skill));
+        Mockito.when(skillService.findSkillsByUserId(userId))
+                .thenReturn(skillList);
+
+        Assertions.assertEquals(skillDtoList, userController.getSkillsByUserId(userId));
+    }
+
+    @Test
+    public void shouldAssignSkillList() {
+        long userId = 1;
+        List<Long> skillIdList = new ArrayList<>();
+
+        userController.assignSkillList(userId, skillIdList);
+
+        Mockito.verify(userService).updateUserSkillList(userId, skillIdList);
     }
 
     @Test
