@@ -17,6 +17,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Bleschunov Dmitry
@@ -114,5 +116,39 @@ public class UserControllerTest {
                 .thenThrow(NotFoundEntityException.class);
 
         Assertions.assertThrows(NotFoundEntityException.class, () -> userController.getUserById(desiredId));
+    }
+
+    @Test
+    public void shouldFollow() {
+        Long userId = 1L;
+        Long followingUserId = 2L;
+
+        User user1 = User.builder()
+                .nickname("User1")
+                .email("user@domain.com")
+                .password("$2a$12$ZqBcuPyawuOEWm/Fo78Hte9DGrHl9fauMBLpfvWECAaO/Paat74kq")
+                .enabled(true)
+                .build();
+        User user2 = User.builder()
+                .nickname("User2")
+                .email("user2@domain.com")
+                .password("$2a$12$ZqBcuPyawuOEWm/Fo78Hte9DGrHl9fauMBLpfvWECAaO/Paat74kq")
+                .enabled(true)
+                .build();
+
+        Set<User> followingSet = new HashSet<>();
+        followingSet.add(user2);
+        User afterFollowingUser = User.builder()
+                .nickname("User1")
+                .email("user@domain.com")
+                .password("$2a$12$ZqBcuPyawuOEWm/Fo78Hte9DGrHl9fauMBLpfvWECAaO/Paat74kq")
+                .enabled(true)
+                .following(followingSet)
+                .build();
+
+        Mockito.when(userService.followUser(userId, followingUserId)).thenReturn(afterFollowingUser);
+        User assertionUser = userController.followUser(userId, followingUserId);
+        Assertions.assertEquals(assertionUser.getFollowing(), afterFollowingUser.getFollowing());
+
     }
 }

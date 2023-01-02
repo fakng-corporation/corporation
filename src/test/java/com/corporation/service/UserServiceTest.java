@@ -20,7 +20,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * @author Bleschunov Dmitry
@@ -47,7 +49,7 @@ public class UserServiceTest {
             add(new User());
             add(new User());
         }});
-        Pageable pageable = PageRequest.of(page,  pageSize);
+        Pageable pageable = PageRequest.of(page, pageSize);
         Mockito.when(userRepository.findByNicknameContainingIgnoreCase(query, pageable))
                 .thenReturn(users);
 
@@ -120,7 +122,7 @@ public class UserServiceTest {
         Assertions.assertEquals(newEmail, user.getEmail());
         Assertions.assertEquals(newAboutMe, user.getAboutMe());
     }
-    
+
     @Test
     public void shouldReturnUserDetails() {
         long desiredId = 1;
@@ -158,5 +160,41 @@ public class UserServiceTest {
                 .thenReturn(Optional.empty());
 
         Assertions.assertThrows(NotFoundEntityException.class, () -> userService.findById(desiredId));
+    }
+
+    @Test
+    public void shouldFollow() {
+        Long userId = 1L;
+        Long followingUserId = 2L;
+
+        User user1 = User.builder()
+                .nickname("User1")
+                .email("user@domain.com")
+                .password("$2a$12$ZqBcuPyawuOEWm/Fo78Hte9DGrHl9fauMBLpfvWECAaO/Paat74kq")
+                .enabled(true)
+                .following(new HashSet<>())
+                .build();
+        User user2 = User.builder()
+                .nickname("User2")
+                .email("user2@domain.com")
+                .password("$2a$12$ZqBcuPyawuOEWm/Fo78Hte9DGrHl9fauMBLpfvWECAaO/Paat74kq")
+                .enabled(true)
+                .build();
+
+        Set<User> followingSet = new HashSet<>();
+        followingSet.add(user2);
+        User afterFollowingUser = User.builder()
+                .nickname("User1")
+                .email("user@domain.com")
+                .password("$2a$12$ZqBcuPyawuOEWm/Fo78Hte9DGrHl9fauMBLpfvWECAaO/Paat74kq")
+                .enabled(true)
+                .following(followingSet)
+                .build();
+
+        Mockito.when(userRepository.findById(userId)).thenReturn(Optional.of(user1));
+        Mockito.when(userRepository.findById(followingUserId)).thenReturn(Optional.of(user2));
+        Mockito.when(userRepository.save(user1)).thenReturn(afterFollowingUser);
+        User assertionUser = userService.followUser(userId, followingUserId);
+        Assertions.assertEquals(assertionUser.getFollowing(), afterFollowingUser.getFollowing());
     }
 }
