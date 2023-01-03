@@ -1,7 +1,7 @@
 package com.corporation.service;
 
-import com.corporation.dto.ProjectDto;
 import com.corporation.dto.RoleDto;
+import com.corporation.exception.NotFoundEntityException;
 import com.corporation.mapper.RoleMapper;
 import com.corporation.model.Project;
 import com.corporation.model.Role;
@@ -56,7 +56,7 @@ public class RoleServiceTest {
     }
 
     @Test
-    public void shouldReturnUpdatedProjectWithOwner() {
+    public void shouldReturnUpdatedRole() {
         long roleId = 1;
         String oldTitle = "old title";
         String newTitle = "new title";
@@ -75,8 +75,22 @@ public class RoleServiceTest {
     }
 
     @Test
-    public void shouldDeleteProject() {
+    public void shouldThrowNotFoundEntityException() {
+        long id = 1;
+        Role role = Role.builder().id(id).build();
+        RoleDto roleDto = roleMapper.toDto(role);
 
+        Mockito.when(roleRepository.findById(any(long.class)))
+                .thenReturn(Optional.empty());
+
+        Assertions.assertThrows(
+                NotFoundEntityException.class,
+                () -> roleService.update(roleDto)
+        );
+    }
+
+    @Test
+    public void shouldDeleteRole() {
         Role role = Role.builder().id(any(Long.class)).build();
         roleService.delete(role.getId());
 

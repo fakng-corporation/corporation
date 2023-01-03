@@ -2,6 +2,7 @@ package com.corporation.service;
 
 import com.corporation.dto.RoleDto;
 import com.corporation.exception.BusinessException;
+import com.corporation.exception.NotFoundEntityException;
 import com.corporation.mapper.RoleMapper;
 import com.corporation.model.Role;
 import com.corporation.repository.RoleRepository;
@@ -30,7 +31,7 @@ public class RoleService {
                     roleMapper.updateFromDto(roleDto, role);
                     return saveEntityAndReturnDto(role);
                 })
-                .orElseThrow(() -> new BusinessException(
+                .orElseThrow(() -> new NotFoundEntityException(
                         String.format("Role with id %d does not exist.", roleDto.getId())
                 ));
     }
