@@ -19,7 +19,9 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -116,19 +118,19 @@ public class UserControllerTest {
     }
 
     @Test
-    public void shouldReturnSkillDtoList() {
+    public void shouldReturnSkillDtoPage() {
         long userId = 1;
         long skillId = 1;
+        int page = 1;
+        int pageSize = 10;
         String skillTitle = "skill";
         Skill skill = Skill.builder().id(skillId).title(skillTitle).build();
-        List<Skill> skillList = new ArrayList<>();
-        skillList.add(skill);
-        List<SkillDto> skillDtoList = new ArrayList<>();
-        skillDtoList.add(skillMapper.toDto(skill));
-        Mockito.when(skillService.findSkillsByUserId(userId))
-                .thenReturn(skillList);
+        Page<Skill> skillPage = new PageImpl<>(Collections.singletonList(skill));
+        Page<SkillDto> skillDtoList = new PageImpl<>(Collections.singletonList(skillMapper.toDto(skill)));
+        Mockito.when(skillService.findSkillsByUserId(userId, page, pageSize))
+                .thenReturn(skillPage);
 
-        Assertions.assertEquals(skillDtoList, userController.getSkillsByUserId(userId));
+        Assertions.assertEquals(skillDtoList, userController.getSkillsByUserId(userId, page, pageSize));
     }
 
     @Test

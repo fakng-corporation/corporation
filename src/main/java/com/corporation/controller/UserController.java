@@ -46,8 +46,11 @@ public class UserController {
     }
 
     @GetMapping("/{id}/skill")
-    public List<SkillDto> getSkillsByUserId(@PathVariable("id") long id) {
-        return skillService.findSkillsByUserId(id).stream().map(skillMapper::toDto).toList();
+    public Page<SkillDto> getSkillsByUserId(
+            @PathVariable("id") long id,
+            @RequestParam("page") int page,
+            @RequestParam("page_size") int pageSize) {
+        return skillService.findSkillsByUserId(id, page, pageSize).map(skillMapper::toDto);
     }
 
     @PostMapping("/{id}/skill")

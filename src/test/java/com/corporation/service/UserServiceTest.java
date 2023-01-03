@@ -97,16 +97,19 @@ public class UserServiceTest {
         List<Long> skillIdList = new ArrayList<>();
         skillIdList.add(skillIdA);
         skillIdList.add(skillIdB);
+        List<Skill> skills = new ArrayList<>();
+        skills.add(Skill.builder().id(skillIdA).build());
+        skills.add(Skill.builder().id(skillIdB).build());
         User mockUser = Mockito.mock(User.class);
         Mockito.when(userRepository.findById(userId))
                 .thenReturn(Optional.of(mockUser));
-        Mockito.when(skillService.findSkillById(skillIdA))
-                .thenReturn(Mockito.any(Skill.class));
+        Mockito.when(skillService.findSkillByIdIn(skillIdList))
+                .thenReturn(skills);
 
         userService.updateUserSkillList(userId, skillIdList);
 
         Mockito.verify(userRepository).findById(userId);
-        Mockito.verify(skillService, Mockito.times(2)).findSkillById(Mockito.anyLong());
+        Mockito.verify(skillService).findSkillByIdIn(skillIdList);
     }
 
     @Test

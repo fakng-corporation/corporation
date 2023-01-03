@@ -15,7 +15,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,8 +49,7 @@ public class UserService implements UserDetailsService {
     @Transactional
     public void updateUserSkillList(long userId, List<Long> skillIdList) {
         User user = findById(userId);
-        List<Skill> skillsToAssign = new ArrayList<>();
-        skillIdList.forEach(skillId -> skillsToAssign.add(skillService.findSkillById(skillId)));
+        List<Skill> skillsToAssign = skillService.findSkillByIdIn(skillIdList);
         user.setSkills(skillsToAssign);
     }
 

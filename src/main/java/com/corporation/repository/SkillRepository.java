@@ -1,6 +1,8 @@
 package com.corporation.repository;
 
 import com.corporation.model.Skill;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,7 +14,7 @@ import java.util.Optional;
  */
 @Repository
 public interface SkillRepository extends CrudRepository<Skill, Long> {
-    Optional<Skill> findSkillById(long skillId);
+    List<Skill> findSkillByIdIn(List<Long> skillIdList);
     Optional<Skill> findSkillByTitle(String title);
-    List<Skill> findSkillsByUsers_Id(long userId);
+    Page<Skill> findSkillsByUsersId(long userId, Pageable pageable);
 }

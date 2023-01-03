@@ -1,10 +1,12 @@
 package com.corporation.service;
 
-import com.corporation.exception.NotFoundEntityException;
+import com.corporation.exception.BusinessException;
 import com.corporation.exception.NotUniqueEntityException;
 import com.corporation.model.Skill;
 import com.corporation.repository.SkillRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,11 +22,14 @@ public class SkillService {
 
     private final SkillRepository skillRepository;
 
-    public Skill findSkillById(long skillId) {
-        return skillRepository.findSkillById(skillId)
-                .orElseThrow(() -> new NotFoundEntityException(
-                        String.format("Skill with id %d does not exist.", skillId)
-                ));
+    public List<Skill> findSkillByIdIn(List<Long> skillIdList) {
+        List<Skill> skills = skillRepository.findSkillByIdIn(skillIdList);
+
+        if (skills.size() != skillIdList.size()) {
+            throw new BusinessException("The number of retrieved skills does not match the number of queried.");
+        }
+
+        return skills;
     }
 
     private Optional<Skill> findSkillByTitle(String title) {
@@ -42,7 +47,7 @@ public class SkillService {
     }
 
     @Transactional
-    public List<Skill> findSkillsByUserId(long userId) {
-        return skillRepository.findSkillsByUsers_Id(userId);
+    public Page<Skill> findSkillsByUserId(long userId, int page, int pageSize) {
+        return skillRepository.findSkillsByUsersId(userId, PageRequest.of(page, pageSize));
     }
 }
