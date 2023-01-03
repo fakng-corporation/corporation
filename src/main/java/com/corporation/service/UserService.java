@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
-import java.util.Set;
 
 /**
  * @author Bleschunov Dmitry
@@ -67,9 +66,7 @@ public class UserService implements UserDetailsService {
         User followingUser = userRepository.findById(followingUserId).orElseThrow(() -> new NotFoundEntityException(
                 String.format("Following user %d does not exist", followingUserId)
         ));
-        Set<User> following = user.getFollowing();
-        following.add(followingUser);
-        user.setFollowing(following);
+        user.getFollowing().add(followingUser);
         return userRepository.save(user);
     }
 }
