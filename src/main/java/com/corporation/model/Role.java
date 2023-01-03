@@ -3,16 +3,18 @@ package com.corporation.model;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
-@Data
 @Entity
 @Builder
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "role")

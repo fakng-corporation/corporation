@@ -1,12 +1,18 @@
 package com.corporation.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Schema(description = "Команда проекта")
-@Data
 @Builder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class TeamDto {
     @Schema(description = "Уникальный идентификатор команды")
     private long id;
