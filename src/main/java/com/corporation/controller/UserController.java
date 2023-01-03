@@ -47,10 +47,10 @@ public class UserController {
         );
     }
 
-    @PutMapping
+    @PutMapping("/{followerId}/{followeeId}")
     public User followUser(
-            @RequestParam("user-id") Long userId,
-            @RequestParam("following-user-id") Long followingId) {
-        return userService.followUser(userId, followingId);
+            @PathVariable("followerId") long followerId,
+            @PathVariable("followeeId") long followeeId) {
+        return userService.followUser(followerId, followeeId);
     }
 }

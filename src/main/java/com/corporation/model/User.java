@@ -16,8 +16,9 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
@@ -28,13 +29,13 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author Bleschunov Dmitry
  */
-@Data
 @Builder
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -82,13 +83,11 @@ public class User implements UserDetails {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "followers",
-            joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "follower_id"))
-    private Set<User> followers;
+            joinColumns = @JoinColumn(name = "followee_id"), inverseJoinColumns = @JoinColumn(name = "follower_id"))
+    private List<User> followers;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "followers",
-            joinColumns = @JoinColumn(name = "follower_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private Set<User> following;
+    @ManyToMany(mappedBy = "followers", fetch = FetchType.EAGER)
+    private List<User> followees;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -118,5 +117,9 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return enabled;
+    }
+
+    public void addFollowee (User followee) {
+        getFollowees().add(followee);
     }
 }

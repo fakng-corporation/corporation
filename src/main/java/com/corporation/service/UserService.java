@@ -59,14 +59,10 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public User followUser(Long userId, Long followingUserId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundEntityException(
-                String.format("User %d does not exist", userId)
-        ));
-        User followingUser = userRepository.findById(followingUserId).orElseThrow(() -> new NotFoundEntityException(
-                String.format("Following user %d does not exist", followingUserId)
-        ));
-        user.getFollowing().add(followingUser);
-        return userRepository.save(user);
+    public User followUser(Long followerId, Long followeeId) {
+        User follower = findById(followerId);
+        User followee = findById(followeeId);
+        follower.addFollowee(followee);
+        return userRepository.save(follower);
     }
 }

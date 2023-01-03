@@ -17,8 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 /**
  * @author Bleschunov Dmitry
@@ -39,7 +38,7 @@ public class UserControllerTest {
         int page = 0;
         int pageSize = 3;
         String query = "";
-        Page<User> users = new PageImpl<>(new ArrayList<>(){{
+        Page<User> users = new PageImpl<>(new ArrayList<>() {{
             add(new User());
             add(new User());
             add(new User());
@@ -120,8 +119,8 @@ public class UserControllerTest {
 
     @Test
     public void shouldFollow() {
-        Long userId = 1L;
-        Long followingUserId = 2L;
+        long userId = 1L;
+        long followingUserId = 2L;
 
         User user1 = User.builder()
                 .nickname("User1")
@@ -136,19 +135,19 @@ public class UserControllerTest {
                 .enabled(true)
                 .build();
 
-        Set<User> followingSet = new HashSet<>();
-        followingSet.add(user2);
+        List<User> followeesList = new ArrayList<>();
+        followeesList.add(user2);
         User afterFollowingUser = User.builder()
                 .nickname("User1")
                 .email("user@domain.com")
                 .password("$2a$12$ZqBcuPyawuOEWm/Fo78Hte9DGrHl9fauMBLpfvWECAaO/Paat74kq")
                 .enabled(true)
-                .following(followingSet)
+                .followees(followeesList)
                 .build();
 
         Mockito.when(userService.followUser(userId, followingUserId)).thenReturn(afterFollowingUser);
         User assertionUser = userController.followUser(userId, followingUserId);
-        Assertions.assertEquals(assertionUser.getFollowing(), afterFollowingUser.getFollowing());
+        Assertions.assertEquals(assertionUser.getFollowees(), afterFollowingUser.getFollowees());
 
     }
 }
