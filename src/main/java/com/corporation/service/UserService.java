@@ -1,11 +1,13 @@
 package com.corporation.service;
 
 import com.corporation.dto.UserDto;
-import com.corporation.exception.UserNotFoundException;
+import com.corporation.exception.NotFoundEntityException;
 import com.corporation.mapper.UserMapper;
 import com.corporation.model.User;
 import com.corporation.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -26,13 +28,20 @@ public class UserService implements UserDetailsService {
     private final S3Service s3Service;
     private final UserMapper userMapper;
 
+    public Page<User> findUsersByNickname(String query, int page, int pageSize) {
+        return userRepository.findByNicknameContainingIgnoreCase(query, PageRequest.of(page, pageSize));
+    }
+
     @Transactional
     public User findById(long id) {
-        Optional<User> optionalUser = userRepository.findById(id);
-        return optionalUser
-                .orElseThrow(() -> new UserNotFoundException(
+        return userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundEntityException(
                         String.format("User with id %d does not exist.", id)
                 ));
+    }
+
+    public Optional<User> findByNicknameOrEmail(String nickname, String email) {
+        return userRepository.findByNicknameOrEmail(nickname, email);
     }
 
     @Transactional
@@ -48,9 +57,9 @@ public class UserService implements UserDetailsService {
         String url = s3Service.upload(userAvatar);
         userRepository.updateUserAvatarById(id, url);
     }
-    
+
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) {
         return userRepository.findByNickname(username)
                 .orElseThrow(() -> new UsernameNotFoundException(
                         String.format("User with nickname %s does not exist.", username)

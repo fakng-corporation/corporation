@@ -5,6 +5,7 @@ import com.corporation.mapper.UserMapper;
 import com.corporation.model.User;
 import com.corporation.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +25,14 @@ public class UserController {
     private final UserService userService;
 
     private final UserMapper userMapper;
+
+    @GetMapping
+    public Page<UserDto> getUsersByNickname(
+            @RequestParam("query") String query,
+            @RequestParam("page") int page,
+            @RequestParam("page_size") int pageSize) {
+        return userService.findUsersByNickname(query, page, pageSize).map(userMapper::toDto);
+    }
 
     @GetMapping("/{id}")
     public UserDto getUserById(@PathVariable("id") long id) {

@@ -36,7 +36,7 @@ public class Project {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "title", length = 128, nullable = false, unique = true)
+    @Column(name = "title", length = 128, nullable = false)
     private String title;
 
     @Column(name = "description", length = 4096)
@@ -48,6 +48,9 @@ public class Project {
 
     @OneToMany(mappedBy = "project")
     private List<Achievement> achievements;
+
+    @OneToMany(mappedBy = "project")
+    private List<Team> teams;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
