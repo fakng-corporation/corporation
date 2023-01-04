@@ -16,9 +16,8 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
@@ -34,8 +33,7 @@ import java.util.List;
  * @author Bleschunov Dmitry
  */
 @Builder
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -58,7 +56,7 @@ public class User implements UserDetails {
     @Column(name = "enabled", nullable = false)
     private boolean enabled;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "authority_id", referencedColumnName = "id")
     private Authority authority;
 
@@ -89,7 +87,7 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "followee_id"), inverseJoinColumns = @JoinColumn(name = "follower_id"))
     private List<User> followers;
 
-    @ManyToMany(mappedBy = "followers", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "followers")
     private List<User> followees;
 
     @Override
@@ -122,7 +120,8 @@ public class User implements UserDetails {
         return enabled;
     }
 
-    public void addFollowee (User followee) {
+    public void addFollowee(User followee) {
+        System.out.println(getFollowees().size());
         getFollowees().add(followee);
-    }
+        System.out.println(getFollowees().size());}
 }

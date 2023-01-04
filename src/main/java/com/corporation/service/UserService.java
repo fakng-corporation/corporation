@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -67,10 +68,16 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public User followUser(Long followerId, Long followeeId) {
-        User follower = findById(followerId);
-        User followee = findById(followeeId);
+    public UserDto followUser(long followerId, long followeeId) {
+        List<User> users = userRepository.findFollowerAndFolloweeById(followerId, followeeId);
+        if (users.size() != 2) {
+            throw new NotFoundEntityException(
+                    String.format("User does not exist")
+            );
+        }
+        User follower = users.stream().filter(x -> x.getId()== followerId).findAny().get();
+        User followee = users.stream().filter(x -> x.getId()== followeeId).findAny().get();
         follower.addFollowee(followee);
-        return userRepository.save(follower);
+        return userMapper.toDto(userRepository.save(follower));
     }
 }

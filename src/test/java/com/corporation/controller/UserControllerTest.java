@@ -149,17 +149,13 @@ public class UserControllerTest {
 
         List<User> followeesList = new ArrayList<>();
         followeesList.add(user2);
-        User afterFollowingUser = User.builder()
+        UserDto afterFollowingUser = UserDto.builder()
                 .nickname("User1")
                 .email("user@domain.com")
-                .password("$2a$12$ZqBcuPyawuOEWm/Fo78Hte9DGrHl9fauMBLpfvWECAaO/Paat74kq")
-                .enabled(true)
-                .followees(followeesList)
                 .build();
 
         Mockito.when(userService.followUser(userId, followingUserId)).thenReturn(afterFollowingUser);
-        User assertionUser = userController.followUser(userId, followingUserId);
-        Assertions.assertEquals(assertionUser.getFollowees(), afterFollowingUser.getFollowees());
-
+        UserDto assertionUser = userController.followUser(userId, followingUserId);
+        Assertions.assertEquals(assertionUser, afterFollowingUser);
     }
 }
