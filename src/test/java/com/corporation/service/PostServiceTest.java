@@ -1,11 +1,11 @@
 package com.corporation.service;
 
-import com.corporation.dto.UpdateDraftPostDto;
+import com.corporation.dto.PostDto;
+import com.corporation.exception.NotFoundEntityException;
 import com.corporation.mapper.PostMapper;
 import com.corporation.model.Post;
 import com.corporation.repository.PostRepository;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mapstruct.factory.Mappers;
@@ -29,33 +29,14 @@ public class PostServiceTest {
     @Spy
     private PostMapper postMapper = Mappers.getMapper(PostMapper.class);
 
-    private Long existingId;
-    private String title;
-    private String body;
-    private boolean isPublished;
-    private UpdateDraftPostDto mockUpdateDraftPost;
-    private Post mockPost;
-    private String updatedTitle;
-    private String updatedBody;
-    private Post mockUpdatedPost;
-
-    @BeforeEach
-    public void setUp() {
-        existingId = 12L;
-        title = "Some Title";
-        body = "Здесь мог быть Ваш код";
-        isPublished = false;
-        updatedTitle = "Post title hes been updated";
-        updatedBody = "Post body has been updated";
-        mockUpdateDraftPost = UpdateDraftPostDto.builder().id(existingId).title(title).body(body).build();
-        mockPost = Post.builder().id(existingId).title(title).body(body).published(false).build();
-        mockUpdatedPost = Post.builder().id(existingId).title(updatedTitle).body(updatedBody).build();
-    }
-
     @Test
     public void shouldReturnCreatedPost() {
 
         long id = 322;
+
+        String title = "Some Title";
+        String body = "Здесь мог быть Ваш код";
+        boolean isPublished = false;
 
         Post mockPost = Post.builder().id(id).title(title).body(body).build();
 
@@ -72,6 +53,8 @@ public class PostServiceTest {
 
     @Test
     public void shouldDeleteById() {
+        long existingId = 12L;
+
         Mockito.doNothing().when(postRepository).deleteById(existingId);
         Assertions.assertDoesNotThrow(() -> postService.deleteById(existingId));
         Mockito.verify(postRepository, Mockito.times(1)).deleteById(existingId);
@@ -79,12 +62,34 @@ public class PostServiceTest {
 
     @Test
     public void shouldUpdateDraftPost() {
+        long existingId = 12L;
+        String title = "Title";
+        String body = "Body text";
+        String updatedTitle = "Post title has been updated";
+        String updatedBody = "Post body has been updated";
+        Post mockPost = Post.builder().id(existingId).title(title).body(body).published(false).build();
+        PostDto existingUpdatePostDto = PostDto.builder().id(existingId).title(title).body(body).build();
+        Post mockUpdatedPost = Post.builder().id(existingId).title(updatedTitle).body(updatedBody).build();
+
         Mockito.doReturn(Optional.of(mockPost)).when(postRepository).findById(existingId);
         Mockito.doReturn(mockUpdatedPost).when(postRepository).save(mockPost);
-        Post updatedPost = postService.updateDraftPost(mockUpdateDraftPost);
-        Assertions.assertDoesNotThrow(() -> postService.updateDraftPost(mockUpdateDraftPost));
+        Post updatedPost = postService.updatePost(existingUpdatePostDto);
+        Assertions.assertDoesNotThrow(() -> postService.updatePost(existingUpdatePostDto));
         Assertions.assertEquals(updatedPost.getTitle(), updatedTitle);
         Assertions.assertEquals(updatedPost.getBody(), updatedBody);
         Assertions.assertEquals(updatedPost.isPublished(), false);
+    }
+
+    @Test
+    public void shouldThrowExceptionOnUpdate() {
+        long notExistingId = 12L;
+        String title = "Title";
+        String body = "Body text";
+        PostDto notExistingUpdatePostDto = PostDto.builder().id(notExistingId).title(title).body(body).build();
+
+        Mockito.when(postRepository.findById(notExistingUpdatePostDto.getId())).thenThrow(new NotFoundEntityException(
+                String.format("Post %d does not exist", notExistingUpdatePostDto.getId())
+        ));
+        Assertions.assertThrows(NotFoundEntityException.class, () -> postService.updatePost(notExistingUpdatePostDto));
     }
 }

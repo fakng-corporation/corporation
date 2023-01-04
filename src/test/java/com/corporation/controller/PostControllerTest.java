@@ -1,14 +1,12 @@
 package com.corporation.controller;
 
 import com.corporation.dto.PostDto;
-import com.corporation.dto.UpdateDraftPostDto;
 import com.corporation.mapper.PostMapperImpl;
 import com.corporation.model.Post;
 import com.corporation.model.User;
 import com.corporation.service.PostService;
 import com.corporation.service.UserService;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -32,30 +30,12 @@ class PostControllerTest {
     @InjectMocks
     private PostController postController;
 
-    private Long existingId;
-    private String title;
-    private String body;
-    private UpdateDraftPostDto existingUpdateDraftPostDto;
-    private String updatedTitle;
-    private String updatedBody;
-    private Post mockUpdatedPost;
-
-    @BeforeEach
-    public void setUp() {
-        existingId = 12L;
-        title = "Король Тайтлов";
-        body = "Это всё равно никто не читает, чтобы тут не было написано";
-        updatedTitle = "Post title hes been updated";
-        updatedBody = "Post body has been updated";
-        existingUpdateDraftPostDto = UpdateDraftPostDto.builder().id(existingId).title(title).body(body).build();
-        mockUpdatedPost = Post.builder().id(existingId).title(updatedTitle).body(updatedBody).build();
-    }
-
     @Test
     void shouldReturnCreatedPostDto() {
-
         long id = 7;
         boolean isPublished = false;
+        String title = "Король Тайтлов";
+        String body = "Это всё равно никто не читает, чтобы тут не было написано";
 
         int desiredId = 1;
         String nickname = "boba";
@@ -91,6 +71,7 @@ class PostControllerTest {
 
     @Test
     public void shouldDeleteById() {
+        long existingId = 12L;
         Mockito.doNothing().when(postService).deleteById(existingId);
         Assertions.assertDoesNotThrow(() -> postController.deleteById(existingId));
         Mockito.verify(postService, Mockito.times(1)).deleteById(existingId);
@@ -98,8 +79,16 @@ class PostControllerTest {
 
     @Test
     public void shouldUpdateById() {
-        Mockito.doReturn(mockUpdatedPost).when(postService).updateDraftPost(existingUpdateDraftPostDto);
-        Assertions.assertDoesNotThrow(() -> postController.updateDraftPost(existingUpdateDraftPostDto));
-        Mockito.verify(postService, Mockito.times(1)).updateDraftPost(existingUpdateDraftPostDto);
+        long existingId = 12L;
+        String title = "Title";
+        String body = "Body text";
+        String updatedTitle = "Post title hes been updated";
+        String updatedBody = "Post body has been updated";
+        PostDto existingUpdatePostDto = PostDto.builder().id(existingId).title(title).body(body).build();
+        Post mockUpdatedPost = Post.builder().id(existingId).title(updatedTitle).body(updatedBody).build();
+
+        Mockito.doReturn(mockUpdatedPost).when(postService).updatePost(existingUpdatePostDto);
+        Assertions.assertDoesNotThrow(() -> postController.updatePost(existingUpdatePostDto));
+        Mockito.verify(postService, Mockito.times(1)).updatePost(existingUpdatePostDto);
     }
 }

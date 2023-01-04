@@ -1,6 +1,6 @@
 package com.corporation.service;
 
-import com.corporation.dto.UpdateDraftPostDto;
+import com.corporation.dto.PostDto;
 import com.corporation.exception.NotFoundEntityException;
 import com.corporation.mapper.PostMapper;
 import com.corporation.model.Post;
@@ -28,12 +28,16 @@ public class PostService {
     }
 
     @Transactional
-    public Post updateDraftPost(UpdateDraftPostDto updateDraftPostDto) {
-        Post updatedPost = postRepository.findById(updateDraftPostDto.getId()).orElseThrow(
-                () -> new NotFoundEntityException(
-                        String.format("Post %d does not exist", updateDraftPostDto.getId())));
-        postMapper.updateDraftToEntity(updateDraftPostDto, updatedPost);
-        updatedPost.setPublished(false);
+    public Post updatePost(PostDto postDto) {
+        Post updatedPost = findById(postDto.getId());
+        postMapper.updateDraftToEntity(postDto, updatedPost);
         return postRepository.save(updatedPost);
+    }
+
+    @Transactional
+    public Post findById(long postId) {
+        return postRepository.findById(postId).orElseThrow(
+                () -> new NotFoundEntityException(
+                        String.format("Post %d does not exist", postId)));
     }
 }

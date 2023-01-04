@@ -1,7 +1,6 @@
 package com.corporation.controller;
 
 import com.corporation.dto.PostDto;
-import com.corporation.dto.UpdateDraftPostDto;
 import com.corporation.mapper.PostMapper;
 import com.corporation.model.Post;
 import com.corporation.model.User;
@@ -43,7 +42,7 @@ public class PostController {
     }
 
     @PutMapping
-    public Post updateDraftPost(@RequestBody UpdateDraftPostDto post) {
-        return postService.updateDraftPost(post);
+    public Post updatePost(@RequestBody PostDto post) {
+        return postService.updatePost(post);
     }
 }
