@@ -16,5 +16,5 @@ public interface PostMapper {
     Post toEntity(PostDto postDto);
 
     @Mapping(target = "user", ignore = true)
-    void updateDraftToEntity(PostDto postDto, @MappingTarget Post post);
+    void updateFromDto(PostDto postDto, @MappingTarget Post post);
 }

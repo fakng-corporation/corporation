@@ -30,7 +30,7 @@ public class PostService {
     @Transactional
     public Post updatePost(PostDto postDto) {
         Post updatedPost = findById(postDto.getId());
-        postMapper.updateDraftToEntity(postDto, updatedPost);
+        postMapper.updateFromDto(postDto, updatedPost);
         return postRepository.save(updatedPost);
     }
 
