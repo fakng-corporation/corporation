@@ -58,11 +58,5 @@ public class CorporationApplication {
                 awsAccessKey,
                 awsSecretKey
         );
-
-        return AmazonSimpleEmailServiceClientBuilder
-                .standard()
-                .withCredentials(new AWSStaticCredentialsProvider(credentials))
-                .withRegion(clientRegion).build();
-
     }
 }
