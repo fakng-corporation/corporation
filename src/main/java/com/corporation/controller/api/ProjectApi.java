@@ -33,6 +33,6 @@ public interface ProjectApi {
     @GetMapping
     Page<ProjectDto> getProjects(
             @RequestParam(value = "Маска поиска", defaultValue = "") String keyword,
-            @RequestParam(value = "Количество страниц",defaultValue = "0") int pageNumber,
+            @RequestParam(value = "Номер страницы",defaultValue = "0") int pageNumber,
             @RequestParam(value = "Элементов на странице",defaultValue = "10") int pageSize);
 }

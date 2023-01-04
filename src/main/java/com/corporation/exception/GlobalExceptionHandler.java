@@ -11,24 +11,24 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(NotUniqueSkillException.class)
+    @ExceptionHandler(NotUniqueEntityException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ExceptionResponse handleNotUniqueSkillException(
-            NotUniqueSkillException exception
+    public ExceptionResponse handleNotUniqueEntityException(
+            NotUniqueEntityException exception
     ) {
         return new ExceptionResponse(exception.getMessage());
     }
 
-    @ExceptionHandler(UserNotFoundException.class)
+    @ExceptionHandler(NotFoundEntityException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ExceptionResponse handleUserNotFoundException(
-            UserNotFoundException exception
+    public ExceptionResponse handleNotFoundEntityException(
+            NotFoundEntityException exception
     ) {
         return new ExceptionResponse(exception.getMessage());
     }
 
     @ExceptionHandler(BusinessException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ExceptionResponse handleBusinessException(
             BusinessException exception
     ) {
@@ -36,7 +36,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ExceptionResponse handleUnknownException(
             Exception exception
     ) {

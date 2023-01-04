@@ -14,5 +14,12 @@ spring:
   properties:
     hibernate:
       format_sql: true
-
-
+aws:
+  credentials:
+    aws_access_key_id: AKIARFGG4ITCFBKUBC6X
+    aws_secret_access_key: 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
+  region: US_EAST_1
+  s3:
+    bucket: fakngcorporation
+  ses:
+    from: fakng-corporation@proton.me

@@ -1,7 +1,7 @@
 package com.corporation.controller;
 
 import com.corporation.dto.UserDto;
-import com.corporation.exception.UserNotFoundException;
+import com.corporation.exception.NotFoundEntityException;
 import com.corporation.mapper.UserMapperImpl;
 import com.corporation.model.User;
 import com.corporation.service.UserService;
@@ -13,6 +13,12 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+
+import java.util.ArrayList;
 
 /**
  * @author Bleschunov Dmitry
@@ -27,6 +33,24 @@ public class UserControllerTest {
 
     @InjectMocks
     private UserController userController;
+
+    @Test
+    public void shouldReturnUserDtoPage() {
+        int page = 0;
+        int pageSize = 3;
+        String query = "";
+        Page<User> users = new PageImpl<>(new ArrayList<>(){{
+            add(new User());
+            add(new User());
+            add(new User());
+        }});
+        Mockito.when(userService.findUsersByNickname(query, page, pageSize))
+                .thenReturn(users);
+
+        Page<UserDto> userDtos = userController.getUsersByNickname(query, page, pageSize);
+
+        Assertions.assertEquals(pageSize, userDtos.getSize());
+    }
 
     @Test
     public void shouldReturnUserDtoById() {
@@ -84,13 +108,23 @@ public class UserControllerTest {
     }
 
     @Test
+    public void shouldUseUserService() {
+        long id = 10;
+        MultipartFile file = new MockMultipartFile("avatar.png", "avatar.png", "image/png", new byte[]{1, 2, 3});
+
+        userController.uploadUserAvatar(id, file);
+
+        Mockito.verify(userService).updateUserAvatar(id, file);
+    }
+
+    @Test
     public void shouldThrowUserNotFoundException() {
 
         int desiredId = 100;
 
         Mockito.when(userService.findById(desiredId))
-                .thenThrow(UserNotFoundException.class);
+                .thenThrow(NotFoundEntityException.class);
 
-        Assertions.assertThrows(UserNotFoundException.class, () -> userController.getUserById(desiredId));
+        Assertions.assertThrows(NotFoundEntityException.class, () -> userController.getUserById(desiredId));
     }
 }

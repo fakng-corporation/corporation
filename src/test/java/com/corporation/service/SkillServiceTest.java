@@ -1,6 +1,6 @@
 package com.corporation.service;
 
-import com.corporation.exception.NotUniqueSkillException;
+import com.corporation.exception.NotUniqueEntityException;
 import com.corporation.model.Skill;
 import com.corporation.repository.SkillRepository;
 import org.junit.jupiter.api.Assertions;
@@ -46,7 +46,7 @@ public class SkillServiceTest {
     }
 
     @Test
-    public void shouldThrowNotUniqueSkillException() {
+    public void shouldThrowNotUniqueEntityException() {
         String title = "java";
 
         Skill skill = Skill.builder().title(title).build();
@@ -54,6 +54,6 @@ public class SkillServiceTest {
         Mockito.when(skillRepository.findSkillByTitle(skill.getTitle()))
                 .thenReturn(Optional.of(skill));
 
-        Assertions.assertThrows(NotUniqueSkillException.class, () -> skillService.save(skill));
+        Assertions.assertThrows(NotUniqueEntityException.class, () -> skillService.save(skill));
     }
 }
