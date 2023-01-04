@@ -65,6 +65,9 @@ public class User implements UserDetails {
     @Column(name = "about_me", length = 4096)
     private String aboutMe;
 
+    @Column(name = "avatar_url", length = 512)
+    private String avatarUrl;
+
     @OneToMany(mappedBy = "owner")
     private List<Project> projects;
 

@@ -1,6 +1,7 @@
 package com.corporation.service;
 
 import com.corporation.dto.RoleDto;
+import com.corporation.exception.NotFoundEntityException;
 import com.corporation.mapper.RoleMapper;
 import com.corporation.model.Project;
 import com.corporation.model.Role;
@@ -14,6 +15,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 
@@ -53,8 +56,41 @@ public class RoleServiceTest {
     }
 
     @Test
-    public void shouldDeleteProject() {
+    public void shouldReturnUpdatedRole() {
+        long roleId = 1;
+        String oldTitle = "old title";
+        String newTitle = "new title";
+        Role role = Role.builder().id(roleId).title(oldTitle).build();
+        Role updatedRole = Role.builder().id(roleId).title(newTitle).build();
+        RoleDto roleDto = roleMapper.toDto(updatedRole);
 
+        Mockito.when(roleRepository.findById(roleId))
+                .thenReturn(Optional.of(role));
+        Mockito.when(roleRepository.save(role))
+                .thenReturn(updatedRole);
+        RoleDto returnedRole = roleService.update(roleDto);
+
+        Assertions.assertEquals(roleId, returnedRole.getId());
+        Assertions.assertEquals(newTitle, returnedRole.getTitle());
+    }
+
+    @Test
+    public void shouldThrowNotFoundEntityException() {
+        long id = 1;
+        Role role = Role.builder().id(id).build();
+        RoleDto roleDto = roleMapper.toDto(role);
+
+        Mockito.when(roleRepository.findById(any(long.class)))
+                .thenReturn(Optional.empty());
+
+        Assertions.assertThrows(
+                NotFoundEntityException.class,
+                () -> roleService.update(roleDto)
+        );
+    }
+
+    @Test
+    public void shouldDeleteRole() {
         Role role = Role.builder().id(any(Long.class)).build();
         roleService.delete(role.getId());
 
