@@ -14,8 +14,6 @@ spring:
   properties:
     hibernate:
       format_sql: true
-email:
-  from: fakng-corporation@proton.me
 aws:
   credentials:
     aws_access_key_id: AKIARFGG4ITCFBKUBC6X

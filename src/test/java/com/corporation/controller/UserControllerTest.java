@@ -13,6 +13,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
@@ -103,6 +105,16 @@ public class UserControllerTest {
         Assertions.assertEquals(newAboutMe, returnedUserDto.getAboutMe());
         Assertions.assertEquals(newEmail, returnedUserDto.getEmail());
         Assertions.assertEquals(desiredId, returnedUserDto.getId());
+    }
+
+    @Test
+    public void shouldUseUserService() {
+        long id = 10;
+        MultipartFile file = new MockMultipartFile("avatar.png", "avatar.png", "image/png", new byte[]{1, 2, 3});
+
+        userController.uploadUserAvatar(id, file);
+
+        Mockito.verify(userService).updateUserAvatar(id, file);
     }
 
     @Test
