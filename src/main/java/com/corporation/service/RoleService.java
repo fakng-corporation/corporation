@@ -1,7 +1,6 @@
 package com.corporation.service;
 
 import com.corporation.dto.RoleDto;
-import com.corporation.exception.BusinessException;
 import com.corporation.exception.NotFoundEntityException;
 import com.corporation.mapper.RoleMapper;
 import com.corporation.model.Role;

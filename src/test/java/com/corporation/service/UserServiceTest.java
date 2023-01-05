@@ -3,6 +3,7 @@ package com.corporation.service;
 import com.corporation.dto.UserDto;
 import com.corporation.exception.NotFoundEntityException;
 import com.corporation.mapper.UserMapperImpl;
+import com.corporation.model.Skill;
 import com.corporation.model.User;
 import com.corporation.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
@@ -19,6 +20,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -29,6 +31,9 @@ public class UserServiceTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private SkillService skillService;
 
     @Spy
     private UserMapperImpl userMapper;
@@ -82,6 +87,29 @@ public class UserServiceTest {
         Assertions.assertEquals(email, user.getEmail());
         Assertions.assertEquals(password, user.getPassword());
         Assertions.assertEquals(aboutMe, user.getAboutMe());
+    }
+
+    @Test
+    public void shouldUpdateUserSkillList() {
+        long userId = 1;
+        long skillIdA = 1L;
+        long skillIdB = 2L;
+        List<Long> skillIdList = new ArrayList<>();
+        skillIdList.add(skillIdA);
+        skillIdList.add(skillIdB);
+        List<Skill> skills = new ArrayList<>();
+        skills.add(Skill.builder().id(skillIdA).build());
+        skills.add(Skill.builder().id(skillIdB).build());
+        User mockUser = Mockito.mock(User.class);
+        Mockito.when(userRepository.findById(userId))
+                .thenReturn(Optional.of(mockUser));
+        Mockito.when(skillService.findSkillByIdIn(skillIdList))
+                .thenReturn(skills);
+
+        userService.updateUserSkillList(userId, skillIdList);
+
+        Mockito.verify(userRepository).findById(userId);
+        Mockito.verify(skillService).findSkillByIdIn(skillIdList);
     }
 
     @Test
