@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +27,7 @@ import java.util.Optional;
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
+    private final S3Service s3Service;
     private final UserMapper userMapper;
 
     private final SkillService skillService;
@@ -60,7 +62,13 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
         return user;
     }
-    
+
+    @Transactional
+    public void updateUserAvatar(long id, MultipartFile userAvatar) {
+        String url = s3Service.upload(userAvatar);
+        userRepository.updateUserAvatarById(id, url);
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) {
         return userRepository.findByNickname(username)

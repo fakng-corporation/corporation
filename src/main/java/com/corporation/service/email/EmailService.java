@@ -23,7 +23,7 @@ public class EmailService {
 
     private static final String ENCODING = "UTF-8";
 
-    @Value("${email.from}")
+    @Value("${aws.ses.from}")
     private String from;
 
     private final AmazonSimpleEmailService amazonSes;

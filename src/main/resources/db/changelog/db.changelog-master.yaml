@@ -24,4 +24,6 @@ databaseChangeLog:
   - include:
       file: db/changelog/init-user-email-index.sql
   - include:
+      file: db/changelog/alter-user-add-column-avatar-url.sql
+  - include:
       file: db/changelog/init-user-skill.sql
