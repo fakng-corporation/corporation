@@ -40,6 +40,13 @@ public class UserService implements UserDetailsService {
                 ));
     }
 
+    public User findByWrittenReviewsId(long reviewId) {
+        return userRepository.findByWrittenReviewsId(reviewId)
+                .orElseThrow(() -> new NotFoundEntityException(
+                        String.format("Author of review with id %d does not exist.", reviewId)
+                ));
+    }
+
     public Optional<User> findByNicknameOrEmail(String nickname, String email) {
         return userRepository.findByNicknameOrEmail(nickname, email);
     }

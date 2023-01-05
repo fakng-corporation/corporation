@@ -22,4 +22,6 @@ public interface UserRepository extends CrudRepository<User, Long> {
     Optional<User> findByNickname(String nickname);
     Page<User> findByNicknameContainingIgnoreCase(String query, Pageable pageable);
     Optional<User> findByNicknameOrEmail(String nickname, String email);
+
+    Optional<User> findByWrittenReviewsId(long reviewId);
 }

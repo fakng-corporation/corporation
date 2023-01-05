@@ -23,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/user")
 public class UserController {
     private final UserService userService;
-
     private final UserMapper userMapper;
 
     @GetMapping
@@ -37,6 +36,12 @@ public class UserController {
     @GetMapping("/{id}")
     public UserDto getUserById(@PathVariable("id") long id) {
         User user = userService.findById(id);
+        return userMapper.toDto(user);
+    }
+
+    @GetMapping("/by_review")
+    public UserDto getAuthorOfReviewById(@RequestParam("review_id") long reviewId) {
+        User user = userService.findByWrittenReviewsId(reviewId);
         return userMapper.toDto(user);
     }
 
