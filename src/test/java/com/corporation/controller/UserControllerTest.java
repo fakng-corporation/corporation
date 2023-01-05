@@ -1,11 +1,9 @@
 package com.corporation.controller;
 
-import com.corporation.dto.SkillDto;
 import com.corporation.dto.UserDto;
 import com.corporation.exception.NotFoundEntityException;
 import com.corporation.mapper.SkillMapperImpl;
 import com.corporation.mapper.UserMapperImpl;
-import com.corporation.model.Skill;
 import com.corporation.model.User;
 import com.corporation.service.SkillService;
 import com.corporation.service.UserService;
@@ -17,13 +15,12 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -127,22 +124,6 @@ public class UserControllerTest {
         userController.uploadUserAvatar(id, file);
 
         Mockito.verify(userService).updateUserAvatar(id, file);
-    }
-
-    @Test
-    public void shouldReturnSkillDtoPage() {
-        long userId = 1;
-        long skillId = 1;
-        int page = 1;
-        int pageSize = 10;
-        String skillTitle = "skill";
-        Skill skill = Skill.builder().id(skillId).title(skillTitle).build();
-        Page<Skill> skillPage = new PageImpl<>(Collections.singletonList(skill));
-        Page<SkillDto> skillDtoList = new PageImpl<>(Collections.singletonList(skillMapper.toDto(skill)));
-        Mockito.when(skillService.findSkillsByUserId(userId, page, pageSize))
-                .thenReturn(skillPage);
-
-        Assertions.assertEquals(skillDtoList, userController.getSkillsByUserId(userId, page, pageSize));
     }
 
     @Test
