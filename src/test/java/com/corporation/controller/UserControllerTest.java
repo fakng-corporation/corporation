@@ -146,4 +146,27 @@ public class UserControllerTest {
 
         Assertions.assertThrows(NotFoundEntityException.class, () -> userController.getUserById(desiredId));
     }
+
+    User mockUserBuilder(long id) {
+        return User.builder()
+                .id(id)
+                .nickname("User" + id)
+                .email("user@domain.com")
+                .password("$2a$12$ZqBcuPyawuOEWm/Fo78Hte9DGrHl9fauMBLpfvWECAaO/Paat74kq")
+                .enabled(true)
+                .followees(new ArrayList<>())
+                .build();
+    }
+
+    @Test
+    public void shouldUnfollow() {
+        long followerId = 1L;
+        long followeeId = 2L;
+        User follower = mockUserBuilder(followerId);
+        UserDto expectedUnfollower = UserDto.builder().id(1L).nickname("User1").email("user@domain.com").build();
+
+        Mockito.when(userService.unfollowUser(followerId, followeeId)).thenReturn(follower);
+        UserDto actualUnfollower = userController.unfollowUser(followerId, followeeId);
+        Assertions.assertEquals(expectedUnfollower, actualUnfollower);
+    }
 }

@@ -89,6 +89,14 @@ public class User implements UserDetails {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @ManyToMany(mappedBy = "followees")
+    private List<User> followers;
+
+    @ManyToMany
+    @JoinTable(name = "followers",
+            joinColumns = @JoinColumn(name = "follower_id"), inverseJoinColumns = @JoinColumn(name = "followee_id"))
+    private List<User> followees;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(new SimpleGrantedAuthority(authority.getAuthority()));
@@ -118,4 +126,8 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return enabled;
     }
+
+    public void addFollowee(User followee) {getFollowees().add(followee);}
+
+    public void removeFollowee(User followee) {getFollowees().remove(followee);}
 }

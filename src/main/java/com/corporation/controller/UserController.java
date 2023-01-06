@@ -60,4 +60,11 @@ public class UserController {
             @RequestParam("userAvatar") MultipartFile userAvatar) {
         userService.updateUserAvatar(id, userAvatar);
     }
+
+    @PutMapping("/unfollow/{followerId}/{followeeId}")
+    public UserDto unfollowUser(
+            @PathVariable("followerId") long followerId,
+            @PathVariable("followeeId") long followeeId) {
+        return userMapper.toDto(userService.unfollowUser(followerId, followeeId));
+    }
 }
