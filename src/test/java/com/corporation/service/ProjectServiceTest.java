@@ -20,6 +20,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -126,5 +127,31 @@ public class ProjectServiceTest {
         Assertions.assertEquals(page.getTotalElements(), 1);
         Assertions.assertEquals(page.getContent(), projectDtoList);
 
+    }
+
+    @Test
+    void shouldFollowProject() {
+        long projectId = 4L;
+        long projectFollowerId = 1l;
+        User projectFollower = User.builder().id(projectFollowerId).nickname("User1").followingProjects(new ArrayList<>()).build();
+
+        Project followingProject = Project.builder().id(projectId).title("Project Title").build();
+        User expectedUser = User.builder().id(projectFollowerId).nickname("User1").followingProjects(new ArrayList<>()).build();
+        expectedUser.getFollowingProjects().add(followingProject);
+
+        Mockito.when(userService.findById(projectFollowerId)).thenReturn(projectFollower);
+        Mockito.when(projectRepository.findById(projectId)).thenReturn(Optional.of(followingProject));
+        Mockito.when(userService.saveUser(expectedUser)).thenReturn(expectedUser);
+        User actualUser = projectService.followProject(projectId, projectFollowerId);
+        Assertions.assertEquals(actualUser, expectedUser);
+    }
+    @Test
+    void shouldThrowThrowProjectNotFoundException() {
+        long projectFollowerId = 1l;
+        User projectFollower = User.builder().id(projectFollowerId).nickname("User1").followingProjects(new ArrayList<>()).build();
+        long wrongProjectId = 3L;
+
+        Mockito.when(userService.findById(projectFollowerId)).thenReturn(projectFollower);
+        Assertions.assertThrows(ProjectNotFoundException.class, () -> projectService.followProject(wrongProjectId, projectFollowerId));
     }
 }

@@ -4,12 +4,14 @@ import com.corporation.exception.ProjectNotFoundException;
 import com.corporation.dto.ProjectDto;
 import com.corporation.mapper.ProjectMapper;
 import com.corporation.model.Project;
+import com.corporation.model.User;
 import com.corporation.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -57,5 +59,13 @@ public class ProjectService {
     public Page<ProjectDto> getProjectsByTitle(String keyword, int pageNumber, int pageSize) {
         Pageable page = PageRequest.of(pageNumber, pageSize);
         return projectRepository.findByTitleContainingIgnoreCase(keyword, page).map(projectMapper::toDto);
+    }
+
+    @Transactional
+    public User followProject(long followingProjectId, long projectFollowerId) {
+        User projectFollower = userService.findById(projectFollowerId);
+        Project followingProject = findById(followingProjectId);
+        projectFollower.getFollowingProjects().add(followingProject);
+        return userService.saveUser(projectFollower);
     }
 }

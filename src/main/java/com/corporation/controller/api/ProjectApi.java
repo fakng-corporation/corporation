@@ -1,6 +1,7 @@
 package com.corporation.controller.api;
 
 import com.corporation.dto.ProjectDto;
+import com.corporation.dto.UserDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
@@ -35,4 +36,7 @@ public interface ProjectApi {
             @RequestParam(value = "Маска поиска", defaultValue = "") String keyword,
             @RequestParam(value = "Номер страницы",defaultValue = "0") int pageNumber,
             @RequestParam(value = "Элементов на странице",defaultValue = "10") int pageSize);
+
+    @PutMapping("/{projectId}/{followerId}")
+    UserDto followProject(@PathVariable("projectId") long followingProjectId, @PathVariable("followerId") long projectFollowerId);
 }
