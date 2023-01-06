@@ -13,13 +13,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.security.Principal;
+
 @RequestMapping("/project")
 @Tag(name = "Управление проектами пользователей", description = "Создание, поиск, модификация проектов")
 public interface ProjectApi {
 
     @Operation(summary = "Регистрация нового проекта", description = "Позволяет создать новый проект")
     @PutMapping
-    ProjectDto addProject(@RequestBody ProjectDto projectDto);
+    ProjectDto addProject(@RequestBody ProjectDto projectDto, Principal principal);
 
     @Operation(summary = "Изменение проекта", description = "Позволяет внести изменения в проект")
     @PostMapping

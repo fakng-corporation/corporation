@@ -36,6 +36,10 @@ public class UserService implements UserDetailsService {
         return userRepository.findByNicknameContainingIgnoreCase(query, PageRequest.of(page, pageSize));
     }
 
+    public User findUsersByNickname(String query) {
+        return userRepository.findByNickname(query).get();
+    }
+
     @Transactional
     public User findById(long id) {
         return userRepository.findById(id)

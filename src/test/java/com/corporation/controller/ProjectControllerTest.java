@@ -3,6 +3,7 @@ package com.corporation.controller;
 import com.corporation.dto.ProjectDto;
 import com.corporation.mapper.ProjectMapperImpl;
 import com.corporation.model.Project;
+import com.corporation.model.User;
 import com.corporation.service.ProjectService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
+import java.security.Principal;
 import java.util.Collections;
 import java.util.List;
 
@@ -32,20 +34,26 @@ public class ProjectControllerTest {
     @InjectMocks
     private ProjectController projectController;
 
+    @Mock
+    private Principal principal;
+
     @Test
     public void shouldReturnCreatedProjectDto() {
 
         long id = 777;
         String title = "bigproject";
+        String ownerNickname = "Bob";
 
         Project project = Project.builder().title(title).build();
+        User owner = User.builder().nickname(ownerNickname).build();
         ProjectDto projectDto = projectMapper.toDto(project);
-        Project projectWithId = Project.builder().id(id).title(title).build();
+        Project projectWithId = Project.builder().owner(owner).id(id).title(title).build();
         ProjectDto addedProjectDto = projectMapper.toDto(projectWithId);
 
-        Mockito.when(projectService.add(projectDto)).thenReturn(addedProjectDto);
+        Mockito.when(principal.getName()).thenReturn(ownerNickname);
+        Mockito.when(projectService.add(projectDto, ownerNickname)).thenReturn(addedProjectDto);
 
-        ProjectDto createdProjectDto = projectController.addProject(projectDto);
+        ProjectDto createdProjectDto = projectController.addProject(projectDto, principal);
 
         Assertions.assertEquals(id, createdProjectDto.getId());
         Assertions.assertEquals(title, createdProjectDto.getTitle());
