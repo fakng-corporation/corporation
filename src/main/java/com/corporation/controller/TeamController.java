@@ -32,4 +32,14 @@ public class TeamController implements TeamApi {
     public Page<TeamDto> getTeams(long projectId, String keyword, int pageNumber, int pageSize) {
         return teamService.getTeamsByTitle(projectId, keyword, pageNumber, pageSize);
     }
+
+    @Override
+    public void inviteToTeam(long senderId, long teamId, long inviteUserId) {
+        teamService.inviteUserToTeam(senderId, teamId, inviteUserId);
+    }
+
+    @Override
+    public void acceptInvite(long userId, String code) {
+        teamService.acceptInvite(userId, code);
+    }
 }

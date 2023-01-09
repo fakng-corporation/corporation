@@ -27,3 +27,9 @@ databaseChangeLog:
       file: db/changelog/alter-user-add-column-avatar-url.sql
   - include:
       file: db/changelog/init-user-skill.sql
+  - include:
+      file: db/changelog/init-user-team.sql
+  - include:
+      file: db/changelog/init-message.sql
+  - include:
+      file: db/changelog/init-invite.sql
