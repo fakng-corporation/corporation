@@ -111,11 +111,10 @@ public class TeamService {
             List<User> users = team.getUsers();
             users.add(user);
             team.setUsers(users);
-            teamRepository.save(team);
         }, () -> {
             throw new NotFoundEntityException(
                     "Invite does not exist.");
         });
-//        inviteToTeamRepository.delete(invite.get());
+        inviteToTeamRepository.delete(invite.get());
     }
 }

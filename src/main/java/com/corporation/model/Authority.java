@@ -31,7 +31,6 @@ public class Authority {
     @Column(name = "authority")
     private String authority;
 
-    @ToString.Exclude
     @OneToMany(mappedBy = "authority")
     private List<User> user;
 }
