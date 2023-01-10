@@ -20,11 +20,11 @@ import java.security.Principal;
 public interface ProjectApi {
 
     @Operation(summary = "Регистрация нового проекта", description = "Позволяет создать новый проект")
-    @PutMapping
+    @PostMapping
     ProjectDto addProject(@RequestBody ProjectDto projectDto, Principal principal);
 
     @Operation(summary = "Изменение проекта", description = "Позволяет внести изменения в проект")
-    @PostMapping
+    @PutMapping
     ProjectDto updateProject(@RequestBody ProjectDto projectDto);
 
     @Operation(summary = "Удаление проекта", description = "Позволяет удалить проект по Id")

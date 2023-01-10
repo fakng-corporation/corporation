@@ -18,11 +18,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface AchievementApi {
 
     @Operation(summary = "Создание нового достижения", description = "Позволяет создать новое достижение в проекте")
-    @PutMapping
+    @PostMapping
     AchievementDto addAchievement(@RequestBody AchievementDto achievementDto);
 
     @Operation(summary = "Изменение достижения", description = "Позволяет изменить достижение в проекте")
-    @PostMapping
+    @PutMapping
     AchievementDto updateAchievement(@RequestBody AchievementDto achievementDto);
 
     @Operation(summary = "Удаление достижения", description = "Позволяет удалить достижение по Id")

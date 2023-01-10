@@ -20,11 +20,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface TeamApi {
 
     @Operation(summary = "Создание новой команды", description = "Позволяет создать новую команду в проекте")
-    @PutMapping
+    @PostMapping
     TeamDto addTeam(@RequestBody TeamDto teamDto);
 
     @Operation(summary = "Изменение команды", description = "Позволяет изменить атрибуты команды в проекте")
-    @PostMapping
+    @PutMapping
     TeamDto updateTeam(@RequestBody TeamDto teamDto);
 
     @Operation(summary = "Удаление команды", description = "Позволяет удалить команду по Id")
