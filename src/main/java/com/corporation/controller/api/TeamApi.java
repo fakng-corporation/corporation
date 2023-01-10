@@ -54,4 +54,12 @@ public interface TeamApi {
     void acceptInvite(@AuthenticationPrincipal(expression = "id") long userId,
                       @Parameter(description = "Указать код для активации пользователя", required = true)
                             @PathVariable String code);
+
+    @Operation(
+            summary = "Получение команды по ID",
+            description = "Позволяет получить команду по ID"
+    )
+    @GetMapping("/{id}")
+    TeamDto getTeam(@Parameter(description = "Укажите ID команды", required = true)
+                    @PathVariable long id);
 }

@@ -117,4 +117,8 @@ public class TeamService {
         });
         inviteToTeamRepository.delete(invite.get());
     }
+
+    public TeamDto getTeamById(long id) {
+        return teamMapper.toDto(findById(id));
+    }
 }

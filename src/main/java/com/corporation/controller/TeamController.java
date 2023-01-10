@@ -42,4 +42,9 @@ public class TeamController implements TeamApi {
     public void acceptInvite(long userId, String code) {
         teamService.acceptInvite(userId, code);
     }
+
+    @Override
+    public TeamDto getTeam(long id) {
+        return  teamService.getTeamById(id);
+    }
 }
