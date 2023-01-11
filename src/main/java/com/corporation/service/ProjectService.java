@@ -6,7 +6,6 @@ import com.corporation.mapper.ProjectMapper;
 import com.corporation.model.Project;
 import com.corporation.model.User;
 import com.corporation.repository.ProjectRepository;
-import com.corporation.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,7 +25,6 @@ public class ProjectService {
     private final ProjectRepository projectRepository;
     private final UserService userService;
     private final ProjectMapper projectMapper;
-    private final UserRepository userRepository;
 
     public ProjectDto add(ProjectDto projectDto) {
         Project project = projectMapper.toEntity(projectDto);
@@ -68,11 +66,20 @@ public class ProjectService {
 
     @Transactional
     public void unfollowProject(long unfollowingProjectId, long unfollowerId) {
-        Project followingProject = projectRepository.findWithFollowersById(unfollowingProjectId);
+        Project followingProject = findWithFollowersById(unfollowingProjectId);
         Map<Long, User> projectFollowers = followingProject.getFollowers().stream()
                 .collect(Collectors.toMap(user -> user.getId(), user -> user));
         projectFollowers.remove(unfollowerId);
         followingProject.setFollowers(new ArrayList<>(projectFollowers.values()));
         projectRepository.save(followingProject);
+    }
+
+    @Transactional
+    public Project findWithFollowersById(long projectId) {
+        return projectRepository.findWithFollowersById(projectId).orElseThrow(
+                () -> new ProjectNotFoundException(
+                        String.format("Project %d does not exist", projectId)
+                )
+        );
     }
 }
