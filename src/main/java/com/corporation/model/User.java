@@ -31,8 +31,8 @@ import java.util.List;
 /**
  * @author Bleschunov Dmitry
  */
-@Data
 @Builder
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -88,6 +88,9 @@ public class User implements UserDetails {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @ManyToMany(mappedBy = "followers")
+    List<Project> followingProjects;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -31,4 +31,9 @@ public class ProjectController implements ProjectApi {
     public Page<ProjectDto> getProjects(String keyword, int pageNumber, int pageSize) {
         return projectService.getProjectsByTitle(keyword, pageNumber, pageSize);
     }
+
+    @Override
+    public void unfollowProject(long unfollowingProjectId, long unfollowerId) {
+        projectService.unfollowProject(unfollowingProjectId, unfollowerId);
+    }
 }

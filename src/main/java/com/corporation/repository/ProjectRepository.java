@@ -10,4 +10,5 @@ import org.springframework.stereotype.Repository;
 public interface ProjectRepository extends JpaRepository<Project, Long> {
 
     Page<Project> findByTitleContainingIgnoreCase(String keyword, Pageable pageable);
+    Project findWithFollowersById(long projectId);
 }

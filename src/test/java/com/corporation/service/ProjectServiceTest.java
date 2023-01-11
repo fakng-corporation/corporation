@@ -20,6 +20,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -126,5 +127,18 @@ public class ProjectServiceTest {
         Assertions.assertEquals(page.getTotalElements(), 1);
         Assertions.assertEquals(page.getContent(), projectDtoList);
 
+    }
+
+    @Test
+    void shouldUnfollowProject() {
+        long projectId = 4L;
+        long projectUnollowerId = 1l;
+        User projectFollower = User.builder().id(projectUnollowerId).nickname("User1").followingProjects(new ArrayList<>()).build();
+        Project unfollowingProject = Project.builder().id(projectId).title("Project Title").build();
+        unfollowingProject.setFollowers(new ArrayList<>(List.of(projectFollower)));
+
+        Mockito.when(projectRepository.findWithFollowersById(projectId)).thenReturn(unfollowingProject);
+        projectService.unfollowProject(projectId, projectUnollowerId);
+        Mockito.verify(projectRepository).save(unfollowingProject);
     }
 }
