@@ -137,7 +137,7 @@ public class ProjectServiceTest {
         Project unfollowingProject = Project.builder().id(projectId).title("Project Title").build();
         unfollowingProject.setFollowers(new ArrayList<>(List.of(projectFollower)));
 
-        Mockito.when(projectRepository.findWithFollowersById(projectId)).thenReturn(unfollowingProject);
+        Mockito.when(projectRepository.findWithFollowersById(projectId)).thenReturn(Optional.of(unfollowingProject));
         projectService.unfollowProject(projectId, projectUnollowerId);
         Mockito.verify(projectRepository).save(unfollowingProject);
     }
