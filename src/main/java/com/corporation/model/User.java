@@ -89,6 +89,9 @@ public class User implements UserDetails {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @ManyToMany(mappedBy = "followers")
+    List<Project> followingProjects;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(new SimpleGrantedAuthority(authority.getAuthority()));

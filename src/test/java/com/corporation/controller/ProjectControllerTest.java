@@ -92,4 +92,13 @@ public class ProjectControllerTest {
         Assertions.assertEquals(page.getTotalElements(), projectDtoPage.getTotalElements());
         Assertions.assertEquals(page.getContent(), projectDtoPage.getContent());
     }
+
+    @Test
+    public void projectFollowersAmount() {
+        long projectId = 4L;
+        long projectFollowersAmount = 1L;
+        Mockito.when(projectService.projectFollowersAmount(projectId)).thenReturn(projectFollowersAmount);
+
+        Assertions.assertEquals(projectController.projectFollowersAmount(projectId), projectFollowersAmount);
+    }
 }

@@ -1,10 +1,13 @@
 package com.corporation.service;
 
+import com.corporation.exception.NotFoundEntityException;
 import com.corporation.exception.ProjectNotFoundException;
 import com.corporation.dto.ProjectDto;
 import com.corporation.mapper.ProjectMapper;
 import com.corporation.model.Project;
+import com.corporation.model.User;
 import com.corporation.repository.ProjectRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -57,5 +60,19 @@ public class ProjectService {
     public Page<ProjectDto> getProjectsByTitle(String keyword, int pageNumber, int pageSize) {
         Pageable page = PageRequest.of(pageNumber, pageSize);
         return projectRepository.findByTitleContainingIgnoreCase(keyword, page).map(projectMapper::toDto);
+    }
+
+    @Transactional
+    public long projectFollowersAmount(long projectId) {
+        return findWithFollowersById(projectId).getFollowers().size();
+    }
+
+    @Transactional
+    public Project findWithFollowersById(long projectId){
+        return projectRepository.findWithFollowersById(projectId).orElseThrow(
+                () -> new NotFoundEntityException(
+                        String.format("Project %d does not exist", projectId)
+                )
+        );
     }
 }
