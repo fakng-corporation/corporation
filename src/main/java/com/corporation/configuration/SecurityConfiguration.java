@@ -1,6 +1,6 @@
 package com.corporation.configuration;
 
-import com.corporation.Util.UserRole;
+import com.corporation.util.UserRole;
 import com.corporation.configuration.jwt.JwtConfigurer;
 import com.corporation.configuration.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;

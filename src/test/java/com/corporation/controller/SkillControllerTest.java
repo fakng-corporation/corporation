@@ -13,7 +13,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.ResponseEntity;
+
+import java.util.Collections;
 
 /**
  * @author Bleschunov Dmitry
@@ -64,5 +68,21 @@ public class SkillControllerTest {
         Mockito.when(skillService.save(skill)).thenThrow(NotUniqueEntityException.class);
 
         Assertions.assertThrows(NotUniqueEntityException.class, () -> skillController.createSkill(skillDto));
+    }
+
+    @Test
+    public void shouldReturnSkillDtoPage() {
+        long userId = 1;
+        long skillId = 1;
+        int page = 1;
+        int pageSize = 10;
+        String skillTitle = "skill";
+        Skill skill = Skill.builder().id(skillId).title(skillTitle).build();
+        Page<Skill> skillPage = new PageImpl<>(Collections.singletonList(skill));
+        Page<SkillDto> skillDtoList = new PageImpl<>(Collections.singletonList(skillMapper.toDto(skill)));
+        Mockito.when(skillService.findSkillsByUserId(userId, page, pageSize))
+                .thenReturn(skillPage);
+
+        Assertions.assertEquals(skillDtoList, skillController.getSkillsByUserId(userId, page, pageSize));
     }
 }
