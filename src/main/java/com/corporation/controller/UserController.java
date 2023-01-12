@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 /**
  * @author Bleschunov Dmitry
  */
@@ -24,7 +26,6 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/user")
 public class UserController {
     private final UserService userService;
-
     private final UserMapper userMapper;
 
     @GetMapping
@@ -39,6 +40,11 @@ public class UserController {
     public UserDto getUserById(@PathVariable("id") long id) {
         User user = userService.findById(id);
         return userMapper.toDto(user);
+    }
+
+    @PutMapping("/{id}/skill")
+    public void assignSkillList(@PathVariable("id") long id, @RequestBody List<Long> skillIdList) {
+        userService.updateUserSkillList(id, skillIdList);
     }
 
     @PostMapping("/{id}")

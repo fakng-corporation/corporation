@@ -4,6 +4,7 @@ import com.corporation.dto.SkillDto;
 import com.corporation.model.Skill;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 /**
  * @author Bleschunov Dmitry
@@ -12,5 +13,6 @@ import org.mapstruct.Mapper;
 public interface SkillMapper {
     SkillDto toDto(Skill skill);
 
+    @Mapping(target = "users", ignore = true)
     Skill toEntity(SkillDto skillDto);
 }

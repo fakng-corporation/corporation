@@ -66,6 +66,14 @@ public class User implements UserDetails {
     @Column(name = "avatar_url", length = 512)
     private String avatarUrl;
 
+    @ManyToMany
+    @JoinTable(
+            name = "user_skill",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "skill_id")
+    )
+    private List<Skill> skills;
+
     @OneToMany(mappedBy = "owner")
     private List<Project> projects;
 
