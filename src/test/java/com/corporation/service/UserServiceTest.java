@@ -2,13 +2,13 @@ package com.corporation.service;
 
 import com.corporation.dto.UserDto;
 import com.corporation.exception.NotFoundEntityException;
-import com.corporation.mapper.UserMapper;
+import com.corporation.mapper.UserMapperImpl;
+import com.corporation.model.Skill;
 import com.corporation.model.User;
 import com.corporation.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mapstruct.factory.Mappers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -20,6 +20,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -31,8 +32,11 @@ public class UserServiceTest {
     @Mock
     private UserRepository userRepository;
 
+    @Mock
+    private SkillService skillService;
+
     @Spy
-    private UserMapper userMapper = Mappers.getMapper(UserMapper.class);
+    private UserMapperImpl userMapper;
 
     @InjectMocks
     private UserService userService;
@@ -86,7 +90,30 @@ public class UserServiceTest {
     }
 
     @Test
-    public void shouldReturnUpdatedUser() {
+    public void shouldUpdateUserSkillList() {
+        long userId = 1;
+        long skillIdA = 1L;
+        long skillIdB = 2L;
+        List<Long> skillIdList = new ArrayList<>();
+        skillIdList.add(skillIdA);
+        skillIdList.add(skillIdB);
+        List<Skill> skills = new ArrayList<>();
+        skills.add(Skill.builder().id(skillIdA).build());
+        skills.add(Skill.builder().id(skillIdB).build());
+        User mockUser = Mockito.mock(User.class);
+        Mockito.when(userRepository.findById(userId))
+                .thenReturn(Optional.of(mockUser));
+        Mockito.when(skillService.findSkillByIdIn(skillIdList))
+                .thenReturn(skills);
+
+        userService.updateUserSkillList(userId, skillIdList);
+
+        Mockito.verify(userRepository).findById(userId);
+        Mockito.verify(skillService).findSkillByIdIn(skillIdList);
+    }
+
+    @Test
+    public void shouldUpdateUser() {
         long desiredId = 1;
         String oldNickname = "boba";
         String oldEmail = "boba@boba.com";

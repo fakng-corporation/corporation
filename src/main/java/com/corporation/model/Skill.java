@@ -5,11 +5,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 /**
  * @author Bleschunov Dmitry
@@ -27,4 +30,7 @@ public class Skill {
 
     @Column(name = "title", length = 32, nullable = false, unique = true)
     private String title;
+
+    @ManyToMany(mappedBy = "skills")
+    private List<User> users;
 }

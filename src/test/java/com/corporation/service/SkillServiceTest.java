@@ -1,5 +1,6 @@
 package com.corporation.service;
 
+import com.corporation.exception.BusinessException;
 import com.corporation.exception.NotUniqueEntityException;
 import com.corporation.model.Skill;
 import com.corporation.repository.SkillRepository;
@@ -11,6 +12,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -43,6 +46,32 @@ public class SkillServiceTest {
 
         Assertions.assertEquals(id, createdSkill.getId());
         Assertions.assertEquals(title, createdSkill.getTitle());
+    }
+
+    @Test
+    public void shouldReturnSkillList() {
+        long skillId = 1;
+        List<Long> skillIdList = Collections.singletonList(skillId);
+        String skillTitle = "skill";
+        Skill skill = Skill.builder().id(skillId).title(skillTitle).build();
+        Mockito.when(skillRepository.findSkillByIdIn(skillIdList))
+                .thenReturn(Collections.singletonList(skill));
+
+        List<Skill> returnedSkills = skillService.findSkillByIdIn(skillIdList);
+
+        Assertions.assertEquals(1, returnedSkills.size());
+        Assertions.assertEquals(skill.getId(), returnedSkills.get(0).getId());
+        Assertions.assertEquals(skill.getTitle(), returnedSkills.get(0).getTitle());
+    }
+
+    @Test
+    public void shouldThrowBusinessException() {
+        long skillId = 100;
+        List<Long> skillIdList = Collections.singletonList(skillId);
+        Mockito.when(skillRepository.findSkillByIdIn(skillIdList))
+                .thenReturn(Collections.emptyList());
+
+        Assertions.assertThrows(BusinessException.class, () -> skillService.findSkillByIdIn(skillIdList));
     }
 
     @Test

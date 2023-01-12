@@ -2,8 +2,10 @@ package com.corporation.controller;
 
 import com.corporation.dto.UserDto;
 import com.corporation.exception.NotFoundEntityException;
+import com.corporation.mapper.SkillMapperImpl;
 import com.corporation.mapper.UserMapperImpl;
 import com.corporation.model.User;
+import com.corporation.service.SkillService;
 import com.corporation.service.UserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -15,8 +17,11 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Bleschunov Dmitry
@@ -28,6 +33,12 @@ public class UserControllerTest {
 
     @Spy
     private UserMapperImpl userMapper;
+
+    @Mock
+    private SkillService skillService;
+
+    @Spy
+    private SkillMapperImpl skillMapper;
 
     @InjectMocks
     private UserController userController;
@@ -103,6 +114,26 @@ public class UserControllerTest {
         Assertions.assertEquals(newAboutMe, returnedUserDto.getAboutMe());
         Assertions.assertEquals(newEmail, returnedUserDto.getEmail());
         Assertions.assertEquals(desiredId, returnedUserDto.getId());
+    }
+
+    @Test
+    public void shouldUseUserService() {
+        long id = 10;
+        MultipartFile file = new MockMultipartFile("avatar.png", "avatar.png", "image/png", new byte[]{1, 2, 3});
+
+        userController.uploadUserAvatar(id, file);
+
+        Mockito.verify(userService).updateUserAvatar(id, file);
+    }
+
+    @Test
+    public void shouldAssignSkillList() {
+        long userId = 1;
+        List<Long> skillIdList = new ArrayList<>();
+
+        userController.assignSkillList(userId, skillIdList);
+
+        Mockito.verify(userService).updateUserSkillList(userId, skillIdList);
     }
 
     @Test
