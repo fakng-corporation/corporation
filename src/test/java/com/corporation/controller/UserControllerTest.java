@@ -19,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Bleschunov Dmitry
@@ -126,5 +127,19 @@ public class UserControllerTest {
                 .thenThrow(NotFoundEntityException.class);
 
         Assertions.assertThrows(NotFoundEntityException.class, () -> userController.getUserById(desiredId));
+    }
+
+    @Test
+    public void shouldReturnUsersByProjectIdAndNicknameValue() {
+        long projectId = 4L;
+        long projectFollowerId = 1l;
+        String searchValue = "User";
+        User user = User.builder().id(projectFollowerId).nickname("User1").build();
+        UserDto userdto = UserDto.builder().id(projectFollowerId).nickname("User1").build();
+        List<UserDto> expectedUser = List.of(userdto);
+
+        Mockito.when(userService.findByProjectIdAndFieldName(projectId, searchValue)).thenReturn(List.of(user));
+        List<UserDto> actualUser = userController.getUsersByProjectIdAndNicknameValue(projectId, searchValue);
+        Assertions.assertEquals(expectedUser, actualUser);
     }
 }

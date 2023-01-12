@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 /**
  * @author Bleschunov Dmitry
  */
@@ -52,5 +54,12 @@ public class UserController {
             @PathVariable("id") long id,
             @RequestParam("userAvatar") MultipartFile userAvatar) {
         userService.updateUserAvatar(id, userAvatar);
+    }
+
+    @GetMapping("/find/{projectId}/{searchValue}")
+    public List<UserDto> getUsersByProjectIdAndNicknameValue(
+            @PathVariable("projectId") long projectId,
+            @PathVariable("searchValue") String searchValue){
+        return userMapper.toDtoList(userService.findByProjectIdAndFieldName(projectId, searchValue));
     }
 }
