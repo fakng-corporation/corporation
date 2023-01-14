@@ -15,7 +15,13 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -93,7 +99,26 @@ public class RoleServiceTest {
     public void shouldDeleteRole() {
         Role role = Role.builder().id(any(Long.class)).build();
         roleService.delete(role.getId());
-
         Mockito.verify(roleRepository).deleteById(role.getId());
+    }
+
+    @Test
+    public void shouldReturnRolesByTitle() {
+        long roleId = 10;
+        String title = "title";
+        Role mockRole = Role.builder().id(roleId).title(title).build();
+        List<Role> roleList = Collections.singletonList(mockRole);
+        Page<Role> rolePage = new PageImpl<>(roleList);
+        RoleDto mockRoleDto = roleMapper.toDto(mockRole);
+        List<RoleDto> roleDtoList = Collections.singletonList(mockRoleDto);
+        Pageable pageable = PageRequest.of(0, 5);
+
+        Mockito.when(roleRepository.findByTitleContainingIgnoreCase(title, pageable))
+                .thenReturn(rolePage);
+        Page<RoleDto> page = roleService.getRolesByTitle(title, 0, 5);
+
+        Assertions.assertEquals(page.getTotalElements(), 1);
+        Assertions.assertEquals(page.getContent(), roleDtoList);
+
     }
 }
