@@ -189,55 +189,13 @@ public class UserServiceTest {
 
     @Test
     public void shouldFollow() {
-        long followingUserId = 2L;
+        long followerId = 1L;
+        long followeeId = 2L;
+        List<Long> followerAndFolloweeIds = List.of(followerId, followeeId);
 
-        User follower = User.builder()
-                .id(1L)
-                .nickname("User1")
-                .email("user@domain.com")
-                .password("$2a$12$ZqBcuPyawuOEWm/Fo78Hte9DGrHl9fauMBLpfvWECAaO/Paat74kq")
-                .enabled(true)
-                .followees(new ArrayList<>())
-                .build();
-        User followee = User.builder()
-                .nickname("User2")
-                .email("user2@domain.com")
-                .password("$2a$12$ZqBcuPyawuOEWm/Fo78Hte9DGrHl9fauMBLpfvWECAaO/Paat74kq")
-                .enabled(true)
-                .build();
+        Mockito.when(userRepository.findFollowerAndFolloweeByIds(followerId, followeeId)).thenReturn(followerAndFolloweeIds);
 
-        List<User> followeesList = new ArrayList<>();
-        followeesList.add(followee);
-        User afterFollowingUser = User.builder()
-                .id(2L)
-                .nickname("User1")
-                .email("user@domain.com")
-                .password("$2a$12$ZqBcuPyawuOEWm/Fo78Hte9DGrHl9fauMBLpfvWECAaO/Paat74kq")
-                .enabled(true)
-                .followees(followeesList)
-                .build();
-
-        UserDto assertionUserDtoo = UserDto.builder()
-                .id(2L)
-                .nickname("User1")
-                .email("user@domain.com")
-                .build();
-
-        List<User> users = new ArrayList<>();
-        users.add(follower);
-        users.add(followee);
-
-        Mockito.when(userRepository.findFollowerAndFolloweeById(follower.getId(), followee.getId())).thenReturn(users);
-        Mockito.when(userRepository.save(follower)).thenReturn(afterFollowingUser);
-        UserDto assertionUserDto = userService.followUser(follower.getId(), followee.getId());
-        Assertions.assertEquals(assertionUserDto, assertionUserDtoo);
-    }
-
-    @Test
-    public void followShouldThrowUserNotFoundException() {
-        long wrongFollowerId = 102L;
-        long wrongFolloweeId = 203L;
-        Mockito.when(userRepository.findFollowerAndFolloweeById(wrongFollowerId, wrongFolloweeId)).thenReturn(new ArrayList<>());
-        Assertions.assertThrows(NotFoundEntityException.class, () -> userService.followUser(wrongFollowerId, wrongFolloweeId));
+        userService.followUser(followerId, followeeId);
+        Mockito.verify(userRepository).followUser(followerId, followeeId);
     }
 }

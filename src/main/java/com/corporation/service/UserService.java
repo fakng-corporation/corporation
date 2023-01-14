@@ -78,16 +78,31 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public UserDto followUser(long followerId, long followeeId) {
-        List<User> users = userRepository.findFollowerAndFolloweeById(followerId, followeeId);
-        if (users.size() != 2) {
-            throw new NotFoundEntityException(
-                    String.format("User does not exist")
-            );
+    public void followUser(long followerId, long followeeId) {
+        if(doesUsersIdsExist(followerId, followeeId)) {
+            userRepository.followUser(followerId, followeeId);
         }
-        User follower = users.stream().filter(x -> x.getId()== followerId).findAny().get();
-        User followee = users.stream().filter(x -> x.getId()== followeeId).findAny().get();
-        follower.addFollowee(followee);
-        return userMapper.toDto(userRepository.save(follower));
+    }
+
+    private boolean doesUsersIdsExist(long followerId, long followeeId) {
+        long followerAndFolloweeAmount = 2L;
+        List<Long> actualIds = userRepository.findFollowerAndFolloweeByIds(followerId, followeeId);
+        if (actualIds.size() == followerAndFolloweeAmount) {
+            return true;
+        }
+        if (actualIds.size() != followerAndFolloweeAmount) {
+            if (!actualIds.contains(followerId)) {
+                userDoesntExist(followerId);
+            }
+            if (!actualIds.contains(followeeId)) {
+                userDoesntExist(followeeId);
+            }
+        }
+        return false;
+    }
+
+    private void userDoesntExist(long userId) {
+        throw new NotFoundEntityException(
+                String.format("User %d does not exists", userId));
     }
 }

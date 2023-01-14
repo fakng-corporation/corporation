@@ -62,9 +62,9 @@ public class UserController {
     }
 
     @PutMapping("/follow/{followerId}/{followeeId}")
-    public UserDto followUser(
+    public void followUser(
             @PathVariable("followerId") long followerId,
             @PathVariable("followeeId") long followeeId) {
-        return userService.followUser(followerId, followeeId);
+        userService.followUser(followerId, followeeId);
     }
 }

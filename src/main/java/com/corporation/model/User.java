@@ -2,7 +2,6 @@ package com.corporation.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -90,7 +89,7 @@ public class User implements UserDetails {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany
     @JoinTable(name = "followers",
             joinColumns = @JoinColumn(name = "followee_id"), inverseJoinColumns = @JoinColumn(name = "follower_id"))
     private List<User> followers;
@@ -129,7 +128,6 @@ public class User implements UserDetails {
     }
 
     public void addFollowee(User followee) {
-        System.out.println(getFollowees().size());
         getFollowees().add(followee);
-        System.out.println(getFollowees().size());}
+    }
 }
