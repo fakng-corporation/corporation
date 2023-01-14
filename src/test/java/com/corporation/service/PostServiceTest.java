@@ -75,9 +75,9 @@ public class PostServiceTest {
         Mockito.doReturn(mockUpdatedPost).when(postRepository).save(mockPost);
         Post updatedPost = postService.updatePost(existingUpdatePostDto);
         Assertions.assertDoesNotThrow(() -> postService.updatePost(existingUpdatePostDto));
-        Assertions.assertEquals(updatedPost.getTitle(), updatedTitle);
-        Assertions.assertEquals(updatedPost.getBody(), updatedBody);
-        Assertions.assertEquals(updatedPost.isPublished(), false);
+        Assertions.assertEquals(updatedTitle, updatedPost.getTitle());
+        Assertions.assertEquals(updatedBody, updatedPost.getBody());
+        Assertions.assertEquals(false, updatedPost.isPublished());
     }
 
     @Test
