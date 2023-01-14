@@ -86,9 +86,12 @@ class PostControllerTest {
         String updatedBody = "Post body has been updated";
         PostDto existingUpdatePostDto = PostDto.builder().id(existingId).title(title).body(body).build();
         Post mockUpdatedPost = Post.builder().id(existingId).title(updatedTitle).body(updatedBody).build();
+        PostDto expectedDto = PostDto.builder().id(existingId).title(updatedTitle).body(updatedBody).build();
 
-        Mockito.doReturn(mockUpdatedPost).when(postService).updatePost(existingUpdatePostDto);
+        Mockito.when(postService.updatePost(existingUpdatePostDto)).thenReturn(mockUpdatedPost);
         Assertions.assertDoesNotThrow(() -> postController.updatePost(existingUpdatePostDto));
         Mockito.verify(postService, Mockito.times(1)).updatePost(existingUpdatePostDto);
+        PostDto actualDto = postController.updatePost(existingUpdatePostDto);
+        Assertions.assertEquals(expectedDto, actualDto);
     }
 }

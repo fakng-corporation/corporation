@@ -42,7 +42,7 @@ public class PostController {
     }
 
     @PutMapping
-    public Post updatePost(@RequestBody PostDto post) {
-        return postService.updatePost(post);
+    public PostDto updatePost(@RequestBody PostDto post) {
+        return postMapper.toDto(postService.updatePost(post));
     }
 }
