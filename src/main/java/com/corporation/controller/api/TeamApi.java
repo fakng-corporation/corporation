@@ -50,7 +50,7 @@ public interface TeamApi {
             summary = "Активация кода приглашения в команду",
             description = "Позволяет активировать код, полученный по приглашению"
     )
-    @GetMapping("/invite/{code}")
+    @PostMapping("/invite/{code}")
     void acceptInvite(@AuthenticationPrincipal(expression = "id") long userId,
                       @Parameter(description = "Указать код для активации пользователя", required = true)
                             @PathVariable String code);

@@ -21,9 +21,9 @@ public class ProjectService {
     private final UserService userService;
     private final ProjectMapper projectMapper;
 
-    public ProjectDto add(ProjectDto projectDto, String owner) {
+    public ProjectDto add(ProjectDto projectDto, long ownerId) {
         Project project = projectMapper.toEntity(projectDto);
-        project.setOwner(userService.findUsersByNickname(owner));
+        project.setOwner(userService.findById(ownerId));
         return saveEntityAndReturnDto(project);
     }
 

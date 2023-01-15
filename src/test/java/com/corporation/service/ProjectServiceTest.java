@@ -46,16 +46,15 @@ public class ProjectServiceTest {
         long projectId = 10;
         String title = "title";
         long ownerId = 5;
-        String ownerUsername = "Bob";
-        User owner = User.builder().nickname(ownerUsername).id(ownerId).build();
+        User owner = User.builder().id(ownerId).build();
         Project project = Project.builder().id(projectId).title(title).owner(owner).build();
         ProjectDto projectDto = projectMapper.toDto(project);
 
-        Mockito.when(userService.findUsersByNickname(ownerUsername))
+        Mockito.when(userService.findById(ownerId))
                 .thenReturn(owner);
         Mockito.when(projectRepository.save(project))
                 .thenReturn(project);
-        ProjectDto returnedProject = projectService.add(projectDto, ownerUsername);
+        ProjectDto returnedProject = projectService.add(projectDto, ownerId);
 
         Assertions.assertEquals(projectId, returnedProject.getId());
         Assertions.assertEquals(title, returnedProject.getTitle());

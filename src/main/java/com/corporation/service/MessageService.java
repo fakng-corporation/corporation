@@ -25,7 +25,7 @@ public class MessageService {
         String code = UUID.randomUUID().toString();
         String subject = "Invite to Team";
         String body = String.format(
-                "You invited to team %s %s. Use code: %s",
+                "You were invited to team %s %s. Use code: %s",
                 inviteEvent.getTeam().getTitle(),
                 inviteEvent.getTeam().getDescription(),
                 code);

@@ -30,6 +30,4 @@ databaseChangeLog:
   - include:
       file: db/changelog/init-user-team.sql
   - include:
-      file: db/changelog/init-message.sql
-  - include:
-      file: db/changelog/init-invite.sql
+      file: db/changelog/init-message-invite.sql

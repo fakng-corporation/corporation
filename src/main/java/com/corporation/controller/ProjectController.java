@@ -7,16 +7,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.security.Principal;
-
 @RequiredArgsConstructor
 @RestController
 public class ProjectController implements ProjectApi {
 
     private final ProjectService projectService;
 
-    public ProjectDto addProject(ProjectDto projectDto, Principal principal) {
-        return projectService.add(projectDto, principal.getName());
+    public ProjectDto addProject(ProjectDto projectDto, long ownerId) {
+        return projectService.add(projectDto, ownerId);
     }
 
     @Override
