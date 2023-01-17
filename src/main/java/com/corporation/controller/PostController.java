@@ -9,6 +9,7 @@ import com.corporation.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +26,7 @@ public class PostController {
     private final PostMapper postMapper;
 
 
-    @PutMapping
+    @PostMapping
     public PostDto createPost(@RequestBody PostDto postDto) {
         User user = userService.findById(postDto.getUserId());
         Post post = postMapper.toEntity(postDto);
