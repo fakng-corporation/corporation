@@ -5,6 +5,7 @@ import com.corporation.model.Post;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.FIELD)
 public interface PostMapper {
@@ -13,4 +14,7 @@ public interface PostMapper {
 
     @Mapping(target = "user", ignore = true)
     Post toEntity(PostDto postDto);
+
+    @Mapping(target = "user", ignore = true)
+    void updateFromDto(PostDto postDto, @MappingTarget Post post);
 }
