@@ -2,7 +2,6 @@ package com.corporation.controller;
 
 import com.corporation.controller.api.ProjectApi;
 import com.corporation.dto.ProjectDto;
-import com.corporation.mapper.UserMapper;
 import com.corporation.service.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProjectController implements ProjectApi {
 
     private final ProjectService projectService;
-    private final UserMapper userMapper;
 
     public ProjectDto addProject(ProjectDto projectDto) {
         return projectService.add(projectDto);

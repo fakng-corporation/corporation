@@ -76,7 +76,4 @@ public class UserService implements UserDetailsService {
                         String.format("User with nickname %s does not exist.", username)
                 ));
     }
-
-    @Transactional
-    User saveUser(User user) {return userRepository.save(user);}
 }

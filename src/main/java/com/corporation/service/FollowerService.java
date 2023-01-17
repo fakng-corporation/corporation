@@ -11,7 +11,7 @@ public class FollowerService {
     private final FollowerRepository followerRepository;
 
     @Transactional
-    public void followProject(long followingProjectId, long projectFollowerId) {
-        followerRepository.followProject(followingProjectId, projectFollowerId);
+    public void followProject(long projectId, long followerId) {
+        followerRepository.followProject(projectId, followerId);
     }
 }
