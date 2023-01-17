@@ -1,6 +1,6 @@
 package com.corporation.configuration.jwt;
 
-import com.corporation.Util.UserRole;
+import com.corporation.util.UserRole;
 import io.jsonwebtoken.JwtParser;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package com.corporation.Util;
+package com.corporation.util;
 
 import lombok.RequiredArgsConstructor;
 

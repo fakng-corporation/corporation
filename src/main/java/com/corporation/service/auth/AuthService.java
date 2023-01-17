@@ -1,6 +1,6 @@
 package com.corporation.service.auth;
 
-import com.corporation.Util.UserRole;
+import com.corporation.util.UserRole;
 import com.corporation.configuration.jwt.TokenProvider;
 import com.corporation.dto.AuthDto;
 import com.corporation.exception.BusinessException;

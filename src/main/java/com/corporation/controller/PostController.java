@@ -40,4 +40,9 @@ public class PostController {
     public void deleteById(@PathVariable Long id) {
         postService.deleteById(id);
     }
+
+    @PutMapping
+    public PostDto updatePost(@RequestBody PostDto post) {
+        return postMapper.toDto(postService.updatePost(post));
+    }
 }

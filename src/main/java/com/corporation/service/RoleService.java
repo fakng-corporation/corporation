@@ -1,12 +1,14 @@
 package com.corporation.service;
 
 import com.corporation.dto.RoleDto;
-import com.corporation.exception.BusinessException;
 import com.corporation.exception.NotFoundEntityException;
 import com.corporation.mapper.RoleMapper;
 import com.corporation.model.Role;
 import com.corporation.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -43,5 +45,10 @@ public class RoleService {
     private RoleDto saveEntityAndReturnDto(Role role) {
         role = roleRepository.save(role);
         return roleMapper.toDto(role);
+    }
+
+    public Page<RoleDto> getRolesByTitle(String keyword, int pageNumber, int pageSize) {
+        Pageable page = PageRequest.of(pageNumber, pageSize);
+        return roleRepository.findByTitleContainingIgnoreCase(keyword, page).map(roleMapper::toDto);
     }
 }
