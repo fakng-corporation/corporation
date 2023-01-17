@@ -64,5 +64,5 @@ public class Project {
     private LocalDateTime updatedAt;
 
     @ManyToMany(mappedBy = "followingProjects")
-    List<User> projectFollowers;
+    private List<User> followers;
 }

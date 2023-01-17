@@ -92,7 +92,7 @@ public class User implements UserDetails {
     @ManyToMany
     @JoinTable(name = "project_followers",
             joinColumns = @JoinColumn(name = "follower_id"), inverseJoinColumns = @JoinColumn(name = "project_id"))
-    List<Project> followingProjects;
+    private List<Project> followingProjects;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

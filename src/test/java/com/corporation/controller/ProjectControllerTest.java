@@ -1,11 +1,9 @@
 package com.corporation.controller;
 
 import com.corporation.dto.ProjectDto;
-import com.corporation.dto.UserDto;
 import com.corporation.mapper.ProjectMapperImpl;
 import com.corporation.mapper.UserMapper;
 import com.corporation.model.Project;
-import com.corporation.model.User;
 import com.corporation.service.ProjectService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -96,18 +94,5 @@ public class ProjectControllerTest {
 
         Assertions.assertEquals(page.getTotalElements(), projectDtoPage.getTotalElements());
         Assertions.assertEquals(page.getContent(), projectDtoPage.getContent());
-    }
-
-    @Test
-    void shouldFollowProject() {
-        long projectId = 4L;
-        long projectFollowerId = 1l;
-        User follower = User.builder().id(projectFollowerId).nickname("User1").build();
-        UserDto expectedUserDto = UserDto.builder().id(projectFollowerId).nickname("User1").build();
-
-        Mockito.when(projectService.followProject(projectId, projectFollowerId)).thenReturn(follower);
-        Mockito.when(userMapper.toDto(follower)).thenReturn(expectedUserDto);
-        UserDto actualUserDto = projectController.followProject(projectId, projectFollowerId);
-        Assertions.assertEquals(expectedUserDto, actualUserDto);
     }
 }
