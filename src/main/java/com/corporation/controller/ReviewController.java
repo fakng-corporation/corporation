@@ -26,17 +26,26 @@ public class ReviewController {
     @PostMapping
     public void createReview(
             @RequestBody ReviewDto reviewDto,
-            @RequestParam("from_user_id") long authorId,
-            @RequestParam("of_user_id") long userId) {
+            @RequestParam("author_id") long authorId,
+            @RequestParam("user_id") long userId) {
         reviewService.createReview(reviewDto, authorId, userId);
     }
 
-    @GetMapping
-    public Page<ReviewDto> getReviews(
+    @GetMapping("/by_user")
+    public Page<ReviewDto> getReviewsOfUser(
             @RequestParam("user_id") long userId,
             @RequestParam("page") int page,
             @RequestParam("page_size") int pageSize)
     {
         return reviewService.findByUserId(userId, page, pageSize).map(reviewMapper::toDto);
+    }
+
+    @GetMapping("/by_author")
+    public Page<ReviewDto> getReviewsOfAuthor(
+            @RequestParam("author_id") long userId,
+            @RequestParam("page") int page,
+            @RequestParam("page_size") int pageSize)
+    {
+        return reviewService.findByAuthorId(userId, page, pageSize).map(reviewMapper::toDto);
     }
 }

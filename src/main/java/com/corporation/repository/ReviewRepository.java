@@ -12,5 +12,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ReviewRepository extends CrudRepository<Review, Long> {
     Page<Review> findByUserId(long userId, Pageable pageable);
-
+    Page<Review> findByAuthorId(long userId, Pageable pageable);
 }

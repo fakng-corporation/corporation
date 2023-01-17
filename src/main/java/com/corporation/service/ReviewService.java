@@ -25,6 +25,10 @@ public class ReviewService {
         return reviewRepository.findByUserId(userId, PageRequest.of(page, pageSize));
     }
 
+    public Page<Review> findByAuthorId(long authorId, int page, int pageSize) {
+        return reviewRepository.findByAuthorId(authorId, PageRequest.of(page, pageSize));
+    }
+
     @Transactional
     public void createReview(ReviewDto reviewDto, long authorId, long userId) {
         Review review = reviewMapper.toEntity(reviewDto);
