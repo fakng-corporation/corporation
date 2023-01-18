@@ -76,33 +76,4 @@ public class UserService implements UserDetailsService {
                         String.format("User with nickname %s does not exist.", username)
                 ));
     }
-
-    @Transactional
-    public void followUser(long followerId, long followeeId) {
-        if(doesUsersIdsExist(followerId, followeeId)) {
-            userRepository.followUser(followerId, followeeId);
-        }
-    }
-
-    private boolean doesUsersIdsExist(long followerId, long followeeId) {
-        long followerAndFolloweeAmount = 2L;
-        List<Long> actualIds = userRepository.findFollowerAndFolloweeByIds(followerId, followeeId);
-        if (actualIds.size() == followerAndFolloweeAmount) {
-            return true;
-        }
-        if (actualIds.size() != followerAndFolloweeAmount) {
-            if (!actualIds.contains(followerId)) {
-                userDoesntExist(followerId);
-            }
-            if (!actualIds.contains(followeeId)) {
-                userDoesntExist(followeeId);
-            }
-        }
-        return false;
-    }
-
-    private void userDoesntExist(long userId) {
-        throw new NotFoundEntityException(
-                String.format("User %d does not exists", userId));
-    }
 }

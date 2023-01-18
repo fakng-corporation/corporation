@@ -31,8 +31,8 @@ import java.util.List;
 /**
  * @author Bleschunov Dmitry
  */
-@Builder
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -88,6 +88,11 @@ public class User implements UserDetails {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @ManyToMany
+    @JoinTable(name = "project_followers",
+            joinColumns = @JoinColumn(name = "follower_id"), inverseJoinColumns = @JoinColumn(name = "project_id"))
+    private List<Project> followingProjects;
 
     @ManyToMany
     @JoinTable(name = "followers",
