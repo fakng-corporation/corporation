@@ -16,9 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -77,20 +75,5 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException(
                         String.format("User with nickname %s does not exist.", username)
                 ));
-    }
-
-    @Transactional
-    public User unfollowUser(long followerId, long followeeId) {
-        User unfollower = findById(followerId);
-        Map<Long, User> followees = new HashMap<>();
-        for (User followee : unfollower.getFollowees()) {
-            followees.put(followee.getId(), followee);
-        }
-        if (!followees.containsKey(followeeId)) {
-            throw new NotFoundEntityException(
-                    String.format("User %d is not following user %d", followerId, followeeId));
-        }
-        unfollower.removeFollowee(followees.get(followeeId));
-        return userRepository.save(unfollower);
     }
 }

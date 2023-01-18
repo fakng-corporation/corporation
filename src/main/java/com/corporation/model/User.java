@@ -89,6 +89,11 @@ public class User implements UserDetails {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @ManyToMany
+    @JoinTable(name = "project_followers",
+            joinColumns = @JoinColumn(name = "follower_id"), inverseJoinColumns = @JoinColumn(name = "project_id"))
+    private List<Project> followingProjects;
+
     @ManyToMany(mappedBy = "followees")
     private List<User> followers;
 

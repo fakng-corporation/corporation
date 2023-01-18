@@ -28,4 +28,6 @@ databaseChangeLog:
   - include:
       file: db/changelog/init-user-skill.sql
   - include:
+      file: db/changelog/init-project-followers.sql
+  - include:
       file: db/changelog/init-followers.sql
