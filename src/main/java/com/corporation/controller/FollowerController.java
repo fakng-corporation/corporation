@@ -21,7 +21,7 @@ public class FollowerController {
         followerService.followProject(followingProjectId, user.getId());
     }
 
-    @PutMapping("/user/follow/{followeeId}")
+    @PutMapping("/user/{followeeId}/follow/")
     public void followUser(
             @AuthenticationPrincipal User user,
             @PathVariable("followeeId") long followeeId) {
