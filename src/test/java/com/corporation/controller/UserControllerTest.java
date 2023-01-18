@@ -157,16 +157,4 @@ public class UserControllerTest {
                 .followees(new ArrayList<>())
                 .build();
     }
-
-    @Test
-    public void shouldUnfollow() {
-        long followerId = 1L;
-        long followeeId = 2L;
-        User follower = mockUserBuilder(followerId);
-        UserDto expectedUnfollower = UserDto.builder().id(1L).nickname("User1").email("user@domain.com").build();
-
-        Mockito.when(userService.unfollowUser(followerId, followeeId)).thenReturn(follower);
-        UserDto actualUnfollower = userController.unfollowUser(followerId, followeeId);
-        Assertions.assertEquals(expectedUnfollower, actualUnfollower);
-    }
 }

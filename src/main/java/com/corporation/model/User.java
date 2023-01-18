@@ -131,8 +131,4 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return enabled;
     }
-
-    public void addFollowee(User followee) {getFollowees().add(followee);}
-
-    public void removeFollowee(User followee) {getFollowees().remove(followee);}
 }

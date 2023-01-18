@@ -1,8 +1,8 @@
 CREATE TABLE followers
 (
-    id          BIGSERIAL PRIMARY KEY,
-    followee_id BIGINT NOT NULL,
+    id BIGSERIAL PRIMARY KEY,
     follower_id BIGINT NOT NULL,
-    FOREIGN KEY (followee_id) REFERENCES "user" (id) ON DELETE CASCADE,
-    FOREIGN KEY (follower_id) REFERENCES "user" (id) ON DELETE CASCADE
+    followee_id BIGINT NOT NULL,
+    CONSTRAINT "follower_fk" FOREIGN KEY (follower_id) REFERENCES "user" (id) ON DELETE CASCADE,
+    CONSTRAINT "followee_fk" FOREIGN KEY (followee_id) REFERENCES "user" (id) ON DELETE CASCADE
 )

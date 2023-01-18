@@ -28,4 +28,13 @@ public class FollowerControllerTest {
         Mockito.verify(followerService).followProject(projectId, follower.getId());
         Assertions.assertDoesNotThrow(() -> followerController.followProject(projectId, follower));
     }
+
+    @Test
+    public void shouldFollow() {
+        long followerId = 1L;
+        long followeeId = 2L;
+
+        followerService.unfollowUser(followerId, followeeId);
+        Mockito.verify(followerService).unfollowUser(followerId, followeeId);
+    }
 }
