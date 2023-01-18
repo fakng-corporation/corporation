@@ -4,19 +4,14 @@ import com.corporation.exception.ProjectNotFoundException;
 import com.corporation.dto.ProjectDto;
 import com.corporation.mapper.ProjectMapper;
 import com.corporation.model.Project;
-import com.corporation.model.User;
 import com.corporation.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -62,24 +57,5 @@ public class ProjectService {
     public Page<ProjectDto> getProjectsByTitle(String keyword, int pageNumber, int pageSize) {
         Pageable page = PageRequest.of(pageNumber, pageSize);
         return projectRepository.findByTitleContainingIgnoreCase(keyword, page).map(projectMapper::toDto);
-    }
-
-    @Transactional
-    public void unfollowProject(long unfollowingProjectId, long unfollowerId) {
-        Project followingProject = findWithFollowersById(unfollowingProjectId);
-        Map<Long, User> projectFollowers = followingProject.getFollowers().stream()
-                .collect(Collectors.toMap(user -> user.getId(), user -> user));
-        projectFollowers.remove(unfollowerId);
-        followingProject.setFollowers(new ArrayList<>(projectFollowers.values()));
-        projectRepository.save(followingProject);
-    }
-
-    @Transactional
-    public Project findWithFollowersById(long projectId) {
-        return projectRepository.findWithFollowersById(projectId).orElseThrow(
-                () -> new ProjectNotFoundException(
-                        String.format("Project %d does not exist", projectId)
-                )
-        );
     }
 }
