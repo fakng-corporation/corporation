@@ -1,11 +1,9 @@
 package com.corporation.service;
 
-import com.corporation.exception.NotFoundEntityException;
 import com.corporation.exception.ProjectNotFoundException;
 import com.corporation.dto.ProjectDto;
 import com.corporation.mapper.ProjectMapper;
 import com.corporation.model.Project;
-import com.corporation.model.User;
 import com.corporation.repository.ProjectRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -63,16 +61,7 @@ public class ProjectService {
     }
 
     @Transactional
-    public long projectFollowersAmount(long projectId) {
-        return findWithFollowersById(projectId).getFollowers().size();
-    }
-
-    @Transactional
-    public Project findWithFollowersById(long projectId){
-        return projectRepository.findWithFollowersById(projectId).orElseThrow(
-                () -> new NotFoundEntityException(
-                        String.format("Project %d does not exist", projectId)
-                )
-        );
+    public long getProjectFollowersAmountByProjectId(long projectId) {
+        return projectRepository.getProjectFollowersAmountByProjectId(projectId);
     }
 }

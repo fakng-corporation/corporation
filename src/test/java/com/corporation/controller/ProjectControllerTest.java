@@ -100,8 +100,9 @@ public class ProjectControllerTest {
     public void projectFollowersAmount() {
         long projectId = 4L;
         long projectFollowersAmount = 1L;
-        Mockito.when(projectService.projectFollowersAmount(projectId)).thenReturn(projectFollowersAmount);
+        Mockito.when(projectService.getProjectFollowersAmountByProjectId(projectId)).thenReturn(projectFollowersAmount);
 
-        Assertions.assertEquals(projectController.projectFollowersAmount(projectId), projectFollowersAmount);
+        long actualFollowersAmount = projectController.getProjectFollowersAmountByProjectId(projectId);
+        Assertions.assertEquals(projectFollowersAmount, actualFollowersAmount);
     }
 }

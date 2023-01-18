@@ -37,6 +37,6 @@ public interface ProjectApi {
             @RequestParam(value = "Элементов на странице",defaultValue = "10") int pageSize);
 
     @Operation(summary = "Количество подписчиков проекта", description = "Получение количества подписчиков проекта")
-    @GetMapping("/followersAmount/{projectId}")
-    long projectFollowersAmount(@PathVariable("projectId") long projectId);
+    @GetMapping("/{projectId}/followersAmount")
+    long getProjectFollowersAmountByProjectId(@PathVariable("projectId") long projectId);
 }
