@@ -131,8 +131,4 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return enabled;
     }
-
-    public void addFollowee(User followee) {
-        followees.add(followee);
-    }
 }
