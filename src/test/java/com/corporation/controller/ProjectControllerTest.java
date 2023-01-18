@@ -2,6 +2,7 @@ package com.corporation.controller;
 
 import com.corporation.dto.ProjectDto;
 import com.corporation.mapper.ProjectMapperImpl;
+import com.corporation.mapper.UserMapper;
 import com.corporation.model.Project;
 import com.corporation.service.ProjectService;
 import org.junit.jupiter.api.Assertions;
@@ -31,6 +32,8 @@ public class ProjectControllerTest {
 
     @InjectMocks
     private ProjectController projectController;
+    @Spy
+    private UserMapper userMapper;
 
     @Test
     public void shouldReturnCreatedProjectDto() {

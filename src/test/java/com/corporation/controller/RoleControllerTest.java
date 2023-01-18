@@ -12,6 +12,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+
+import java.util.Collections;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 
@@ -68,5 +73,22 @@ public class RoleControllerTest {
 
         Assertions.assertEquals(id, resultRoleDto.getId());
         Assertions.assertEquals(newTitle, resultRoleDto.getTitle());
+    }
+
+    @Test
+    public void shouldReturnRoleByTitle() {
+        long roleId = 10;
+        String title = "title";
+        Role mockRole = Role.builder().id(roleId).title(title).build();
+        RoleDto mockRoleDto = roleMapper.toDto(mockRole);
+        List<RoleDto> roleDtoList = Collections.singletonList(mockRoleDto);
+        Page<RoleDto> roleDtoPage = new PageImpl<>(roleDtoList);
+
+        Mockito.when(roleService.getRolesByTitle(title, 0, 5)).thenReturn(roleDtoPage);
+        Page<RoleDto> page = roleController.getRoles(title, 0, 5);
+
+        Assertions.assertEquals(page.getTotalElements(), roleDtoPage.getTotalElements());
+        Assertions.assertEquals(page.getContent(), roleDtoPage.getContent());
+
     }
 }
