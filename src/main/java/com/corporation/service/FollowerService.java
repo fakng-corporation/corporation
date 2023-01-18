@@ -16,6 +16,11 @@ public class FollowerService {
     }
 
     @Transactional
+    public void followUser(long followerId, long followeeId) {
+        followerRepository.followUser(followerId, followeeId);
+    }
+
+    @Transactional
     public void unfollowProject(long projectId, long followerId) {
         followerRepository.unfollowProject(projectId, followerId);
     }

@@ -30,6 +30,15 @@ public class FollowerControllerTest {
     }
 
     @Test
+    public void shouldFollow() {
+        long followerId = 1L;
+        long followeeId = 2L;
+
+        followerService.followUser(followerId, followeeId);
+        Mockito.verify(followerService).followUser(followerId, followeeId);
+    }
+
+    @Test
     void shouldUnfollowProject() {
         long projectId = 4L;
         User follower = User.builder().id(3L).nickname("User2").email("user2@domain.com").password("admin").enabled(true).build();

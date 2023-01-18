@@ -26,6 +26,15 @@ public class FollowerServiceTest {
     }
 
     @Test
+    public void shouldFollow() {
+        long followerId = 1L;
+        long followeeId = 2L;
+
+        followerService.followUser(followerId, followeeId);
+        Mockito.verify(followerRepository).followUser(followerId, followeeId);
+    }
+
+    @Test
     void shouldUnfollowProject() {
         long followerId = 2L;
         long projectId = 3L;
