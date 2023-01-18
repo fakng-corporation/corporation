@@ -11,6 +11,6 @@ import org.springframework.stereotype.Repository;
 public interface ProjectRepository extends JpaRepository<Project, Long> {
 
     Page<Project> findByTitleContainingIgnoreCase(String keyword, Pageable pageable);
-    @Query(nativeQuery = true, value = "SELECT COUNT(*) FROM project_followers WHERE project_id= :projectId")
-    long getProjectFollowersAmountByProjectId(long projectId);
+    @Query(nativeQuery = true, value = "SELECT COUNT(id) FROM project_followers WHERE project_id = :projectId")
+    long getProjectFollowersAmount(long projectId);
 }

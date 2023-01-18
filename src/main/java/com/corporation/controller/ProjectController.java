@@ -33,7 +33,7 @@ public class ProjectController implements ProjectApi {
     }
 
     @Override
-    public long getProjectFollowersAmountByProjectId(long projectId) {
+    public long getProjectFollowersAmount(long projectId) {
         return projectService.getProjectFollowersAmountByProjectId(projectId);
     }
 }

@@ -38,5 +38,5 @@ public interface ProjectApi {
 
     @Operation(summary = "Количество подписчиков проекта", description = "Получение количества подписчиков проекта")
     @GetMapping("/{projectId}/followersAmount")
-    long getProjectFollowersAmountByProjectId(@PathVariable("projectId") long projectId);
+    long getProjectFollowersAmount(@PathVariable("projectId") long projectId);
 }

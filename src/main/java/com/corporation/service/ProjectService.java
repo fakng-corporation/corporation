@@ -62,6 +62,6 @@ public class ProjectService {
 
     @Transactional
     public long getProjectFollowersAmountByProjectId(long projectId) {
-        return projectRepository.getProjectFollowersAmountByProjectId(projectId);
+        return projectRepository.getProjectFollowersAmount(projectId);
     }
 }
