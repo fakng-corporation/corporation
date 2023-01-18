@@ -16,12 +16,12 @@ public class FollowerController {
     private final FollowerService followerService;
 
     @PutMapping("/follow/project/{projectId}")
-    void followProject(@PathVariable("projectId") long followingProjectId,
+    public void followProject(@PathVariable("projectId") long followingProjectId,
                        @AuthenticationPrincipal User user) {
         followerService.followProject(followingProjectId, user.getId());
     }
     @PutMapping("/unfollow/project/{projectId}")
-    void unfollowProject(@PathVariable("projectId") long followingProjectId,
+    public void unfollowProject(@PathVariable("projectId") long followingProjectId,
                        @AuthenticationPrincipal User user) {
         followerService.unfollowProject(followingProjectId, user.getId());
     }
