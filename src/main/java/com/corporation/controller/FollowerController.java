@@ -28,7 +28,7 @@ public class FollowerController {
         followerService.followUser(user.getId(), followeeId);
     }
 
-    @PutMapping("/user/unfollow/{followeeId}")
+    @PutMapping("/user/{followeeId}/unfollow")
     public void unfollowUser(
             @AuthenticationPrincipal User user,
             @PathVariable("followeeId") long followeeId) {

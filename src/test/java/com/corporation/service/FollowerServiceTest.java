@@ -35,7 +35,7 @@ public class FollowerServiceTest {
     }
 
     @Test
-    public void shouldFollow() {
+    public void shouldUnfollow() {
         long followerId = 1L;
         long followeeId = 2L;
 
