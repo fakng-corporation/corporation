@@ -47,6 +47,12 @@ public class UserController {
         userService.updateUserSkillList(id, skillIdList);
     }
 
+    @GetMapping("/by_review")
+    public UserDto getAuthorOfReviewById(@RequestParam("review_id") long reviewId) {
+        User user = userService.findByWrittenReviewsId(reviewId);
+        return userMapper.toDto(user);
+    }
+
     @PostMapping("/{id}")
     public UserDto updateUser(@RequestBody UserDto userDto) {
         return userMapper.toDto(
