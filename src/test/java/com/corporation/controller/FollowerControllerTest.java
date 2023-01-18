@@ -28,4 +28,13 @@ public class FollowerControllerTest {
         Mockito.verify(followerService).followProject(projectId, follower.getId());
         Assertions.assertDoesNotThrow(() -> followerController.followProject(projectId, follower));
     }
+
+    @Test
+    void shouldUnfollowProject() {
+        long projectId = 4L;
+        User unfollower = User.builder().id(3L).nickname("User2").email("user2@domain.com").password("admin").enabled(true).build();
+
+        followerController.unfollowProject(projectId, unfollower);
+        Mockito.verify(followerService).unfollowProject(projectId, unfollower.getId());
+    }
 }

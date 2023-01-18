@@ -36,9 +36,5 @@ public interface ProjectApi {
             @RequestParam(value = "Номер страницы",defaultValue = "0") int pageNumber,
             @RequestParam(value = "Элементов на странице",defaultValue = "10") int pageSize);
 
-    @Operation(summary = "Отписка от проекта", description = "Позволяет отписаться от обновлений проекта")
-    @PutMapping("/unfollow/{unfollowingProjectId}/{unfollowerId}")
-    void unfollowProject(
-            @PathVariable("unfollowingProjectId") long unfollowingProjectId,
-            @PathVariable("unfollowerId") long unfollowerId);
+
 }

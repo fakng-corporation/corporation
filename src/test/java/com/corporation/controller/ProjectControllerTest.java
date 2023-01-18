@@ -95,13 +95,4 @@ public class ProjectControllerTest {
         Assertions.assertEquals(page.getTotalElements(), projectDtoPage.getTotalElements());
         Assertions.assertEquals(page.getContent(), projectDtoPage.getContent());
     }
-
-    @Test
-    void shouldUnfollowProject() {
-        long projectId = 4L;
-        long projectUnfollowerId = 1l;
-
-        projectController.unfollowProject(projectId, projectUnfollowerId);
-        Mockito.verify(projectService).unfollowProject(projectId, projectUnfollowerId);
-    }
 }

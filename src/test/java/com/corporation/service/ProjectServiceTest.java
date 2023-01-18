@@ -127,17 +127,4 @@ public class ProjectServiceTest {
         Assertions.assertEquals(page.getContent(), projectDtoList);
 
     }
-
-    @Test
-    void shouldUnfollowProject() {
-        long projectId = 4L;
-        long projectUnollowerId = 1l;
-        User projectFollower = User.builder().id(projectUnollowerId).nickname("User1").followingProjects(new ArrayList<>()).build();
-        Project unfollowingProject = Project.builder().id(projectId).title("Project Title").build();
-        unfollowingProject.setFollowers(new ArrayList<>(List.of(projectFollower)));
-
-        Mockito.when(projectRepository.findWithFollowersById(projectId)).thenReturn(Optional.of(unfollowingProject));
-        projectService.unfollowProject(projectId, projectUnollowerId);
-        Mockito.verify(projectRepository).save(unfollowingProject);
-    }
 }
