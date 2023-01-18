@@ -11,6 +11,10 @@ public interface FollowerRepository extends CrudRepository<User, Long> {
     void followProject(long projectId, long followerId);
 
     @Modifying
+    @Query(nativeQuery = true, value = "INSERT INTO followers (follower_id, followee_id) VALUES (:followerId, :followeeId)")
+    void followUser(long followerId, long followeeId);
+
+    @Modifying
     @Query(nativeQuery = true, value = "DELETE FROM followers WHERE follower_id = :followerId AND followee_id = :followeeId")
     void unfollowUser(long followerId, long followeeId);
 }

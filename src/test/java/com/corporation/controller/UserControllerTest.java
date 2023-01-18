@@ -48,7 +48,7 @@ public class UserControllerTest {
         int page = 0;
         int pageSize = 3;
         String query = "";
-        Page<User> users = new PageImpl<>(new ArrayList<>(){{
+        Page<User> users = new PageImpl<>(new ArrayList<>() {{
             add(new User());
             add(new User());
             add(new User());

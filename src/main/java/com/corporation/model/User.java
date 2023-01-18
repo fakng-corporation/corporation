@@ -94,12 +94,12 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "follower_id"), inverseJoinColumns = @JoinColumn(name = "project_id"))
     private List<Project> followingProjects;
 
-    @ManyToMany(mappedBy = "followees")
-    private List<User> followers;
-
     @ManyToMany
     @JoinTable(name = "followers",
-            joinColumns = @JoinColumn(name = "follower_id"), inverseJoinColumns = @JoinColumn(name = "followee_id"))
+            joinColumns = @JoinColumn(name = "followee_id"), inverseJoinColumns = @JoinColumn(name = "follower_id"))
+    private List<User> followers;
+
+    @ManyToMany(mappedBy = "followers")
     private List<User> followees;
 
     @Override
