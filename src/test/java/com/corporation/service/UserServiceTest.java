@@ -186,16 +186,4 @@ public class UserServiceTest {
 
         Assertions.assertThrows(NotFoundEntityException.class, () -> userService.findById(desiredId));
     }
-
-    @Test
-    public void shouldFollow() {
-        long followerId = 1L;
-        long followeeId = 2L;
-        List<Long> followerAndFolloweeIds = List.of(followerId, followeeId);
-
-        Mockito.when(userRepository.findFollowerAndFolloweeByIds(followerId, followeeId)).thenReturn(followerAndFolloweeIds);
-
-        userService.followUser(followerId, followeeId);
-        Mockito.verify(userRepository).followUser(followerId, followeeId);
-    }
 }

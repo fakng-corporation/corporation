@@ -133,6 +133,6 @@ public class User implements UserDetails {
     }
 
     public void addFollowee(User followee) {
-        getFollowees().add(followee);
+        followees.add(followee);
     }
 }

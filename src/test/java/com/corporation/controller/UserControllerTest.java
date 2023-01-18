@@ -146,13 +146,4 @@ public class UserControllerTest {
 
         Assertions.assertThrows(NotFoundEntityException.class, () -> userController.getUserById(desiredId));
     }
-
-    @Test
-    public void shouldFollow() {
-        long followerId = 1L;
-        long followeeId = 2L;
-
-        userService.followUser(followerId, followeeId);
-        Mockito.verify(userService).followUser(followerId, followeeId);
-    }
 }

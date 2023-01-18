@@ -60,11 +60,4 @@ public class UserController {
             @RequestParam("userAvatar") MultipartFile userAvatar) {
         userService.updateUserAvatar(id, userAvatar);
     }
-
-    @PutMapping("/follow/{followerId}/{followeeId}")
-    public void followUser(
-            @PathVariable("followerId") long followerId,
-            @PathVariable("followeeId") long followeeId) {
-        userService.followUser(followerId, followeeId);
-    }
 }
