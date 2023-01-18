@@ -11,17 +11,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/following")
+@RequestMapping("/follower")
 public class FollowerController {
     private final FollowerService followerService;
 
-    @PutMapping("/follow/project/{projectId}")
-    public void followProject(@PathVariable("projectId") long followingProjectId,
+    @PutMapping("/follow/project/{id}")
+    public void followProject(@PathVariable("id") long followingProjectId,
                        @AuthenticationPrincipal User user) {
         followerService.followProject(followingProjectId, user.getId());
     }
-    @PutMapping("/unfollow/project/{projectId}")
-    public void unfollowProject(@PathVariable("projectId") long followingProjectId,
+    @PutMapping("/unfollow/project/{id}")
+    public void unfollowProject(@PathVariable("id") long followingProjectId,
                        @AuthenticationPrincipal User user) {
         followerService.unfollowProject(followingProjectId, user.getId());
     }
