@@ -34,4 +34,10 @@ public class FollowerController {
             @PathVariable("followeeId") long followeeId) {
         followerService.unfollowUser(user.getId(), followeeId);
     }
+
+    @PutMapping("/project/{projectId}/unfollow")
+    public void unfollowProject(@PathVariable("projectId") long followingProjectId,
+                                @AuthenticationPrincipal User user) {
+        followerService.unfollowProject(followingProjectId, user.getId());
+    }
 }
