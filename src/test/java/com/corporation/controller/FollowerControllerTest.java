@@ -37,4 +37,13 @@ public class FollowerControllerTest {
         followerService.followUser(followerId, followeeId);
         Mockito.verify(followerService).followUser(followerId, followeeId);
     }
+
+    @Test
+    public void shouldUnfollow() {
+        long followerId = 1L;
+        long followeeId = 2L;
+
+        followerService.unfollowUser(followerId, followeeId);
+        Mockito.verify(followerService).unfollowUser(followerId, followeeId);
+    }
 }
