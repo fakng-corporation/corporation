@@ -134,7 +134,7 @@ public class ProjectServiceTest {
         long projectFollowersAmount = 1l;
         Mockito.when(projectRepository.getProjectFollowersAmount(projectId)).thenReturn(projectFollowersAmount);
 
-        long actualProjectFollowersAmount = projectService.getProjectFollowersAmountByProjectId(projectId);
+        long actualProjectFollowersAmount = projectService.getProjectFollowersAmount(projectId);
         Assertions.assertEquals(projectFollowersAmount, actualProjectFollowersAmount);
     }
 }
