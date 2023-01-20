@@ -17,4 +17,8 @@ public interface FollowerRepository extends CrudRepository<User, Long> {
     @Modifying
     @Query(nativeQuery = true, value = "DELETE FROM followers WHERE follower_id = :followerId AND followee_id = :followeeId")
     void unfollowUser(long followerId, long followeeId);
+
+    @Modifying
+    @Query(nativeQuery = true, value = "DELETE FROM project_followers WHERE project_id= :projectId and follower_id = :followerId")
+    void unfollowProject(long projectId, long followerId);
 }

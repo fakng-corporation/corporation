@@ -42,4 +42,14 @@ public class FollowerServiceTest {
         followerService.unfollowUser(followerId, followeeId);
         Mockito.verify(followerRepository).unfollowUser(followerId, followeeId);
     }
+
+    @Test
+    void shouldUnfollowProject() {
+        long followerId = 2L;
+        long projectId = 3L;
+        Mockito.doNothing().when(followerRepository).unfollowProject(projectId, followerId);
+
+        followerService.unfollowProject(projectId, followerId);
+        Mockito.verify(followerRepository).unfollowProject(projectId, followerId);
+    }
 }
