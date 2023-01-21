@@ -52,7 +52,7 @@ public class UserServiceTest {
             add(new User());
             add(new User());
         }});
-        Pageable pageable = PageRequest.of(page,  pageSize);
+        Pageable pageable = PageRequest.of(page, pageSize);
         Mockito.when(userRepository.findByNicknameContainingIgnoreCase(query, pageable))
                 .thenReturn(users);
 
@@ -148,7 +148,7 @@ public class UserServiceTest {
         Assertions.assertEquals(newEmail, user.getEmail());
         Assertions.assertEquals(newAboutMe, user.getAboutMe());
     }
-    
+
     @Test
     public void shouldReturnUserDetails() {
         long desiredId = 1;

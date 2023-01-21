@@ -18,10 +18,30 @@ import org.springframework.web.bind.annotation.RestController;
 public class FollowerController {
     private final FollowerService followerService;
 
-    @PutMapping("/project/{projectId}")
-    void followProject(@PathVariable("projectId") long followingProjectId,
+    @PutMapping("/project/{projectId}/follow")
+    public void followProject(@PathVariable("projectId") long followingProjectId,
                        @AuthenticationPrincipal User user) {
         followerService.followProject(followingProjectId, user.getId());
+    }
+
+    @PutMapping("/user/{followeeId}/follow/")
+    public void followUser(
+            @AuthenticationPrincipal User user,
+            @PathVariable("followeeId") long followeeId) {
+        followerService.followUser(user.getId(), followeeId);
+    }
+
+    @PutMapping("/user/{followeeId}/unfollow")
+    public void unfollowUser(
+            @AuthenticationPrincipal User user,
+            @PathVariable("followeeId") long followeeId) {
+        followerService.unfollowUser(user.getId(), followeeId);
+    }
+
+    @PutMapping("/project/{projectId}/unfollow")
+    public void unfollowProject(@PathVariable("projectId") long followingProjectId,
+                                @AuthenticationPrincipal User user) {
+        followerService.unfollowProject(followingProjectId, user.getId());
     }
     @GetMapping("/project/findSubscribers")
     public Page<User> getUsersByProjectIdAndNicknameValue(

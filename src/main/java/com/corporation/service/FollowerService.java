@@ -20,6 +20,21 @@ public class FollowerService {
     }
 
     @Transactional
+    public void followUser(long followerId, long followeeId) {
+        followerRepository.followUser(followerId, followeeId);
+    }
+
+    @Transactional
+    public void unfollowUser(long followerId, long followeeId) {
+        followerRepository.unfollowUser(followerId, followeeId);
+    }
+
+    @Transactional
+    public void unfollowProject(long projectId, long followerId) {
+        followerRepository.unfollowProject(projectId, followerId);
+    }
+
+    @Transactional
     public Page<User> findProjectSubscribers(long projectId, String keyword, int pageNumber, int pageSize) {
         Pageable page = PageRequest.of(pageNumber, pageSize);
         return followerRepository.findByFollowingProjectsIdAndNicknameContainingIgnoreCaseOrderById(projectId, keyword, page);

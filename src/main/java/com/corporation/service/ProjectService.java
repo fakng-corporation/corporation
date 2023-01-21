@@ -5,6 +5,7 @@ import com.corporation.dto.ProjectDto;
 import com.corporation.mapper.ProjectMapper;
 import com.corporation.model.Project;
 import com.corporation.repository.ProjectRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -57,5 +58,10 @@ public class ProjectService {
     public Page<ProjectDto> getProjectsByTitle(String keyword, int pageNumber, int pageSize) {
         Pageable page = PageRequest.of(pageNumber, pageSize);
         return projectRepository.findByTitleContainingIgnoreCase(keyword, page).map(projectMapper::toDto);
+    }
+
+    @Transactional
+    public long getProjectFollowersAmount(long projectId) {
+        return projectRepository.getProjectFollowersAmount(projectId);
     }
 }

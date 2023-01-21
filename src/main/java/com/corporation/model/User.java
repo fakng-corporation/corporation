@@ -94,6 +94,14 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "follower_id"), inverseJoinColumns = @JoinColumn(name = "project_id"))
     private List<Project> followingProjects;
 
+    @ManyToMany
+    @JoinTable(name = "followers",
+            joinColumns = @JoinColumn(name = "followee_id"), inverseJoinColumns = @JoinColumn(name = "follower_id"))
+    private List<User> followers;
+
+    @ManyToMany(mappedBy = "followers")
+    private List<User> followees;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(new SimpleGrantedAuthority(authority.getAuthority()));
