@@ -4,7 +4,6 @@ import com.corporation.dto.UserDto;
 import com.corporation.exception.NotFoundEntityException;
 import com.corporation.mapper.UserMapperImpl;
 import com.corporation.model.Skill;
-import com.corporation.model.Project;
 import com.corporation.model.User;
 import com.corporation.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
@@ -186,20 +185,5 @@ public class UserServiceTest {
                 .thenReturn(Optional.empty());
 
         Assertions.assertThrows(NotFoundEntityException.class, () -> userService.findById(desiredId));
-    }
-
-    @Test
-    public void shouldReturnUsersByProjectIdAndNicknameValue() {
-        long projectId = 4L;
-        long projectFollowerId = 1l;
-        String searchValue = "User";
-        User user = User.builder().id(projectFollowerId).nickname("User1").build();
-        Project project = Project.builder().id(projectId).title("Project Title").build();
-        user.setProjects(new ArrayList<>(List.of(project)));
-        List<User> expectedUser = List.of(user);
-
-        Mockito.when(userRepository.findByProjectIdAndFollowersNickname(projectId, searchValue)).thenReturn(List.of(user));
-        List<User> actualUser = userService.findByProjectIdAndFieldName(projectId, searchValue);
-        Assertions.assertEquals(expectedUser, actualUser);
     }
 }

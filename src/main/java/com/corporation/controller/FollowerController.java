@@ -1,5 +1,6 @@
 package com.corporation.controller;
 
+import com.corporation.dto.UserDto;
 import com.corporation.model.User;
 import com.corporation.service.FollowerService;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +45,7 @@ public class FollowerController {
         followerService.unfollowProject(followingProjectId, user.getId());
     }
     @GetMapping("/project/findSubscribers")
-    public Page<User> getUsersByProjectIdAndNicknameValue(
+    public Page<UserDto> getProjectSubscribers(
             @RequestParam("projectId") long projectId,
             @RequestParam(value = "keyword", defaultValue = "") String keyword,
             @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber,

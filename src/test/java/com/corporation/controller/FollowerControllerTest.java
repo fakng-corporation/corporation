@@ -1,5 +1,6 @@
 package com.corporation.controller;
 
+import com.corporation.dto.UserDto;
 import com.corporation.model.User;
 import com.corporation.service.FollowerService;
 import org.junit.jupiter.api.Assertions;
@@ -9,6 +10,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+
+import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 public class FollowerControllerTest {
@@ -54,5 +59,20 @@ public class FollowerControllerTest {
 
         followerController.unfollowProject(projectId, follower);
         Mockito.verify(followerService).unfollowProject(projectId, follower.getId());
+    }
+
+    @Test
+    public void shouldReturnUsersByProjectIdAndNickname() {
+        long projectId = 4L;
+        long projectFollowerId = 1l;
+        String keyword = "User";
+        int pageNumber = 2;
+        int pageSize = 3;
+        UserDto userdto = UserDto.builder().id(projectFollowerId).nickname("User1").build();
+        Page<UserDto> expectedResult = new PageImpl<>(List.of(userdto));
+
+        Mockito.when(followerService.findProjectSubscribers(projectId, keyword, pageNumber, pageSize)).thenReturn(expectedResult);
+        Page<UserDto> actualResult = followerController.getProjectSubscribers(projectId, keyword, pageNumber, pageSize);
+        Assertions.assertEquals(expectedResult, actualResult);
     }
 }
