@@ -60,11 +60,4 @@ public class UserController {
             @RequestParam("userAvatar") MultipartFile userAvatar) {
         userService.updateUserAvatar(id, userAvatar);
     }
-
-    @GetMapping("/find/{projectId}/{searchValue}")
-    public List<UserDto> getUsersByProjectIdAndNicknameValue(
-            @PathVariable("projectId") long projectId,
-            @PathVariable("searchValue") String searchValue){
-        return userMapper.toDtoList(userService.findByProjectIdAndFieldName(projectId, searchValue));
-    }
 }

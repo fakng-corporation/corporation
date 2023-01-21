@@ -76,7 +76,4 @@ public class UserService implements UserDetailsService {
                         String.format("User with nickname %s does not exist.", username)
                 ));
     }
-    public List<User> findByProjectIdAndFieldName(long projectId, String searchValue) {
-        return userRepository.findByProjectIdAndFollowersNickname(projectId, searchValue);
-    }
 }
