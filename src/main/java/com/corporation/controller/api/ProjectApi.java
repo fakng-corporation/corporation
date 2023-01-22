@@ -36,4 +36,8 @@ public interface ProjectApi {
             @RequestParam(value = "Маска поиска", defaultValue = "") String keyword,
             @RequestParam(value = "Номер страницы",defaultValue = "0") int pageNumber,
             @RequestParam(value = "Элементов на странице",defaultValue = "10") int pageSize);
+
+    @Operation(summary = "Количество подписчиков проекта", description = "Получение количества подписчиков проекта")
+    @GetMapping("/{projectId}/followersAmount")
+    long getProjectFollowersAmount(@PathVariable("projectId") long projectId);
 }

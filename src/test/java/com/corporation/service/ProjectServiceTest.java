@@ -127,4 +127,14 @@ public class ProjectServiceTest {
         Assertions.assertEquals(page.getContent(), projectDtoList);
 
     }
+
+    @Test
+    public void shouldReturnProjectFollowersAmount() {
+        long projectId = 4L;
+        long projectFollowersAmount = 1l;
+        Mockito.when(projectRepository.getProjectFollowersAmount(projectId)).thenReturn(projectFollowersAmount);
+
+        long actualProjectFollowersAmount = projectService.getProjectFollowersAmount(projectId);
+        Assertions.assertEquals(projectFollowersAmount, actualProjectFollowersAmount);
+    }
 }

@@ -7,7 +7,6 @@ import com.corporation.model.User;
 import com.corporation.service.PostService;
 import com.corporation.service.UserService;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -31,20 +30,12 @@ class PostControllerTest {
     @InjectMocks
     private PostController postController;
 
-    private Long existingId;
-
-    @BeforeEach
-    public void setUp() {
-        existingId = 12L;
-    }
-
     @Test
     void shouldReturnCreatedPostDto() {
-
         long id = 7;
+        boolean isPublished = false;
         String title = "Король Тайтлов";
         String body = "Это всё равно никто не читает, чтобы тут не было написано";
-        boolean isPublished = false;
 
         int desiredId = 1;
         String nickname = "boba";
@@ -79,10 +70,28 @@ class PostControllerTest {
     }
 
     @Test
-    public void shoudDeleteById() {
+    public void shouldDeleteById() {
+        long existingId = 12L;
         Mockito.doNothing().when(postService).deleteById(existingId);
         Assertions.assertDoesNotThrow(() -> postController.deleteById(existingId));
         Mockito.verify(postService, Mockito.times(1)).deleteById(existingId);
     }
 
+    @Test
+    public void shouldUpdateById() {
+        long existingId = 12L;
+        String title = "Title";
+        String body = "Body text";
+        String updatedTitle = "Post title hes been updated";
+        String updatedBody = "Post body has been updated";
+        PostDto existingUpdatePostDto = PostDto.builder().id(existingId).title(title).body(body).build();
+        Post mockUpdatedPost = Post.builder().id(existingId).title(updatedTitle).body(updatedBody).build();
+        PostDto expectedDto = PostDto.builder().id(existingId).title(updatedTitle).body(updatedBody).build();
+
+        Mockito.when(postService.updatePost(existingUpdatePostDto)).thenReturn(mockUpdatedPost);
+        Assertions.assertDoesNotThrow(() -> postController.updatePost(existingUpdatePostDto));
+        Mockito.verify(postService, Mockito.times(1)).updatePost(existingUpdatePostDto);
+        PostDto actualDto = postController.updatePost(existingUpdatePostDto);
+        Assertions.assertEquals(expectedDto, actualDto);
+    }
 }

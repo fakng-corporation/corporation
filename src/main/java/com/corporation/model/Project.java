@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -61,4 +62,7 @@ public class Project {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @ManyToMany(mappedBy = "followingProjects")
+    private List<User> followers;
 }

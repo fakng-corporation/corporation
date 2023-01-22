@@ -2,6 +2,7 @@ package com.corporation.controller;
 
 import com.corporation.dto.ProjectDto;
 import com.corporation.mapper.ProjectMapperImpl;
+import com.corporation.mapper.UserMapper;
 import com.corporation.model.Project;
 import com.corporation.model.User;
 import com.corporation.service.ProjectService;
@@ -32,6 +33,8 @@ public class ProjectControllerTest {
 
     @InjectMocks
     private ProjectController projectController;
+    @Spy
+    private UserMapper userMapper;
 
     @Test
     public void shouldReturnCreatedProjectDto() {
@@ -94,5 +97,15 @@ public class ProjectControllerTest {
 
         Assertions.assertEquals(page.getTotalElements(), projectDtoPage.getTotalElements());
         Assertions.assertEquals(page.getContent(), projectDtoPage.getContent());
+    }
+
+    @Test
+    public void shouldReturnProjectFollowersAmount() {
+        long projectId = 4L;
+        long projectFollowersAmount = 1L;
+        Mockito.when(projectService.getProjectFollowersAmount(projectId)).thenReturn(projectFollowersAmount);
+
+        long actualFollowersAmount = projectController.getProjectFollowersAmount(projectId);
+        Assertions.assertEquals(projectFollowersAmount, actualFollowersAmount);
     }
 }
