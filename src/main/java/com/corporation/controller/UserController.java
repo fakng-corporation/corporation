@@ -18,9 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-/**
- * @author Bleschunov Dmitry
- */
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/user")
