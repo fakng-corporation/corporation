@@ -60,4 +60,9 @@ public class UserController {
             @RequestParam("userAvatar") MultipartFile userAvatar) {
         userService.updateUserAvatar(id, userAvatar);
     }
+
+    @GetMapping("/{id}/followers")
+    public long getUserFollowersAmount(@PathVariable("id") long id) {
+        return userService.getUserFollowersAmount(id);
+    }
 }
