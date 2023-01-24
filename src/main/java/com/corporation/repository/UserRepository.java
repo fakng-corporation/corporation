@@ -19,7 +19,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
     @Query("update User u set u.avatarUrl = :avatarUrl where u.id = :id")
     void updateUserAvatarById(long id, String avatarUrl);
 
-    @Query(nativeQuery = true, value = "select u.followers from User u where u.id = :userId")
+    @Query(nativeQuery = true, value = "select COUNT(id) from followers where followee_id = :userId")
     long getUserFollowersAmount(long userId);
 
     Optional<User> findByNickname(String nickname);

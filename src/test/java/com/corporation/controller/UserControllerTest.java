@@ -149,17 +149,16 @@ public class UserControllerTest {
 
     @Test
     public void shouldReturnFollowersAmountById() {
-        User plug = new User();
         long desiredId = 1;
-        List<User> newFollowers = List.of(plug, plug, plug);
+        long followersAmount = 3;
 
         Mockito.when(userService.getUserFollowersAmount(desiredId))
-                .thenReturn((long) newFollowers.size());
+                .thenReturn(followersAmount);
 
-        long followersAmount = userController.getUserFollowersAmount(desiredId);
+        long followersReceived = userController.getUserFollowersAmount(desiredId);
 
         Mockito.verify(userService).getUserFollowersAmount(desiredId);
 
-        Assertions.assertEquals(newFollowers.size(), followersAmount);
+        Assertions.assertEquals(followersAmount, followersReceived);
     }
 }
