@@ -23,5 +23,8 @@ public interface FollowerRepository extends JpaRepository<User, Long> {
     @Modifying
     @Query(nativeQuery = true, value = "DELETE FROM project_followers WHERE project_id= :projectId and follower_id = :followerId")
     void unfollowProject(long projectId, long followerId);
-    Page<User> findByFollowingProjectsIdAndNicknameContainingIgnoreCaseOrderById(long projectId, String keyword, Pageable page);
+
+    @Query(value =
+            "SELECT u FROM User AS u JOIN u.followingProjects as p WHERE u.nickname LIKE %:keyword% AND p.id=:projectId GROUP BY u.id ORDER BY u.id")
+    Page<User> findProjectSubscribers(long projectId, String keyword, Pageable page);
 }

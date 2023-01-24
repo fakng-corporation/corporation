@@ -7,8 +7,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 
-import java.util.List;
-
 /**
  * @author Bleschunov Dmitry
  */
@@ -18,5 +16,4 @@ public interface UserMapper {
     void updateEntity(UserDto userDto, @MappingTarget User user);
     UserDto toDto(User user);
     User toEntity(UserDto userDto);
-    List<UserDto> toDtoList(List<User> user);
 }

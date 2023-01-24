@@ -44,9 +44,9 @@ public class FollowerController {
                                 @AuthenticationPrincipal User user) {
         followerService.unfollowProject(followingProjectId, user.getId());
     }
-    @GetMapping("/project/findSubscribers")
+    @GetMapping("/project/{id}/subscribers")
     public Page<UserDto> getProjectSubscribers(
-            @RequestParam("projectId") long projectId,
+            @PathVariable("id") long projectId,
             @RequestParam(value = "keyword", defaultValue = "") String keyword,
             @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber,
             @RequestParam(value = "pageSize", defaultValue = "10") int pageSize){

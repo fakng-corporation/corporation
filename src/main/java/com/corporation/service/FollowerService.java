@@ -39,6 +39,6 @@ public class FollowerService {
     @Transactional
     public Page<UserDto> findProjectSubscribers(long projectId, String keyword, int pageNumber, int pageSize) {
         Pageable page = PageRequest.of(pageNumber, pageSize);
-        return followerRepository.findByFollowingProjectsIdAndNicknameContainingIgnoreCaseOrderById(projectId, keyword, page).map(userMapper::toDto);
+        return followerRepository.findProjectSubscribers(projectId, keyword, page).map(userMapper::toDto);
     }
 }

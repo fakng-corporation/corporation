@@ -68,8 +68,8 @@ public class FollowerControllerTest {
         String keyword = "User";
         int pageNumber = 2;
         int pageSize = 3;
-        UserDto userdto = UserDto.builder().id(projectFollowerId).nickname("User1").build();
-        Page<UserDto> expectedResult = new PageImpl<>(List.of(userdto));
+        UserDto userDto = UserDto.builder().id(projectFollowerId).nickname("User1").build();
+        Page<UserDto> expectedResult = new PageImpl<>(List.of(userDto));
 
         Mockito.when(followerService.findProjectSubscribers(projectId, keyword, pageNumber, pageSize)).thenReturn(expectedResult);
         Page<UserDto> actualResult = followerController.getProjectSubscribers(projectId, keyword, pageNumber, pageSize);

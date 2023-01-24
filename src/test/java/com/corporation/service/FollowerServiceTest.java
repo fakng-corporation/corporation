@@ -28,7 +28,6 @@ public class FollowerServiceTest {
     private FollowerService followerService;
 
     @Spy
-    @InjectMocks
     private UserMapper userMapper = Mappers.getMapper(UserMapper.class);
 
     @Test
@@ -78,11 +77,11 @@ public class FollowerServiceTest {
         int pageNumber = 2;
         int pageSize = 3;
         Pageable page = PageRequest.of(pageNumber, pageSize);
-        UserDto userdto = userMapper.toDto(user);
+        UserDto userDto = userMapper.toDto(user);
 
-        Mockito.when(followerRepository.findByFollowingProjectsIdAndNicknameContainingIgnoreCaseOrderById(projectId, keyword, page))
+        Mockito.when(followerRepository.findProjectSubscribers(projectId, keyword, page))
                 .thenReturn(new PageImpl<>(List.of(user)));
         Page<UserDto> actualResult = followerService.findProjectSubscribers(projectId, keyword, pageNumber, pageSize);
-        Assertions.assertEquals(new PageImpl<>(List.of(userdto)), actualResult);
+        Assertions.assertEquals(new PageImpl<>(List.of(userDto)), actualResult);
     }
 }
