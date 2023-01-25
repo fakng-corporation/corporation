@@ -52,4 +52,13 @@ public class FollowerController {
             @RequestParam(value = "pageSize", defaultValue = "10") int pageSize){
         return followerService.findProjectSubscribers(projectId, keyword, pageNumber, pageSize);
     }
+
+    @GetMapping("/user/{id}/subscribers")
+    public Page<UserDto> getUserSubscribers(
+            @PathVariable("id") long userId,
+            @RequestParam(value = "keyword", defaultValue = "") String keyword,
+            @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = "10") int pageSize){
+        return followerService.findUserSubscribers(userId, keyword, pageNumber, pageSize);
+    }
 }

@@ -27,4 +27,7 @@ public interface FollowerRepository extends JpaRepository<User, Long> {
     @Query(value =
             "SELECT u FROM User AS u JOIN u.followingProjects as p WHERE u.nickname LIKE %:keyword% AND p.id=:projectId GROUP BY u.id ORDER BY u.id")
     Page<User> findProjectSubscribers(long projectId, String keyword, Pageable page);
+
+    @Query("SELECT u FROM User AS u JOIN u.followees AS f WHERE u.nickname LIKE %:keyword% AND f.id = :userId GROUP BY u.id ORDER BY u.id")
+    Page<User> findUserSubscribers(long userId, String keyword, Pageable page);
 }
