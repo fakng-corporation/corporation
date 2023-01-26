@@ -44,7 +44,7 @@ public class FollowerController {
                                 @AuthenticationPrincipal User user) {
         followerService.unfollowProject(followingProjectId, user.getId());
     }
-    @GetMapping("/project/{id}/subscribers")
+    @GetMapping("/project/{id}/followers")
     public Page<UserDto> getProjectSubscribers(
             @PathVariable("id") long projectId,
             @RequestParam(value = "keyword", defaultValue = "") String keyword,
@@ -53,7 +53,7 @@ public class FollowerController {
         return followerService.findProjectSubscribers(projectId, keyword, pageNumber, pageSize);
     }
 
-    @GetMapping("/user/{id}/subscribers")
+    @GetMapping("/user/{id}/followers")
     public Page<UserDto> getUserSubscribers(
             @PathVariable("id") long userId,
             @RequestParam(value = "keyword", defaultValue = "") String keyword,
