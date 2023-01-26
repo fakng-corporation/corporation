@@ -146,4 +146,19 @@ public class UserControllerTest {
 
         Assertions.assertThrows(NotFoundEntityException.class, () -> userController.getUserById(desiredId));
     }
+
+    @Test
+    public void shouldReturnFollowersAmountById() {
+        long desiredId = 1;
+        long followersAmount = 3;
+
+        Mockito.when(userService.getUserFollowersAmount(desiredId))
+                .thenReturn(followersAmount);
+
+        long followersReceived = userController.getUserFollowersAmount(desiredId);
+
+        Mockito.verify(userService).getUserFollowersAmount(desiredId);
+
+        Assertions.assertEquals(followersAmount, followersReceived);
+    }
 }
