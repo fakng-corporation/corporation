@@ -125,10 +125,10 @@ public class TeamService {
         invite.ifPresentOrElse(inviteToTeam -> {
             if (inviteToTeam.getRecipientId() == userId) {
                 inviteToTeamRepository.addToTeam(userId, inviteToTeam.getTeamId());
-                inviteToTeamRepository.delete(invite.get());
+                inviteToTeamRepository.deleteById(inviteToTeam.getId());
             } else {
-                throw new NotFoundEntityException(
-                        "Invite does not exist.");
+                throw new NotEnoughPermissionException(
+                        "You don't have permission to use this invite");
             }
         }, () -> {
             throw new NotFoundEntityException(
