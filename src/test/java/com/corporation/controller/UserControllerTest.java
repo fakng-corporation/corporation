@@ -161,4 +161,20 @@ public class UserControllerTest {
 
         Assertions.assertEquals(followersAmount, followersReceived);
     }
+
+    @Test
+    public void shouldReturnUserFolloweesList() {
+        long desiredId = 2;
+        User followee = new User();
+        List<User> newUserFollowees = List.of(followee, followee, followee);
+
+        Mockito.when(userService.getUserFollowees(desiredId))
+                .thenReturn(newUserFollowees);
+
+        List<User> receivedFollowees = userController.getUserFollowees(desiredId);
+
+        Mockito.verify(userService).getUserFollowees(desiredId);
+
+        Assertions.assertEquals(newUserFollowees, receivedFollowees);
+    }
 }
