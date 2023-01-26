@@ -81,4 +81,10 @@ public class UserService implements UserDetailsService {
     public long getUserFollowersAmount(long userId) {
         return userRepository.getUserFollowersAmount(userId);
     }
+
+    @Transactional
+    public Page<UserDto> getUserFollowees(long userId, int page, int pageSize) {
+        return userRepository.getUserFollowees(userId, PageRequest.of(page, pageSize))
+                .map(userMapper::toDto);
+    }
 }

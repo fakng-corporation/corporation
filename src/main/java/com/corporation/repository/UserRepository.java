@@ -22,6 +22,11 @@ public interface UserRepository extends CrudRepository<User, Long> {
     @Query(nativeQuery = true, value = "select COUNT(id) from followers where followee_id = :userId")
     long getUserFollowersAmount(long userId);
 
+    @Query(nativeQuery = true, value = "select u.* from User as u " +
+            "join followers as subs on u.id = subs.followee_id " +
+            "where subs.follower_id = :userId")
+    Page<User> getUserFollowees(long userId, Pageable pageable);
+
     Optional<User> findByNickname(String nickname);
     Page<User> findByNicknameContainingIgnoreCase(String query, Pageable pageable);
     Optional<User> findByNicknameOrEmail(String nickname, String email);

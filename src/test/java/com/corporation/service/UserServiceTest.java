@@ -199,4 +199,26 @@ public class UserServiceTest {
 
         Assertions.assertEquals(followersAmount, followersReceived);
     }
+
+    @Test
+    public void shouldReturnUserFolloweesList() {
+        long desireId = 2;
+        int page = 0;
+        int pageSize = 5;
+        Page<User> newUserFollowees = new PageImpl<>(new ArrayList<>() {{
+            add(new User());
+            add(new User());
+            add(new User());
+            add(new User());
+            add(new User());
+        }});
+        Pageable pageable = PageRequest.of(page, pageSize);
+
+        Mockito.when(userRepository.getUserFollowees(desireId, pageable))
+                .thenReturn(newUserFollowees);
+
+        Page<UserDto> receivedFollowees = userService.getUserFollowees(desireId, page, pageSize);
+
+        Assertions.assertEquals(newUserFollowees.map(userMapper::toDto), receivedFollowees);
+    }
 }

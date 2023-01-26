@@ -65,4 +65,12 @@ public class UserController {
     public long getUserFollowersAmount(@PathVariable("id") long id) {
         return userService.getUserFollowersAmount(id);
     }
+
+    @GetMapping("/{id}/followees")
+    public Page<UserDto> getUserFollowees(
+            @PathVariable("id") long id,
+            @RequestParam("page") int page,
+            @RequestParam("size") int pageSize) {
+        return userService.getUserFollowees(id, page, pageSize);
+    }
 }
