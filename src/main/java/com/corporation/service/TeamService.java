@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -81,7 +82,24 @@ public class TeamService {
         // Доработать после добавления прав!!!!
         if (owner.getId() == senderId) {
             User recipient = userService.findById(userId);
-            messageEventPublisher.inviteUserToTeamEvent(owner, recipient, team);
+
+            String code = UUID.randomUUID().toString();
+            InviteToTeam inviteToTeam = InviteToTeam.builder()
+                    .senderId(senderId)
+                    .recipientId(userId)
+                    .teamId(teamId)
+                    .code(code)
+                    .build();
+            inviteToTeamRepository.save(inviteToTeam);
+
+            String subject = "Invite to Team";
+            String body = String.format(
+                    "You were invited to team %s %s. Use code: %s",
+                    team.getTitle(),
+                    team.getDescription(),
+                    code);
+
+            messageEventPublisher.sendMessage(owner, recipient, body, subject);
         } else {
             throw new NotEnoughPermissionException(
                     String.format("You don't have " +

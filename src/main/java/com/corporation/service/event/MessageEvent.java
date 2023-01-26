@@ -1,7 +1,5 @@
 package com.corporation.service.event;
 
-import com.corporation.model.Team;
-
 import com.corporation.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,10 +10,11 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class InviteEvent {
+public class MessageEvent {
 
     private User sender;
     private User recipient;
-    private Team team;
+    private String body;
+    private String subject;
 
 }

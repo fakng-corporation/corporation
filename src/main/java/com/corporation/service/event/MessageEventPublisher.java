@@ -1,6 +1,5 @@
 package com.corporation.service.event;
 
-import com.corporation.model.Team;
 import com.corporation.model.User;
 import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -12,8 +11,9 @@ public class MessageEventPublisher {
 
     private ApplicationEventPublisher applicationEventPublisher;
 
-    public void inviteUserToTeamEvent(User sender, User recipient, Team team) {
-        InviteEvent inviteEvent = new InviteEvent(sender, recipient, team);
-        applicationEventPublisher.publishEvent(inviteEvent);
+    public void sendMessage(User sender, User recipient, String body, String subject) {
+        MessageEvent messageEvent =
+                new MessageEvent(sender, recipient, body, subject);
+        applicationEventPublisher.publishEvent(messageEvent);
     }
 }
