@@ -81,4 +81,9 @@ public class UserService implements UserDetailsService {
     public long getUserFollowersAmount(long userId) {
         return userRepository.getUserFollowersAmount(userId);
     }
+
+    @Transactional
+    public List<User> getUserFollowees(long userId) {
+        return userRepository.getUserFollowees(userId);
+    }
 }

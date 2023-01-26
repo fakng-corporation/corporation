@@ -65,4 +65,9 @@ public class UserController {
     public long getUserFollowersAmount(@PathVariable("id") long id) {
         return userService.getUserFollowersAmount(id);
     }
+
+    @GetMapping("/{id}/followees")
+    public List<User> getUserFollowees(@PathVariable("id") long id) {
+        return userService.getUserFollowees(id);
+    }
 }

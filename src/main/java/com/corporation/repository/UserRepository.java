@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -21,6 +22,11 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     @Query(nativeQuery = true, value = "select COUNT(id) from followers where followee_id = :userId")
     long getUserFollowersAmount(long userId);
+
+    @Query(nativeQuery = true, value = "select u.* from User as u " +
+            "join followers as subs on u.id = subs.followee_id " +
+            "where subs.follower_id = :userId")
+    List<User> getUserFollowees(long userId);
 
     Optional<User> findByNickname(String nickname);
     Page<User> findByNicknameContainingIgnoreCase(String query, Pageable pageable);
