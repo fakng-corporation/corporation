@@ -199,4 +199,18 @@ public class UserServiceTest {
 
         Assertions.assertEquals(followersAmount, followersReceived);
     }
+
+    @Test
+    public void shouldReturnUserFolloweesList() {
+        long desireId = 2;
+        User followees = new User();
+        List<User> newUserFollowees = List.of(followees, followees);
+
+        Mockito.when(userRepository.getUserFollowees(desireId))
+                .thenReturn(newUserFollowees);
+
+        List<User> receivedFollowees = userService.getUserFollowees(desireId);
+
+        Assertions.assertEquals(newUserFollowees, receivedFollowees);
+    }
 }
