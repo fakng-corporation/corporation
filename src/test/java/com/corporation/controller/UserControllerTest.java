@@ -165,15 +165,22 @@ public class UserControllerTest {
     @Test
     public void shouldReturnUserFolloweesList() {
         long desiredId = 2;
-        User followee = new User();
-        List<User> newUserFollowees = List.of(followee, followee, followee);
+        int page = 0;
+        int pageSize = 5;
+        Page<UserDto> newUserFollowees = new PageImpl<>(new ArrayList<>() {{
+            add(userMapper.toDto(new User()));
+            add(userMapper.toDto(new User()));
+            add(userMapper.toDto(new User()));
+            add(userMapper.toDto(new User()));
+            add(userMapper.toDto(new User()));
+        }});
 
-        Mockito.when(userService.getUserFollowees(desiredId))
+        Mockito.when(userService.getUserFollowees(desiredId, page, pageSize))
                 .thenReturn(newUserFollowees);
 
-        List<User> receivedFollowees = userController.getUserFollowees(desiredId);
+        Page<UserDto> receivedFollowees = userController.getUserFollowees(desiredId, page, pageSize);
 
-        Mockito.verify(userService).getUserFollowees(desiredId);
+        Mockito.verify(userService).getUserFollowees(desiredId, page, pageSize);
 
         Assertions.assertEquals(newUserFollowees, receivedFollowees);
     }
