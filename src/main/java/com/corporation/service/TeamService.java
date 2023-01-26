@@ -77,7 +77,6 @@ public class TeamService {
     public void inviteUserToTeam(long senderId, long teamId, long userId) {
         Team team = findById(teamId);
         User owner = team.getProject().getOwner();
-        // Проверяем имеет ли сендер права на приглашение пользователей
         // Сейчас сравнивается владелец команды проекта и сендер
         // Доработать после добавления прав!!!!
         if (owner.getId() == senderId) {
