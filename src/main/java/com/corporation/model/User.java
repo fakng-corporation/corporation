@@ -86,7 +86,10 @@ public class User implements UserDetails {
     private List<Project> projects;
 
     @OneToMany(mappedBy = "sender")
-    private List<Message> messages;
+    private List<Message> outboxMessages;
+
+    @OneToMany(mappedBy = "recipient")
+    private List<Message> inboxMessages;
 
     @OneToMany(mappedBy = "user")
     private List<Post> posts;

@@ -15,7 +15,7 @@ import lombok.Setter;
 public class InviteEvent {
 
     private User sender;
-    private long userId;
+    private User recipient;
     private Team team;
 
 }

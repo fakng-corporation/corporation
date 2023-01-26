@@ -12,8 +12,8 @@ public class MessageEventPublisher {
 
     private ApplicationEventPublisher applicationEventPublisher;
 
-    public void inviteUserToTeamEvent(User sender, long userId, Team team) {
-        InviteEvent inviteEvent = new InviteEvent(sender, userId, team);
+    public void inviteUserToTeamEvent(User sender, User recipient, Team team) {
+        InviteEvent inviteEvent = new InviteEvent(sender, recipient, team);
         applicationEventPublisher.publishEvent(inviteEvent);
     }
 }

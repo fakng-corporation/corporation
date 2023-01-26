@@ -32,13 +32,14 @@ public class MessageService {
         Message message = Message.builder()
                 .body(body)
                 .sender(inviteEvent.getSender())
+                .recipient(inviteEvent.getRecipient())
                 .subject(subject)
                 .build();
         save(message);
 
         InviteToTeam inviteToTeam = InviteToTeam.builder()
                 .senderId(inviteEvent.getSender().getId())
-                .recipientId(inviteEvent.getUserId())
+                .recipientId(inviteEvent.getRecipient().getId())
                 .teamId(inviteEvent.getTeam().getId())
                 .code(code)
                 .build();

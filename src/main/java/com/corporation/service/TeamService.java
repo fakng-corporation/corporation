@@ -20,7 +20,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -81,7 +80,8 @@ public class TeamService {
         // Сейчас сравнивается владелец команды проекта и сендер
         // Доработать после добавления прав!!!!
         if (owner.getId() == senderId) {
-            messageEventPublisher.inviteUserToTeamEvent(owner, userId, team);
+            User recipient = userService.findById(userId);
+            messageEventPublisher.inviteUserToTeamEvent(owner, recipient, team);
         } else {
             throw new NotEnoughPermissionException(
                     String.format("You don't have " +
@@ -106,12 +106,13 @@ public class TeamService {
     public void acceptInvite(long userId, String code) {
         Optional<InviteToTeam> invite = inviteToTeamRepository.findByCode(code);
         invite.ifPresentOrElse(inviteToTeam -> {
-            Team team = findById(inviteToTeam.getTeamId());
-            User user = userService.findById(userId);
-            List<User> users = team.getUsers();
-            users.add(user);
-            team.setUsers(users);
-            inviteToTeamRepository.delete(invite.get());
+            if (inviteToTeam.getRecipientId() == userId) {
+                inviteToTeamRepository.addToTeam(userId, inviteToTeam.getTeamId());
+                inviteToTeamRepository.delete(invite.get());
+            } else {
+                throw new NotFoundEntityException(
+                        "Invite does not exist.");
+            }
         }, () -> {
             throw new NotFoundEntityException(
                     "Invite does not exist.");
