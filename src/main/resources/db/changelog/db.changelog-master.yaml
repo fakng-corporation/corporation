@@ -31,3 +31,7 @@ databaseChangeLog:
       file: db/changelog/init-project-followers.sql
   - include:
       file: db/changelog/init-followers.sql
+  - include:
+      file: db/changelog/init-user-team.sql
+  - include:
+      file: db/changelog/init-message-invite.sql

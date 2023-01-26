@@ -9,12 +9,14 @@ import org.mapstruct.MappingTarget;
 @Mapper(componentModel = "spring")
 public interface TeamMapper {
 
+    @Mapping(target = "users", ignore = true)
     @Mapping(target = "project", ignore = true)
     Team toEntity(TeamDto teamDto);
 
     @Mapping(source = "project.id", target = "projectId")
     TeamDto toDto(Team team);
 
+    @Mapping(target = "users", ignore = true)
     @Mapping(target = "project", ignore = true)
     void updateFromDto(TeamDto teamDto, @MappingTarget Team team);
 }

@@ -13,8 +13,8 @@ public class ProjectController implements ProjectApi {
 
     private final ProjectService projectService;
 
-    public ProjectDto addProject(ProjectDto projectDto) {
-        return projectService.add(projectDto);
+    public ProjectDto addProject(ProjectDto projectDto, long ownerId) {
+        return projectService.add(projectDto, ownerId);
     }
 
     @Override

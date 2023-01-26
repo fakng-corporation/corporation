@@ -54,7 +54,7 @@ public class ProjectServiceTest {
                 .thenReturn(owner);
         Mockito.when(projectRepository.save(project))
                 .thenReturn(project);
-        ProjectDto returnedProject = projectService.add(projectDto);
+        ProjectDto returnedProject = projectService.add(projectDto, ownerId);
 
         Assertions.assertEquals(projectId, returnedProject.getId());
         Assertions.assertEquals(title, returnedProject.getTitle());

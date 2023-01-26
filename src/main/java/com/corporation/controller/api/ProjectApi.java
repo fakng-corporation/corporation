@@ -4,6 +4,7 @@ import com.corporation.dto.ProjectDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,11 +19,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface ProjectApi {
 
     @Operation(summary = "Регистрация нового проекта", description = "Позволяет создать новый проект")
-    @PutMapping
-    ProjectDto addProject(@RequestBody ProjectDto projectDto);
+    @PostMapping
+    ProjectDto addProject(@RequestBody ProjectDto projectDto, @AuthenticationPrincipal(expression = "id") long ownerId);
 
     @Operation(summary = "Изменение проекта", description = "Позволяет внести изменения в проект")
-    @PostMapping
+    @PutMapping
     ProjectDto updateProject(@RequestBody ProjectDto projectDto);
 
     @Operation(summary = "Удаление проекта", description = "Позволяет удалить проект по Id")

@@ -1,5 +1,6 @@
 package com.corporation.model;
 
+import com.corporation.model.service.Message;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -73,8 +74,22 @@ public class User implements UserDetails {
     )
     private List<Skill> skills;
 
+    @ManyToMany
+    @JoinTable(
+            name = "user_team",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "team_id")
+    )
+    private List<Team> teams;
+
     @OneToMany(mappedBy = "owner")
     private List<Project> projects;
+
+    @OneToMany(mappedBy = "sender")
+    private List<Message> outboxMessages;
+
+    @OneToMany(mappedBy = "recipient")
+    private List<Message> inboxMessages;
 
     @OneToMany(mappedBy = "user")
     private List<Post> posts;

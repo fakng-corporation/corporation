@@ -2,8 +2,10 @@ package com.corporation.controller.api;
 
 import com.corporation.dto.TeamDto;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,11 +20,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface TeamApi {
 
     @Operation(summary = "Создание новой команды", description = "Позволяет создать новую команду в проекте")
-    @PutMapping
+    @PostMapping
     TeamDto addTeam(@RequestBody TeamDto teamDto);
 
     @Operation(summary = "Изменение команды", description = "Позволяет изменить атрибуты команды в проекте")
-    @PostMapping
+    @PutMapping
     TeamDto updateTeam(@RequestBody TeamDto teamDto);
 
     @Operation(summary = "Удаление команды", description = "Позволяет удалить команду по Id")
@@ -36,4 +38,28 @@ public interface TeamApi {
             @RequestParam(value = "Маска поиска", defaultValue = "") String keyword,
             @RequestParam(value = "Номер страницы", defaultValue = "0") int pageNumber,
             @RequestParam(value = "Элементов на странице", defaultValue = "10") int pageSize);
+
+    @Operation(summary = "Приглашение пользователя в команду",
+            description = "Отправляет пользователю приглашение в команду в проекте")
+    @PostMapping("/{id}")
+    void inviteToTeam(@AuthenticationPrincipal(expression = "id") long senderId,
+                      @PathVariable("id") long teamId,
+                      @RequestParam(value = "ID пользователя") long inviteUserId);
+
+    @Operation(
+            summary = "Активация кода приглашения в команду",
+            description = "Позволяет активировать код, полученный по приглашению"
+    )
+    @PostMapping("/invite/{code}")
+    void acceptInvite(@AuthenticationPrincipal(expression = "id") long userId,
+                      @Parameter(description = "Указать код для активации пользователя", required = true)
+                            @PathVariable String code);
+
+    @Operation(
+            summary = "Получение команды по ID",
+            description = "Позволяет получить команду по ID"
+    )
+    @GetMapping("/{id}")
+    TeamDto getTeam(@Parameter(description = "Укажите ID команды", required = true)
+                    @PathVariable long id);
 }
