@@ -76,4 +76,9 @@ public class UserService implements UserDetailsService {
                         String.format("User with nickname %s does not exist.", username)
                 ));
     }
+
+    @Transactional
+    public long getUserFollowersAmount(long userId) {
+        return userRepository.getUserFollowersAmount(userId);
+    }
 }
