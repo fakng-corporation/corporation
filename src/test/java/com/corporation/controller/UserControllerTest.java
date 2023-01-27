@@ -146,4 +146,42 @@ public class UserControllerTest {
 
         Assertions.assertThrows(NotFoundEntityException.class, () -> userController.getUserById(desiredId));
     }
+
+    @Test
+    public void shouldReturnFollowersAmountById() {
+        long desiredId = 1;
+        long followersAmount = 3;
+
+        Mockito.when(userService.getUserFollowersAmount(desiredId))
+                .thenReturn(followersAmount);
+
+        long followersReceived = userController.getUserFollowersAmount(desiredId);
+
+        Mockito.verify(userService).getUserFollowersAmount(desiredId);
+
+        Assertions.assertEquals(followersAmount, followersReceived);
+    }
+
+    @Test
+    public void shouldReturnUserFolloweesList() {
+        long desiredId = 2;
+        int page = 0;
+        int pageSize = 5;
+        Page<UserDto> newUserFollowees = new PageImpl<>(new ArrayList<>() {{
+            add(userMapper.toDto(new User()));
+            add(userMapper.toDto(new User()));
+            add(userMapper.toDto(new User()));
+            add(userMapper.toDto(new User()));
+            add(userMapper.toDto(new User()));
+        }});
+
+        Mockito.when(userService.getUserFollowees(desiredId, page, pageSize))
+                .thenReturn(newUserFollowees);
+
+        Page<UserDto> receivedFollowees = userController.getUserFollowees(desiredId, page, pageSize);
+
+        Mockito.verify(userService).getUserFollowees(desiredId, page, pageSize);
+
+        Assertions.assertEquals(newUserFollowees, receivedFollowees);
+    }
 }

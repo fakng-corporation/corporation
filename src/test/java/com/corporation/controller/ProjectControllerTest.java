@@ -4,6 +4,7 @@ import com.corporation.dto.ProjectDto;
 import com.corporation.mapper.ProjectMapperImpl;
 import com.corporation.mapper.UserMapper;
 import com.corporation.model.Project;
+import com.corporation.model.User;
 import com.corporation.service.ProjectService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -40,15 +41,17 @@ public class ProjectControllerTest {
 
         long id = 777;
         String title = "bigproject";
+        long ownerId = 7;
 
         Project project = Project.builder().title(title).build();
+        User owner = User.builder().id(ownerId).build();
         ProjectDto projectDto = projectMapper.toDto(project);
-        Project projectWithId = Project.builder().id(id).title(title).build();
+        Project projectWithId = Project.builder().owner(owner).id(id).title(title).build();
         ProjectDto addedProjectDto = projectMapper.toDto(projectWithId);
 
-        Mockito.when(projectService.add(projectDto)).thenReturn(addedProjectDto);
+        Mockito.when(projectService.add(projectDto, ownerId)).thenReturn(addedProjectDto);
 
-        ProjectDto createdProjectDto = projectController.addProject(projectDto);
+        ProjectDto createdProjectDto = projectController.addProject(projectDto, ownerId);
 
         Assertions.assertEquals(id, createdProjectDto.getId());
         Assertions.assertEquals(title, createdProjectDto.getTitle());
