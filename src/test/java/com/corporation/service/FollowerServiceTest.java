@@ -79,9 +79,9 @@ public class FollowerServiceTest {
         Pageable page = PageRequest.of(pageNumber, pageSize);
         UserDto userDto = userMapper.toDto(user);
 
-        Mockito.when(followerRepository.findProjectSubscribers(projectId, keyword, page))
+        Mockito.when(followerRepository.findProjectFollowers(projectId, keyword, page))
                 .thenReturn(new PageImpl<>(List.of(user)));
-        Page<UserDto> actualResult = followerService.findProjectSubscribers(projectId, keyword, pageNumber, pageSize);
+        Page<UserDto> actualResult = followerService.findProjectFollowers(projectId, keyword, pageNumber, pageSize);
         Assertions.assertEquals(new PageImpl<>(List.of(userDto)), actualResult);
     }
 
@@ -96,9 +96,9 @@ public class FollowerServiceTest {
         Pageable page = PageRequest.of(pageNumber, pageSize);
         UserDto userDto = userMapper.toDto(user);
 
-        Mockito.when(followerRepository.findUserSubscribers(userId, keyword, page))
+        Mockito.when(followerRepository.findUserFollowers(userId, keyword, page))
                 .thenReturn(new PageImpl<>(List.of(user)));
-        Page<UserDto> actualResult = followerService.findUserSubscribers(userId, keyword, pageNumber, pageSize);
+        Page<UserDto> actualResult = followerService.findUserFollowers(userId, keyword, pageNumber, pageSize);
         Assertions.assertEquals(new PageImpl<>(List.of(userDto)), actualResult);
     }
 }
