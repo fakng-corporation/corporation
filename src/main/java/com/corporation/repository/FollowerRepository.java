@@ -24,10 +24,11 @@ public interface FollowerRepository extends JpaRepository<User, Long> {
     @Query(nativeQuery = true, value = "DELETE FROM project_followers WHERE project_id= :projectId and follower_id = :followerId")
     void unfollowProject(long projectId, long followerId);
 
-    @Query(value =
-            "SELECT u FROM User AS u JOIN u.followingProjects as p WHERE u.nickname LIKE %:keyword% AND p.id=:projectId GROUP BY u.id ORDER BY u.id")
+    @Query(nativeQuery = true, value =
+            "SELECT u.* FROM \"user\" AS u JOIN project_followers AS pf ON u.id = pf.follower_id WHERE project_id=:projectId AND u.nickname LIKE %:keyword% ORDER BY u.id")
     Page<User> findProjectFollowers(long projectId, String keyword, Pageable page);
 
-    @Query("SELECT u FROM User AS u WHERE u.id IN (SELECT f.id FROM User AS u join u.followers as f where u.id = :userId) AND u.nickname LIKE %:keyword% ORDER BY u.id")
+    @Query(nativeQuery = true, value =
+            "SELECT u.* FROM \"user\" AS u JOIN followers AS f ON u.id = f.follower_id WHERE followee_id = :userId AND u.nickname LIKE %:keyword% ORDER BY u.id")
     Page<User> findUserFollowers(long userId, String keyword, Pageable page);
 }
