@@ -163,7 +163,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void shouldReturnUserFolloweesList() {
+    public void shouldReturnUserFolloweesPage() {
         long desiredId = 2;
         int page = 0;
         int pageSize = 5;

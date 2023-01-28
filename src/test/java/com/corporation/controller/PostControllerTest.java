@@ -14,6 +14,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+
+import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 class PostControllerTest {
@@ -93,5 +97,23 @@ class PostControllerTest {
         Mockito.verify(postService, Mockito.times(1)).updatePost(existingUpdatePostDto);
         PostDto actualDto = postController.updatePost(existingUpdatePostDto);
         Assertions.assertEquals(expectedDto, actualDto);
+    }
+
+    @Test
+    public void shouldReturnUserPostsPage() {
+        long desiredId = 1;
+        int page = 2;
+        int pageSize = 5;
+        Page<PostDto> newUserPosts = new PageImpl<>(
+                List.of(postMapper.toDto(new Post()), postMapper.toDto(new Post()))
+        );
+
+        Mockito.when(postService.getUserPostsById(desiredId, page, pageSize))
+                .thenReturn(newUserPosts);
+        Page<PostDto> receivedPosts = postController.getUserPostsById(desiredId, page, pageSize);
+
+        Mockito.verify(postService).getUserPostsById(desiredId, page, pageSize);
+
+        Assertions.assertEquals(newUserPosts, receivedPosts);
     }
 }

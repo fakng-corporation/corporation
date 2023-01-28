@@ -14,7 +14,12 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
@@ -91,5 +96,22 @@ public class PostServiceTest {
                 String.format("Post %d does not exist", notExistingUpdatePostDto.getId())
         ));
         Assertions.assertThrows(NotFoundEntityException.class, () -> postService.updatePost(notExistingUpdatePostDto));
+    }
+
+    @Test
+    public void shouldReturnUserPostsPage() {
+        long desireId = 1;
+        int page = 2;
+        int pageSize = 5;
+        Page<Post> newUserPosts = new PageImpl<>(
+                List.of(new Post(), new Post(), new Post())
+        );
+        Pageable pageable = PageRequest.of(page, pageSize);
+
+        Mockito.when(postRepository.getUserPostsById(desireId, pageable))
+                .thenReturn(newUserPosts);
+        Page<PostDto> receivedPosts = postService.getUserPostsById(desireId, page, pageSize);
+
+        Assertions.assertEquals(newUserPosts.map(postMapper::toDto), receivedPosts);
     }
 }

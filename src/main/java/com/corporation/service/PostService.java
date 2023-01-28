@@ -7,6 +7,8 @@ import com.corporation.model.Post;
 import com.corporation.repository.PostRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 
@@ -20,6 +22,12 @@ public class PostService {
     public Post savePostDraft(Post post) {
         post.setPublished(false);
         return postRepository.save(post);
+    }
+
+    @Transactional
+    public Page<PostDto> getUserPostsById(long userId, int page, int pageSize) {
+        return postRepository.getUserPostsById(userId, PageRequest.of(page, pageSize))
+                .map(postMapper::toDto);
     }
 
     @Transactional

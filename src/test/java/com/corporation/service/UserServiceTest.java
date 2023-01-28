@@ -201,7 +201,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void shouldReturnUserFolloweesList() {
+    public void shouldReturnUserFolloweesPage() {
         long desireId = 2;
         int page = 0;
         int pageSize = 5;
