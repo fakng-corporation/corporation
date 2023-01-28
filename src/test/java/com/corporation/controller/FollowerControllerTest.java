@@ -64,15 +64,30 @@ public class FollowerControllerTest {
     @Test
     public void shouldReturnUsersByProjectIdAndNickname() {
         long projectId = 4L;
-        long projectFollowerId = 1l;
+        long projectFollowerId = 1L;
         String keyword = "User";
         int pageNumber = 2;
         int pageSize = 3;
         UserDto userDto = UserDto.builder().id(projectFollowerId).nickname("User1").build();
         Page<UserDto> expectedResult = new PageImpl<>(List.of(userDto));
 
-        Mockito.when(followerService.findProjectSubscribers(projectId, keyword, pageNumber, pageSize)).thenReturn(expectedResult);
-        Page<UserDto> actualResult = followerController.getProjectSubscribers(projectId, keyword, pageNumber, pageSize);
+        Mockito.when(followerService.findProjectFollowers(projectId, keyword, pageNumber, pageSize)).thenReturn(expectedResult);
+        Page<UserDto> actualResult = followerController.getProjectFollowers(projectId, keyword, pageNumber, pageSize);
+        Assertions.assertEquals(expectedResult, actualResult);
+    }
+
+    @Test
+    public void shouldReturnUsersByUserIdAndNickname() {
+        long userId = 4L;
+        long userFollowerId = 1L;
+        String keyword = "User";
+        int pageNumber = 2;
+        int pageSize = 3;
+        UserDto userDto = UserDto.builder().id(userFollowerId).nickname("User1").build();
+        Page<UserDto> expectedResult = new PageImpl<>(List.of(userDto));
+
+        Mockito.when(followerService.findUserFollowers(userId, keyword, pageNumber, pageSize)).thenReturn(expectedResult);
+        Page<UserDto> actualResult = followerController.getUserFollowers(userId, keyword, pageNumber, pageSize);
         Assertions.assertEquals(expectedResult, actualResult);
     }
 }
