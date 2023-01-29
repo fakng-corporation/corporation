@@ -6,9 +6,13 @@ import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.FIELD)
 public interface PostMapper {
+
+    PostMapper INSTANCE = Mappers.getMapper(PostMapper.class);
+
     @Mapping(source = "user.id", target = "userId")
     PostDto toDto(Post post);
 
