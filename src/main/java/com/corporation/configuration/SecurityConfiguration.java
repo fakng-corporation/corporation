@@ -44,14 +44,12 @@ public class SecurityConfiguration {
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeHttpRequests()
-            .requestMatchers("/login", "/register")
+            .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/login", "/register")
             .permitAll()
             .requestMatchers("/**")
             .hasAnyAuthority(UserRole.ROLE_USER.value)
             .anyRequest()
             .authenticated()
-            .and()
-            .httpBasic()
             .and()
             .apply(jwtSecurityConfigurerAdapter());
 
