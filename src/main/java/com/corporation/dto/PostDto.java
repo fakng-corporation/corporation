@@ -3,9 +3,7 @@ package com.corporation.dto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 
@@ -20,6 +18,7 @@ public class PostDto {
     private String body;
     private boolean published;
     private long userId;
+    private long projectId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private LocalDateTime publishedAt;

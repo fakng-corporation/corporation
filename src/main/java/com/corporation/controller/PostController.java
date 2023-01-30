@@ -2,10 +2,7 @@ package com.corporation.controller;
 
 import com.corporation.dto.PostDto;
 import com.corporation.mapper.PostMapper;
-import com.corporation.model.Post;
-import com.corporation.model.User;
 import com.corporation.service.PostService;
-import com.corporation.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,18 +22,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class PostController {
 
     private final PostService postService;
-    private final UserService userService;
     private final PostMapper postMapper;
 
     @PostMapping
     public PostDto createPost(@RequestBody PostDto postDto) {
-        User user = userService.findById(postDto.getUserId());
-        Post post = postMapper.toEntity(postDto);
-        post.setUser(user);
-        post = postService.savePostDraft(post);
-        PostDto postDtoToReturn = postMapper.toDto(post);
-        postDtoToReturn.setUserId(post.getUser().getId());
-        return postDtoToReturn;
+        return postService.savePostDraft(postDto);
     }
 
     @GetMapping("/user/{id}")

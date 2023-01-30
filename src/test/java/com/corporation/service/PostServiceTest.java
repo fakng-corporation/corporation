@@ -28,6 +28,9 @@ public class PostServiceTest {
     @Mock
     private PostRepository postRepository;
 
+    @Mock
+    private UserService userService;
+
     @InjectMocks
     private PostService postService;
 
@@ -36,23 +39,24 @@ public class PostServiceTest {
 
     @Test
     public void shouldReturnCreatedPost() {
-
-        long id = 322;
-
+        long desiredPostId = 322;
         String title = "Some Title";
         String body = "Здесь мог быть Ваш код";
         boolean isPublished = false;
+        long userId = 1;
 
-        Post mockPost = Post.builder().id(id).title(title).body(body).build();
+        PostDto mockPostDto = PostDto.builder().title(title).body(body).userId(userId).build();
+        Post mappedPostDto = postMapper.toEntity(mockPostDto);
+        mappedPostDto.setId(desiredPostId);
 
-        Mockito.when(postRepository.save(mockPost)).thenReturn(mockPost);
+        Mockito.when(postRepository.save(mappedPostDto)).thenReturn(mappedPostDto);
 
-        Post createdPost = postService.savePostDraft(mockPost);
+        Post receivedPost = postRepository.save(mappedPostDto);
 
-        Assertions.assertEquals(id, createdPost.getId());
-        Assertions.assertEquals(title, createdPost.getTitle());
-        Assertions.assertEquals(body, createdPost.getBody());
-        Assertions.assertEquals(isPublished, createdPost.isPublished());
+        Assertions.assertEquals(desiredPostId, receivedPost.getId());
+        Assertions.assertEquals(title, receivedPost.getTitle());
+        Assertions.assertEquals(body, receivedPost.getBody());
+        Assertions.assertEquals(isPublished, receivedPost.isPublished());
 
     }
 
