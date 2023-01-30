@@ -4,6 +4,7 @@ import com.corporation.dto.PostDto;
 import com.corporation.exception.NotFoundEntityException;
 import com.corporation.mapper.PostMapper;
 import com.corporation.model.Post;
+import com.corporation.model.Project;
 import com.corporation.model.User;
 import com.corporation.repository.PostRepository;
 import jakarta.transaction.Transactional;
@@ -20,6 +21,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final PostMapper postMapper;
     private final UserService userService;
+    private final ProjectService projectService;
 
     public PostDto savePostDraft(PostDto postDto) {
         Post post = postMapper.toEntity(postDto);
@@ -29,6 +31,20 @@ public class PostService {
 
         PostDto returnedPostDto = postMapper.toDto(postRepository.save(post));
         returnedPostDto.setUserId(postDto.getUserId());
+        return returnedPostDto;
+    }
+
+    public PostDto saveProjectPostDraft(PostDto postDto) {
+        Post post = postMapper.toEntity(postDto);
+        User user = userService.findById(postDto.getUserId());
+        Project project = projectService.findById(postDto.getProjectId());
+        post.setUser(user);
+        post.setProject(project);
+        post.setPublished(false);
+
+        PostDto returnedPostDto = postMapper.toDto(postRepository.save(post));
+        returnedPostDto.setUserId(postDto.getUserId());
+        returnedPostDto.setProjectId(postDto.getProjectId());
         return returnedPostDto;
     }
 
