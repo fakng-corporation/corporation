@@ -35,3 +35,5 @@ databaseChangeLog:
       file: db/changelog/init-user-team.sql
   - include:
       file: db/changelog/init-message-invite.sql
+  - include:
+      file: db/changelog/alter-post-add-column-project-id.sql
