@@ -57,10 +57,10 @@ public class PostServiceTest {
                 .projectId(projectId)
                 .build();
 
-        Post mappedPostDto = postMapper.toEntity(mockPostDto);
+        Post mappedPost = postMapper.toEntity(mockPostDto);
 
-        Mockito.when(postRepository.save(mappedPostDto))
-                .thenReturn(mappedPostDto);
+        Mockito.when(postRepository.save(mappedPost))
+                .thenReturn(mappedPost);
 
         PostDto receivedPostDto = postService.savePostDraft(mockPostDto);
 
