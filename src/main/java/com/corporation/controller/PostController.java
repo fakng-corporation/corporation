@@ -29,11 +29,6 @@ public class PostController {
         return postService.savePostDraft(postDto);
     }
 
-    @PostMapping("/project")
-    public PostDto createProjectPost(@RequestBody PostDto postDto) {
-        return postService.saveProjectPostDraft(postDto);
-    }
-
     @GetMapping("/user/{id}")
     public Page<PostDto> getUserPostsById(@PathVariable("id") long id,
                                           @RequestParam("page") int page,

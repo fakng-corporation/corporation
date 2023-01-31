@@ -18,7 +18,7 @@ public class PostDto {
     private String body;
     private boolean published;
     private long userId;
-    private long projectId;
+    private Long projectId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private LocalDateTime publishedAt;

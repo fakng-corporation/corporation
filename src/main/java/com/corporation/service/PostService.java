@@ -24,27 +24,18 @@ public class PostService {
     private final ProjectService projectService;
 
     public PostDto savePostDraft(PostDto postDto) {
-        Post post = postMapper.toEntity(postDto);
         User user = userService.findById(postDto.getUserId());
-        post.setUser(user);
-        post.setPublished(false);
+        Long projectId = postDto.getProjectId();
+        Project project = projectId == null ? null : projectService.findById(projectId);
 
-        PostDto returnedPostDto = postMapper.toDto(postRepository.save(post));
-        returnedPostDto.setUserId(postDto.getUserId());
-        return returnedPostDto;
-    }
-
-    public PostDto saveProjectPostDraft(PostDto postDto) {
         Post post = postMapper.toEntity(postDto);
-        User user = userService.findById(postDto.getUserId());
-        Project project = projectService.findById(postDto.getProjectId());
         post.setUser(user);
         post.setProject(project);
         post.setPublished(false);
 
         PostDto returnedPostDto = postMapper.toDto(postRepository.save(post));
         returnedPostDto.setUserId(postDto.getUserId());
-        returnedPostDto.setProjectId(postDto.getProjectId());
+        returnedPostDto.setProjectId(projectId);
         return returnedPostDto;
     }
 
