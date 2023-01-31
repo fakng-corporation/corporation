@@ -4,8 +4,6 @@ import com.corporation.dto.PostDto;
 import com.corporation.exception.NotFoundEntityException;
 import com.corporation.mapper.PostMapper;
 import com.corporation.model.Post;
-import com.corporation.model.Project;
-import com.corporation.model.User;
 import com.corporation.repository.PostRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -44,60 +42,33 @@ public class PostServiceTest {
 
     @Test
     public void shouldReturnCreatedPost() {
-        long desiredPostId = 322;
+        long desiredPostId = 7;
         String title = "Some Title";
         String body = "Здесь мог быть Ваш код";
         boolean isPublished = false;
+        Long projectId = 2L;
         long userId = 1;
 
-        User mockUser = User.builder().id(userId).build();
+        PostDto mockPostDto = PostDto.builder()
+                .id(desiredPostId)
+                .title(title)
+                .body(body)
+                .userId(userId)
+                .projectId(projectId)
+                .build();
 
-        PostDto mockPostDto = PostDto.builder().title(title).body(body).userId(userId).build();
         Post mappedPostDto = postMapper.toEntity(mockPostDto);
-        mappedPostDto.setId(desiredPostId);
-        mappedPostDto.setUser(mockUser);
 
         Mockito.when(postRepository.save(mappedPostDto))
                 .thenReturn(mappedPostDto);
 
-        Post receivedPost = postRepository.save(mappedPostDto);
+        PostDto receivedPostDto = postService.savePostDraft(mockPostDto);
 
-        Assertions.assertEquals(desiredPostId, receivedPost.getId());
-        Assertions.assertEquals(title, receivedPost.getTitle());
-        Assertions.assertEquals(body, receivedPost.getBody());
-        Assertions.assertEquals(mockUser, receivedPost.getUser());
-        Assertions.assertEquals(isPublished, receivedPost.isPublished());
-    }
-
-    @Test
-    public void  shouldReturnCreateProjectPost() {
-        long desiredPostId = 323;
-        String title = "Current title";
-        String body = "Здесь должен быть мой код!";
-        boolean isPublished = false;
-        long projectId = 2;
-        long userId = 1;
-
-        User mockUser = User.builder().id(userId).build();
-        Project mockProject = Project.builder().id(projectId).build();
-
-        PostDto mockPostDto = PostDto.builder().title(title).body(body).userId(userId).projectId(projectId).build();
-        Post mappedPostDto = postMapper.toEntity(mockPostDto);
-        mappedPostDto.setId(desiredPostId);
-        mappedPostDto.setUser(mockUser);
-        mappedPostDto.setProject(mockProject);
-
-        Mockito.when(postRepository.save(mappedPostDto))
-                .thenReturn(mappedPostDto);
-
-        Post receivedPost = postRepository.save(mappedPostDto);
-
-        Assertions.assertEquals(desiredPostId, receivedPost.getId());
-        Assertions.assertEquals(title, receivedPost.getTitle());
-        Assertions.assertEquals(body, receivedPost.getBody());
-        Assertions.assertEquals(mockUser, receivedPost.getUser());
-        Assertions.assertEquals(mockProject, receivedPost.getProject());
-        Assertions.assertEquals(isPublished, receivedPost.isPublished());
+        Assertions.assertEquals(desiredPostId, receivedPostDto.getId());
+        Assertions.assertEquals(title, receivedPostDto.getTitle());
+        Assertions.assertEquals(body, receivedPostDto.getBody());
+        Assertions.assertEquals(userId, receivedPostDto.getUserId());
+        Assertions.assertEquals(isPublished, receivedPostDto.isPublished());
     }
 
     @Test

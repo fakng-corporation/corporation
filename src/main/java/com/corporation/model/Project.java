@@ -65,4 +65,7 @@ public class Project {
 
     @ManyToMany(mappedBy = "followingProjects")
     private List<User> followers;
+
+    @OneToMany(mappedBy = "project")
+    private List<Post> posts;
 }
