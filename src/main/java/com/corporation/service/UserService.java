@@ -48,6 +48,10 @@ public class UserService implements UserDetailsService {
         return userRepository.findByNicknameOrEmail(nickname, email);
     }
 
+    public Optional<User> findByNickname(String nickname) {
+        return userRepository.findByNickname(nickname);
+    }
+
     @Transactional
     public void updateUserSkillList(long userId, List<Long> skillIdList) {
         User user = findById(userId);

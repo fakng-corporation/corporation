@@ -1,17 +1,19 @@
 package com.corporation.configuration.jwt;
 
+import com.corporation.model.User;
+import com.corporation.service.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -27,6 +29,9 @@ import java.util.stream.Collectors;
 public class TokenProvider {
     private final Key key;
     private final JwtParser parser;
+
+    @Autowired
+    private UserService userService;
 
     public TokenProvider(@Value("${spring.security.secret}") String base64Secret) {
         byte[] keyBytes = Decoders.BASE64.decode(base64Secret);
@@ -60,9 +65,9 @@ public class TokenProvider {
                 .map(SimpleGrantedAuthority::new)
                 .toList();
 
-        User principal = new User(claims.getSubject(), "", authorities);
+        User principalUser = userService.findByNickname(claims.getSubject()).get();
 
-        return new UsernamePasswordAuthenticationToken(principal, token, authorities);
+        return new UsernamePasswordAuthenticationToken(principalUser, token, authorities);
     }
 
     public boolean validateToken(String token) {
