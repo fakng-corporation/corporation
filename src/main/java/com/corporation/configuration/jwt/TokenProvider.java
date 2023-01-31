@@ -65,7 +65,7 @@ public class TokenProvider {
                 .map(SimpleGrantedAuthority::new)
                 .toList();
 
-        User principalUser = userService.findByNickname(claims.getSubject()).get();
+        User principalUser = (User) userService.loadUserByUsername(claims.getSubject());
 
         return new UsernamePasswordAuthenticationToken(principalUser, token, authorities);
     }
