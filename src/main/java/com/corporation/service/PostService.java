@@ -33,10 +33,7 @@ public class PostService {
         post.setProject(project);
         post.setPublished(false);
 
-        PostDto returnedPostDto = postMapper.toDto(postRepository.save(post));
-        returnedPostDto.setUserId(postDto.getUserId());
-        returnedPostDto.setProjectId(projectId);
-        return returnedPostDto;
+        return postMapper.toDto(postRepository.save(post));
     }
 
     @Transactional

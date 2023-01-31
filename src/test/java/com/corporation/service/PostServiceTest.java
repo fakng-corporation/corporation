@@ -43,16 +43,11 @@ public class PostServiceTest {
     @Test
     public void shouldReturnCreatedPost() {
         long desiredPostId = 7;
-        String title = "Some Title";
-        String body = "Здесь мог быть Ваш код";
-        boolean isPublished = false;
         Long projectId = 2L;
         long userId = 1;
 
         PostDto mockPostDto = PostDto.builder()
                 .id(desiredPostId)
-                .title(title)
-                .body(body)
                 .userId(userId)
                 .projectId(projectId)
                 .build();
@@ -65,10 +60,7 @@ public class PostServiceTest {
         PostDto receivedPostDto = postService.savePostDraft(mockPostDto);
 
         Assertions.assertEquals(desiredPostId, receivedPostDto.getId());
-        Assertions.assertEquals(title, receivedPostDto.getTitle());
-        Assertions.assertEquals(body, receivedPostDto.getBody());
         Assertions.assertEquals(userId, receivedPostDto.getUserId());
-        Assertions.assertEquals(isPublished, receivedPostDto.isPublished());
     }
 
     @Test

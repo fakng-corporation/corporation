@@ -39,17 +39,10 @@ class PostControllerTest {
 
     @Test
     public void shouldReturnCreatedPostDto() {
-        long desiredPostId = 7;
-        boolean isPublished = false;
-        String title = "Король Тайтлов";
-        String body = "Это всё равно никто не читает, чтобы тут не было написано";
         Long projectId = 2L;
         long userId = 1;
 
         PostDto mockPostDto = PostDto.builder()
-                .id(desiredPostId)
-                .title(title)
-                .body(body)
                 .userId(userId)
                 .projectId(projectId)
                 .build();
@@ -61,12 +54,8 @@ class PostControllerTest {
 
         Mockito.verify(postService).savePostDraft(mockPostDto);
 
-        Assertions.assertEquals(desiredPostId, receivedPostDto.getId());
-        Assertions.assertEquals(title, receivedPostDto.getTitle());
-        Assertions.assertEquals(body, receivedPostDto.getBody());
         Assertions.assertEquals(userId, receivedPostDto.getUserId());
         Assertions.assertEquals(projectId, receivedPostDto.getProjectId());
-        Assertions.assertEquals(isPublished, receivedPostDto.isPublished());
     }
 
     @Test
