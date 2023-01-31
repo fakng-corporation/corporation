@@ -4,6 +4,7 @@ import com.corporation.dto.PostDto;
 import com.corporation.mapper.PostMapperImpl;
 import com.corporation.model.Post;
 import com.corporation.service.PostService;
+import com.corporation.service.ProjectService;
 import com.corporation.service.UserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -27,6 +28,9 @@ class PostControllerTest {
     @Mock
     private UserService userService;
 
+    @Mock
+    private ProjectService projectService;
+
     @Spy
     private PostMapperImpl postMapper;
 
@@ -34,7 +38,7 @@ class PostControllerTest {
     private PostController postController;
 
     @Test
-    void shouldReturnCreatedPostDto() {
+    public void shouldReturnCreatedPostDto() {
         long desiredPostId = 7;
         boolean isPublished = false;
         String title = "Король Тайтлов";
@@ -47,7 +51,8 @@ class PostControllerTest {
         PostDto mappedPost = postMapper.toDto(mappedPostDto);
         mappedPost.setUserId(userId);
 
-        Mockito.when(postService.savePostDraft(mockPostDto)).thenReturn(mappedPost);
+        Mockito.when(postService.savePostDraft(mockPostDto))
+                .thenReturn(mappedPost);
 
         PostDto receivedPostDto = postController.createPost(mockPostDto);
 
@@ -58,6 +63,38 @@ class PostControllerTest {
         Assertions.assertEquals(title, receivedPostDto.getTitle());
         Assertions.assertEquals(body, receivedPostDto.getBody());
         Assertions.assertEquals(userId, receivedPostDto.getUserId());
+        Assertions.assertEquals(isPublished, receivedPostDto.isPublished());
+    }
+
+    @Test
+    public void shouldReturnCreatedProjectPost() {
+        long desiredPostId = 8;
+        boolean isPublished = false;
+        String title = "Император Тайтлов";
+        String body = "Это обязательно кто то прочитает. Да-да, я о тебе мой любопытный друг";
+        long projectId = 2;
+        long userId = 1;
+
+        PostDto mockPostDto = PostDto.builder().title(title).body(body).projectId(projectId).userId(userId).build();
+        Post mappedPostDto = postMapper.toEntity(mockPostDto);
+        mappedPostDto.setId(desiredPostId);
+        PostDto mappedPost = postMapper.toDto(mappedPostDto);
+        mappedPost.setUserId(userId);
+        mappedPost.setProjectId(projectId);
+
+        Mockito.when(postService.saveProjectPostDraft(mockPostDto))
+                .thenReturn(mappedPost);
+
+        PostDto receivedPostDto = postController.createProjectPost(mockPostDto);
+
+        Mockito.verify(postMapper).toEntity(mockPostDto);
+        Mockito.verify(postMapper).toDto(mappedPostDto);
+
+        Assertions.assertEquals(desiredPostId, receivedPostDto.getId());
+        Assertions.assertEquals(title, receivedPostDto.getTitle());
+        Assertions.assertEquals(body, receivedPostDto.getBody());
+        Assertions.assertEquals(userId, receivedPostDto.getUserId());
+        Assertions.assertEquals(projectId, receivedPostDto.getProjectId());
         Assertions.assertEquals(isPublished, receivedPostDto.isPublished());
     }
 
