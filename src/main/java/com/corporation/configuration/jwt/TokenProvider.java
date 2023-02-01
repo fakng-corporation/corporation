@@ -30,13 +30,13 @@ public class TokenProvider {
     private final Key key;
     private final JwtParser parser;
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    public TokenProvider(@Value("${spring.security.secret}") String base64Secret) {
+    public TokenProvider(@Value("${spring.security.secret}") String base64Secret, UserService userService) {
         byte[] keyBytes = Decoders.BASE64.decode(base64Secret);
         key = Keys.hmacShaKeyFor(keyBytes);
         parser = Jwts.parserBuilder().setSigningKey(key).build();
+        this.userService = userService;
     }
 
     public String createToken(Authentication authentication) {
@@ -65,7 +65,7 @@ public class TokenProvider {
                 .map(SimpleGrantedAuthority::new)
                 .toList();
 
-        User principalUser = (User) userService.loadUserByUsername(claims.getSubject());
+        User principalUser = userService.loadUserByUsername(claims.getSubject());
 
         return new UsernamePasswordAuthenticationToken(principalUser, token, authorities);
     }

@@ -25,7 +25,7 @@ public class TokenProviderTest {
     @Mock
     private UserService userService;
     private final TokenProvider tokenProvider =
-            new TokenProvider("ZG1pdHJ5Ymxlc2NodW5vdl9pc19zdXBlcl9wdXBlcl9jbGFzcwo");
+            new TokenProvider("ZG1pdHJ5Ymxlc2NodW5vdl9pc19zdXBlcl9wdXBlcl9jbGFzcwo", userService);
 
     @Test
     public void shouldReturnJwtToken() {
