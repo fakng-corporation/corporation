@@ -4,6 +4,8 @@ import com.corporation.dto.PostDto;
 import com.corporation.exception.NotFoundEntityException;
 import com.corporation.mapper.PostMapper;
 import com.corporation.model.Post;
+import com.corporation.model.Project;
+import com.corporation.model.User;
 import com.corporation.repository.PostRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -47,20 +49,29 @@ public class PostServiceTest {
         long userId = 1;
 
         PostDto mockPostDto = PostDto.builder()
-                .id(desiredPostId)
                 .userId(userId)
                 .projectId(projectId)
                 .build();
+        Project mockProject = Project.builder()
+                .id(projectId)
+                .build();
+        User mockUser = User.builder()
+                .id(userId)
+                .build();
 
-        Post mappedPost = postMapper.toEntity(mockPostDto);
+        Post receivablePost = postMapper.toEntity(mockPostDto);
+        receivablePost.setId(desiredPostId);
+        receivablePost.setUser(mockUser);
+        receivablePost.setProject(mockProject);
 
-        Mockito.when(postRepository.save(mappedPost))
-                .thenReturn(mappedPost);
+        Mockito.when(postRepository.save(postMapper.toEntity(mockPostDto)))
+                .thenReturn(receivablePost);
 
         PostDto receivedPostDto = postService.savePostDraft(mockPostDto);
 
         Assertions.assertEquals(desiredPostId, receivedPostDto.getId());
         Assertions.assertEquals(userId, receivedPostDto.getUserId());
+        Assertions.assertEquals(projectId, receivedPostDto.getProjectId());
     }
 
     @Test
