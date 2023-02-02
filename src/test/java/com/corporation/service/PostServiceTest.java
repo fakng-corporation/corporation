@@ -72,6 +72,16 @@ public class PostServiceTest {
         Assertions.assertEquals(desiredPostId, receivedPostDto.getId());
         Assertions.assertEquals(userId, receivedPostDto.getUserId());
         Assertions.assertEquals(projectId, receivedPostDto.getProjectId());
+
+        mockPostDto.setProjectId(null);
+        receivablePost.setProject(null);
+
+        Mockito.when(postRepository.save(postMapper.toEntity(mockPostDto)))
+                .thenReturn(receivablePost);
+
+        receivedPostDto = postService.savePostDraft(mockPostDto);
+
+        Assertions.assertNull(receivedPostDto.getProjectId());
     }
 
     @Test
