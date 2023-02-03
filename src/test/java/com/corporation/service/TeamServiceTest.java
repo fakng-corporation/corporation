@@ -5,7 +5,9 @@ import com.corporation.exception.NotUniqueEntityException;
 import com.corporation.mapper.TeamMapper;
 import com.corporation.model.Project;
 import com.corporation.model.Team;
+import com.corporation.model.User;
 import com.corporation.repository.TeamRepository;
+import com.corporation.repository.service.TeamMemberRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -31,6 +33,9 @@ import static org.mockito.ArgumentMatchers.any;
 public class TeamServiceTest {
     @Mock
     private TeamRepository teamRepository;
+
+    @Mock
+    private TeamMemberRepository teamMemberRepository;
 
     @Mock
     private ProjectService projectService;
@@ -144,6 +149,22 @@ public class TeamServiceTest {
 
         Assertions.assertEquals(page.getTotalElements(), 1);
         Assertions.assertEquals(page.getContent(), teamDtoList);
+    }
 
+    @Test
+    public void shouldDeleteMemberFromTeam() {
+        long teamId = 111;
+        long userId = 777;
+        long ownerId = 555;
+
+        User mockOwner = User.builder().id(ownerId).build();
+        Project project = Project.builder().id(Mockito.anyLong()).owner(mockOwner).build();
+        Team mockTeam = Team.builder().id(teamId).project(project).build();
+
+        Mockito.when(teamRepository.findById(teamId))
+                .thenReturn(Optional.of(mockTeam));
+        teamService.removeMember(ownerId, userId, teamId);
+
+        Mockito.verify(teamMemberRepository).removeFromTeam(userId, teamId);
     }
 }

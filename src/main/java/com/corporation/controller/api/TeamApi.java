@@ -29,7 +29,7 @@ public interface TeamApi {
 
     @Operation(summary = "Удаление команды", description = "Позволяет удалить команду по Id")
     @DeleteMapping("/{id}")
-    void deleteTeam(@PathVariable("id") Long id);
+    void deleteTeam(@PathVariable("id") long id);
 
     @Operation(summary = "Получение списка команд проекта", description = "Позволяет получать команды по заданной маске")
     @GetMapping
@@ -41,8 +41,8 @@ public interface TeamApi {
 
     @Operation(summary = "Приглашение пользователя в команду",
             description = "Отправляет пользователю приглашение в команду в проекте")
-    @PostMapping("/{id}")
-    void inviteToTeam(@AuthenticationPrincipal(expression = "id") long senderId,
+    @PostMapping("/member/{id}")
+    void inviteMember(@AuthenticationPrincipal(expression = "id") long senderId,
                       @PathVariable("id") long teamId,
                       @RequestParam(value = "ID пользователя") long inviteUserId);
 
@@ -53,7 +53,7 @@ public interface TeamApi {
     @PostMapping("/invite/{code}")
     void acceptInvite(@AuthenticationPrincipal(expression = "id") long userId,
                       @Parameter(description = "Указать код для активации пользователя", required = true)
-                            @PathVariable String code);
+                      @PathVariable String code);
 
     @Operation(
             summary = "Получение команды по ID",
@@ -62,4 +62,10 @@ public interface TeamApi {
     @GetMapping("/{id}")
     TeamDto getTeam(@Parameter(description = "Укажите ID команды", required = true)
                     @PathVariable long id);
+
+    @Operation(summary = "Удаление члена команды", description = "Позволяет удалить члена команды по Id")
+    @DeleteMapping("/member/{id}")
+    void removeMember(@AuthenticationPrincipal(expression = "id") long ownerId,
+                      @PathVariable("id") long id,
+                      @RequestParam(value = "ID команды") long teamId);
 }

@@ -10,7 +10,7 @@ import com.corporation.model.Team;
 import com.corporation.model.User;
 import com.corporation.model.service.InviteToTeam;
 import com.corporation.repository.TeamRepository;
-import com.corporation.repository.service.InviteToTeamRepository;
+import com.corporation.repository.service.TeamMemberRepository;
 import com.corporation.service.event.MessageEventPublisher;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +32,7 @@ public class TeamService {
     private final UserService userService;
     private final TeamMapper teamMapper;
     private final MessageEventPublisher messageEventPublisher;
-    private final InviteToTeamRepository inviteToTeamRepository;
+    private final TeamMemberRepository teamMemberRepository;
 
     public TeamDto add(TeamDto teamDto) {
         Project project = projectService.findById(teamDto.getProjectId());
@@ -74,7 +74,7 @@ public class TeamService {
     }
 
     @Transactional
-    public void inviteUserToTeam(long senderId, long teamId, long userId) {
+    public void inviteMember(long senderId, long teamId, long userId) {
         Team team = findById(teamId);
         User owner = team.getProject().getOwner();
         // Сейчас сравнивается владелец команды проекта и сендер
@@ -89,7 +89,7 @@ public class TeamService {
                     .teamId(teamId)
                     .code(code)
                     .build();
-            inviteToTeamRepository.save(inviteToTeam);
+            teamMemberRepository.save(inviteToTeam);
 
             String subject = "Invite to Team";
             String body = String.format(
@@ -106,7 +106,7 @@ public class TeamService {
         }
     }
 
-    private Team findById(long id) {
+    public Team findById(long id) {
         Optional<Team> optionalTeam = teamRepository.findById(id);
         return optionalTeam
                 .orElseThrow(() -> new NotFoundEntityException(
@@ -121,11 +121,11 @@ public class TeamService {
 
     @Transactional
     public void acceptInvite(long userId, String code) {
-        Optional<InviteToTeam> invite = inviteToTeamRepository.findByCode(code);
+        Optional<InviteToTeam> invite = teamMemberRepository.findByCode(code);
         invite.ifPresentOrElse(inviteToTeam -> {
             if (inviteToTeam.getRecipientId() == userId) {
-                inviteToTeamRepository.addToTeam(userId, inviteToTeam.getTeamId());
-                inviteToTeamRepository.deleteById(inviteToTeam.getId());
+                teamMemberRepository.addToTeam(userId, inviteToTeam.getTeamId());
+                teamMemberRepository.deleteById(inviteToTeam.getId());
             } else {
                 throw new NotEnoughPermissionException(
                         "You don't have permission to use this invite");
@@ -138,5 +138,19 @@ public class TeamService {
 
     public TeamDto getTeamById(long id) {
         return teamMapper.toDto(findById(id));
+    }
+
+    public void removeMember(long ownerId, long id, long teamId) {
+        Team team = findById(teamId);
+        User projectOwner = team.getProject().getOwner();
+        // Сейчас сравнивается владелец команды проекта и сендер
+        // Доработать после добавления прав!!!!
+        if (projectOwner.getId() == ownerId) {
+            teamMemberRepository.removeFromTeam(id, teamId);
+        } else {
+            throw new NotEnoughPermissionException(
+                    String.format("You don't have " +
+                            "permission to remove users from team with ID %d.", teamId));
+        }
     }
 }
