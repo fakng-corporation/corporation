@@ -24,7 +24,7 @@ public class TeamController implements TeamApi {
     }
 
     @Override
-    public void deleteTeam(Long id) {
+    public void deleteTeam(long id) {
         teamService.delete(id);
     }
 
@@ -34,8 +34,8 @@ public class TeamController implements TeamApi {
     }
 
     @Override
-    public void inviteToTeam(long senderId, long teamId, long inviteUserId) {
-        teamService.inviteUserToTeam(senderId, teamId, inviteUserId);
+    public void inviteMember(long senderId, long teamId, long inviteUserId) {
+        teamService.inviteMember(senderId, teamId, inviteUserId);
     }
 
     @Override
@@ -45,6 +45,11 @@ public class TeamController implements TeamApi {
 
     @Override
     public TeamDto getTeam(long id) {
-        return  teamService.getTeamById(id);
+        return teamService.getTeamById(id);
+    }
+
+    @Override
+    public void removeMember(long ownerId, long id, long teamId) {
+        teamService.removeMember(ownerId, id, teamId);
     }
 }

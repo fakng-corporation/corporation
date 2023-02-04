@@ -83,4 +83,15 @@ public class TeamControllerTest {
         Assertions.assertEquals(page.getTotalElements(), teamDtoPage.getTotalElements());
         Assertions.assertEquals(page.getContent(), teamDtoPage.getContent());
     }
+
+    @Test
+    public void shouldDeleteMemberFromTeam() {
+        long teamId = 111;
+        long userId = 777;
+        long ownerId = 555;
+
+        teamController.removeMember(ownerId, userId, teamId);
+
+        Mockito.verify(teamService).removeMember(ownerId, userId, teamId);
+    }
 }

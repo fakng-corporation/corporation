@@ -10,11 +10,15 @@ import java.util.Optional;
 
 
 @Repository
-public interface InviteToTeamRepository extends CrudRepository<InviteToTeam, Long> {
+public interface TeamMemberRepository extends CrudRepository<InviteToTeam, Long> {
 
     Optional<InviteToTeam> findByCode(String code);
 
     @Modifying
     @Query(nativeQuery = true, value = "INSERT INTO user_team (user_id, team_id) VALUES (:userId, :teamId)")
     void addToTeam(long userId, long teamId);
+
+    @Modifying
+    @Query(nativeQuery = true, value = "DELETE FROM user_team WHERE user_id = :userId AND team_id = :teamId")
+    void removeFromTeam(long userId, long teamId);
 }
