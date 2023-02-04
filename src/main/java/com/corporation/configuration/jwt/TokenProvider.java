@@ -1,5 +1,7 @@
 package com.corporation.configuration.jwt;
 
+import com.corporation.model.User;
+import com.corporation.service.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
@@ -11,7 +13,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -28,10 +29,13 @@ public class TokenProvider {
     private final Key key;
     private final JwtParser parser;
 
-    public TokenProvider(@Value("${spring.security.secret}") String base64Secret) {
+    private final UserService userService;
+
+    public TokenProvider(@Value("${spring.security.secret}") String base64Secret, UserService userService) {
         byte[] keyBytes = Decoders.BASE64.decode(base64Secret);
         key = Keys.hmacShaKeyFor(keyBytes);
         parser = Jwts.parserBuilder().setSigningKey(key).build();
+        this.userService = userService;
     }
 
     public String createToken(Authentication authentication) {
@@ -60,9 +64,11 @@ public class TokenProvider {
                 .map(SimpleGrantedAuthority::new)
                 .toList();
 
-        User principal = new User(claims.getSubject(), "", authorities);
 
-        return new UsernamePasswordAuthenticationToken(principal, token, authorities);
+        long principalUserID = userService.loadUserByUsername(claims.getSubject()).getId();
+        User principalUser = User.builder().nickname(claims.getSubject()).password("").id(principalUserID).build();
+
+        return new UsernamePasswordAuthenticationToken(principalUser, token, authorities);
     }
 
     public boolean validateToken(String token) {
