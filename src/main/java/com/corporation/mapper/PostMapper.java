@@ -10,11 +10,14 @@ import org.mapstruct.MappingTarget;
 @Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.FIELD)
 public interface PostMapper {
     @Mapping(source = "user.id", target = "userId")
+    @Mapping(source = "project.id", target = "projectId")
     PostDto toDto(Post post);
 
     @Mapping(target = "user", ignore = true)
+    @Mapping(target = "project", ignore = true)
     Post toEntity(PostDto postDto);
 
     @Mapping(target = "user", ignore = true)
+    @Mapping(target = "project", ignore = true)
     void updateFromDto(PostDto postDto, @MappingTarget Post post);
 }

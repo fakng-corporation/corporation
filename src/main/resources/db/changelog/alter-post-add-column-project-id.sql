@@ -1,0 +1,1 @@
+ALTER TABLE "post" ADD COLUMN project_id BIGINT REFERENCES "project" (id) ON DELETE CASCADE
