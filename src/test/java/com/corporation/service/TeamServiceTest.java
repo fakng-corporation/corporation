@@ -1,6 +1,7 @@
 package com.corporation.service;
 
 import com.corporation.dto.TeamDto;
+import com.corporation.exception.NotEnoughPermissionException;
 import com.corporation.exception.NotUniqueEntityException;
 import com.corporation.mapper.TeamMapper;
 import com.corporation.model.Project;
@@ -52,8 +53,16 @@ public class TeamServiceTest {
         long teamId = 10;
         String title = "new team";
         long projectId = 5;
-        Project project = Project.builder().id(projectId).build();
-        Team team = Team.builder().id(teamId).title(title).project(project).build();
+        Project project = Project
+                .builder()
+                .id(projectId)
+                .build();
+        Team team = Team
+                .builder()
+                .id(teamId)
+                .title(title)
+                .project(project)
+                .build();
         TeamDto teamDto = teamMapper.toDto(team);
 
         Mockito.when(projectService.findById(projectId))
@@ -73,8 +82,16 @@ public class TeamServiceTest {
         long teamId = 10;
         String title = "new team";
         long projectId = 5;
-        Project project = Project.builder().id(projectId).build();
-        Team team = Team.builder().id(teamId).title(title).project(project).build();
+        Project project = Project
+                .builder()
+                .id(projectId)
+                .build();
+        Team team = Team
+                .builder()
+                .id(teamId)
+                .title(title)
+                .project(project)
+                .build();
         TeamDto teamDto = teamMapper.toDto(team);
         Mockito.when(projectService.findById(projectId))
                 .thenReturn(project);
@@ -91,9 +108,21 @@ public class TeamServiceTest {
         String oldTitle = "old title";
         String newTitle = "new title";
         long projectId = 5;
-        Project project = Project.builder().id(projectId).build();
-        Team team = Team.builder().id(teamId).title(oldTitle).project(project).build();
-        Team updatedTeam = Team.builder().id(teamId).title(newTitle).build();
+        Project project = Project
+                .builder()
+                .id(projectId)
+                .build();
+        Team team = Team
+                .builder()
+                .id(teamId)
+                .title(oldTitle)
+                .project(project)
+                .build();
+        Team updatedTeam = Team
+                .builder()
+                .id(teamId)
+                .title(newTitle)
+                .build();
         TeamDto teamDto = teamMapper.toDto(updatedTeam);
 
         Mockito.when(teamRepository.findById(teamId))
@@ -111,7 +140,10 @@ public class TeamServiceTest {
     public void updateShouldThrowEntityNotFoundException() {
 
         long id = 100;
-        TeamDto teamDto = TeamDto.builder().id(id).build();
+        TeamDto teamDto = TeamDto
+                .builder()
+                .id(id)
+                .build();
 
         Mockito.when(teamRepository.findById(any(long.class))).thenReturn(Optional.empty());
 
@@ -123,7 +155,10 @@ public class TeamServiceTest {
     @Test
     public void shouldDeleteTeam() {
 
-        Team team = Team.builder().id(any(Long.class)).build();
+        Team team = Team
+                .builder()
+                .id(any(Long.class))
+                .build();
         teamService.delete(team.getId());
 
         Mockito.verify(teamRepository).deleteById(team.getId());
@@ -134,8 +169,16 @@ public class TeamServiceTest {
         long teamId = 10;
         String title = "title";
         long projectId = 5;
-        Project project = Project.builder().id(projectId).build();
-        Team mockTeam = Team.builder().id(teamId).title(title).project(project).build();
+        Project project = Project
+                .builder()
+                .id(projectId)
+                .build();
+        Team mockTeam = Team
+                .builder()
+                .id(teamId)
+                .title(title)
+                .project(project)
+                .build();
         List<Team> teamList = Collections.singletonList(mockTeam);
         Page<Team> teamPage = new PageImpl<>(teamList);
         TeamDto mockTeamDto = teamMapper.toDto(mockTeam);
@@ -157,14 +200,54 @@ public class TeamServiceTest {
         long userId = 777;
         long ownerId = 555;
 
-        User mockOwner = User.builder().id(ownerId).build();
-        Project project = Project.builder().id(Mockito.anyLong()).owner(mockOwner).build();
-        Team mockTeam = Team.builder().id(teamId).project(project).build();
+        User mockOwner = User
+                .builder()
+                .id(ownerId)
+                .build();
+        Project project = Project
+                .builder()
+                .id(Mockito.anyLong())
+                .owner(mockOwner)
+                .build();
+        Team mockTeam = Team
+                .builder()
+                .id(teamId)
+                .project(project)
+                .build();
 
         Mockito.when(teamRepository.findById(teamId))
                 .thenReturn(Optional.of(mockTeam));
         teamService.removeMember(ownerId, userId, teamId);
 
         Mockito.verify(teamMemberRepository).removeFromTeam(userId, teamId);
+    }
+
+    @Test
+    public void shouldReturnExceptionWhenDeleteMemberFromTeam() {
+        long teamId = 111;
+        long userId = 777;
+        long ownerId = 555;
+        long anotherUserId = 155;
+
+        User mockOwner = User
+                .builder()
+                .id(anotherUserId)
+                .build();
+        Project project = Project
+                .builder()
+                .id(Mockito.anyLong())
+                .owner(mockOwner)
+                .build();
+        Team mockTeam = Team
+                .builder()
+                .id(teamId)
+                .project(project)
+                .build();
+
+        Mockito.when(teamRepository.findById(teamId))
+                .thenReturn(Optional.of(mockTeam));
+
+        Assertions.assertThrows(NotEnoughPermissionException.class,
+                () -> teamService.removeMember(ownerId, userId, teamId));
     }
 }
