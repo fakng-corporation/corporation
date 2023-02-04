@@ -8,7 +8,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -65,7 +64,9 @@ public class TokenProvider {
                 .map(SimpleGrantedAuthority::new)
                 .toList();
 
-        User principalUser = userService.loadUserByUsername(claims.getSubject());
+
+        long principalUserID = userService.loadUserByUsername(claims.getSubject()).getId();
+        User principalUser = User.builder().nickname(claims.getSubject()).password("").id(principalUserID).build();
 
         return new UsernamePasswordAuthenticationToken(principalUser, token, authorities);
     }

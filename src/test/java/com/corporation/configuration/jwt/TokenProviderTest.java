@@ -52,7 +52,7 @@ public class TokenProviderTest {
     public void shouldReturnAuthentication() {
         String token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib2JhIiwiYXV0aCI6IlJPTEVfVVNFUiJ9.r4YIpClbz47ZgPsTBApKGjnyXqW7cZfpFw_8t13heKI";
 
-        User user = User.builder().id(1).nickname("boba").build();
+        User user = User.builder().id(1).nickname("boba").password("555").build();
         Mockito.when(userService.loadUserByUsername("boba")).thenReturn(user);
 
         Authentication authentication = tokenProvider.getAuthentication(token);
@@ -61,6 +61,7 @@ public class TokenProviderTest {
         List<SimpleGrantedAuthority> authorities = (List<SimpleGrantedAuthority>) authentication.getAuthorities();
 
         Assertions.assertEquals("boba", principal.getUsername());
+        Assertions.assertEquals("", principal.getPassword());
         Assertions.assertEquals(1, principal.getId());
         Assertions.assertEquals(1, authorities.size());
         Assertions.assertEquals(UserRole.ROLE_USER.value, authorities.get(0).getAuthority());
@@ -73,6 +74,4 @@ public class TokenProviderTest {
 
         Assertions.assertTrue(tokenProvider.validateToken(token));
     }
-
-
 }
