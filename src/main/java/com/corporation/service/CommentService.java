@@ -32,7 +32,7 @@ public class CommentService {
         comment.setPost(post);
         comment.setContent(commentDto.getContent());
         commentRepository.save(comment);
-        return save(comment);
+        return commentToDTO(comment);
     }
 
 
@@ -42,12 +42,8 @@ public class CommentService {
                 .collect(Collectors.toList());
     }
 
-    private CommentDto save(Comment comment) {
+    private CommentDto commentToDTO(Comment comment) {
         return CommentMapper.INSTANCE.toDto(comment);
     }
 
-
-    public void deleteCommentById(long id) {
-        commentRepository.deleteById(id);
-    }
 }

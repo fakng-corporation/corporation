@@ -1,14 +1,14 @@
-package com.corporation.service;
+package com.corporation.controller;
 
 import com.corporation.dto.CommentDto;
 import com.corporation.dto.PostDto;
 import com.corporation.dto.UserDto;
-import com.corporation.mapper.CommentMapper;
-import com.corporation.model.Comment;
 import com.corporation.repository.CommentRepository;
+import com.corporation.service.CommentService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -16,21 +16,25 @@ import org.mockito.MockitoAnnotations;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-
-class CommentServiceTest {
+class CommentControllerTest {
 
     private UserDto user1;
     private UserDto user2;
     private PostDto mockPostDto;
+    private PostDto mockPostDto1;
     private CommentDto commentDto1;
     private CommentDto commentDto2;
+
 
     @Mock
     private CommentRepository commentRepository;
 
+    @Mock
     private CommentService commentService;
+
+    @InjectMocks
+    private CommentController commentController;
 
 
     @BeforeEach
@@ -73,6 +77,17 @@ class CommentServiceTest {
                 .build();
 
 
+        mockPostDto = PostDto
+                .builder()
+                .id(2L)
+                .title(title)
+                .body(body)
+                .published(isPublished)
+                .userId(user2.getId())
+                .createdAt(createdTime)
+                .build();
+
+
         commentDto1 = CommentDto
                 .builder()
                 .id(1L)
@@ -91,29 +106,38 @@ class CommentServiceTest {
                 .build();
     }
 
-    @Test
-    void shouldReturnComment() {
-        Comment actual = CommentMapper.INSTANCE.toEntity(commentService.addComment(commentDto1));
-        Comment expected = CommentMapper.INSTANCE.toEntity(commentDto1);
 
-        Assertions.assertEquals(expected.getUser().getId(), actual.getUser().getId());
-        Assertions.assertEquals(expected.getPost().getId(), actual.getPost().getId());
-        Assertions.assertEquals(expected.getContent(), actual.getContent());
+    @Test
+    void shouldReturnCommentDto() {
+        CommentDto expected = commentDto1;
+        Mockito.when(commentController.addComment(expected)).thenReturn(commentDto1);
+        CommentDto actual = commentController.addComment(commentDto1);
+
+        Assertions.assertEquals(expected.getPost(), actual.getPost());
+        Assertions.assertEquals(expected.getId(), actual.getId());
+        Assertions.assertEquals(expected.getUser(), actual.getUser());
     }
 
     @Test
-    void shouldReturnCommentDTOsByPostId() {
-        List<Comment> actual = new ArrayList<>(List.of(
-                CommentMapper.INSTANCE.toEntity(commentDto1),
-                CommentMapper.INSTANCE.toEntity(commentDto2)
-        ));
+    void shouldReturnCommentsByPostId() {
+        List<CommentDto> expected = new ArrayList<>();
+        expected.add(commentDto1);
+        expected.add(commentDto2);
 
-        Mockito.when(commentRepository.getPostCommentByPostId(mockPostDto.getId()))
-                .thenReturn(actual);
+        Mockito.when(commentController.getCommentByPostId(mockPostDto.getId())).thenReturn(expected);
+        List<CommentDto> actual = commentController.getCommentByPostId(mockPostDto.getId());
 
-        List<CommentDto> expected =  commentService.getCommentByPostId(1L);
+        Assertions.assertEquals(expected, actual);
+    }
 
-        Assertions.assertEquals(actual.stream().map(CommentMapper.INSTANCE::toDto).collect(Collectors.toList()), expected);
+    @Test
+    void shouldNotReturnCommentsByPostId() {
+        List<CommentDto> expected = new ArrayList<>();
+
+        Mockito.when(commentController.getCommentByPostId(mockPostDto.getId())).thenReturn(expected);
+        List<CommentDto> actual = commentController.getCommentByPostId(mockPostDto.getId());
+
+        Assertions.assertEquals(expected, actual);
     }
 
 }

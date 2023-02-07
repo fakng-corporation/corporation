@@ -4,7 +4,6 @@ package com.corporation.controller;
 import com.corporation.dto.CommentDto;
 import com.corporation.service.CommentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,22 +21,15 @@ public class CommentController {
     private CommentService commentService;
 
 
-    @PostMapping("")
-    public CommentDto createPostComment(@RequestBody CommentDto commentDto) {
+    @PostMapping
+    public CommentDto addComment(@RequestBody CommentDto commentDto) {
         return commentService.addComment(commentDto);
     }
 
     @GetMapping("/post/{id}")
-    public List<CommentDto> getPostCommentByPostId(
-            @PathVariable long id) {
+    public List<CommentDto> getCommentByPostId(@PathVariable long id) {
         return commentService.getCommentByPostId(id);
     }
-
-    @DeleteMapping("/{id}")
-    public void deleteCommentById(@PathVariable long id) {
-        commentService.deleteCommentById(id);
-    }
-
 
 
 }
