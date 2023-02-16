@@ -1,5 +1,6 @@
 package com.corporation.model;
 
+import com.corporation.model.service.Like;
 import com.corporation.model.service.Message;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -116,6 +117,9 @@ public class User implements UserDetails {
 
     @ManyToMany(mappedBy = "followers")
     private List<User> followees;
+
+    @OneToMany(mappedBy = "user")
+    private List<Like> likes;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
