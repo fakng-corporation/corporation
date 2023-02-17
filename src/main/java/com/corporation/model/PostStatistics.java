@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -19,9 +20,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "post_statistics")
 public class PostStatistics {
     @Id
-    @OneToOne
-    @JoinColumn(name = "post_id", referencedColumnName = "id")
-    private Post post;
+    private Long post_id;
 
     @Column(name = "likes")
     private long likes;
@@ -31,4 +30,9 @@ public class PostStatistics {
 
     @Column(name = "comment_amount")
     private long comment_amount;
+
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "post_id")
+    private Post post;
 }

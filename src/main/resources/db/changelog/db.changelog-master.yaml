@@ -37,3 +37,7 @@ databaseChangeLog:
       file: db/changelog/init-message-invite.sql
   - include:
       file: db/changelog/alter-post-add-column-project-id.sql
+  - include:
+      file: db/changelog/init-like.sql
+  - include:
+      file: db/changelog/init-post-statistics.sql
