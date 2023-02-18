@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "post_statistics")
 public class PostStatistics {
     @Id
-    private Long post_id;
+    private Long postId;
 
     @Column(name = "likes")
     private long likes;
@@ -29,7 +29,7 @@ public class PostStatistics {
     private long views;
 
     @Column(name = "comment_amount")
-    private long comment_amount;
+    private long commentAmount;
 
     @OneToOne
     @MapsId

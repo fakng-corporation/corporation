@@ -4,9 +4,11 @@ import com.corporation.dto.PostDto;
 import com.corporation.exception.NotFoundEntityException;
 import com.corporation.mapper.PostMapper;
 import com.corporation.model.Post;
+import com.corporation.model.PostStatistics;
 import com.corporation.model.Project;
 import com.corporation.model.User;
 import com.corporation.repository.PostRepository;
+import com.corporation.repository.PostStatisticsRepository;
 import com.corporation.service.event.LikeEventPublisher;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ public class PostService {
     private final UserService userService;
     private final ProjectService projectService;
     private final LikeEventPublisher likeEventPublisher;
+    private final PostStatisticsRepository postStatisticsRepository;
 
     public PostDto savePostDraft(PostDto postDto) {
         User user = userService.findById(postDto.getUserId());
@@ -34,8 +37,13 @@ public class PostService {
         post.setUser(user);
         post.setProject(project);
         post.setPublished(false);
+        post = postRepository.save(post);
 
-        return postMapper.toDto(postRepository.save(post));
+        PostStatistics postStatistics = new PostStatistics();
+        postStatistics.setPostId(post.getId());
+        postStatisticsRepository.save(postStatistics);
+
+        return postMapper.toDto(post);
     }
 
     @Transactional
