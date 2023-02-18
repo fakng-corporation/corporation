@@ -7,6 +7,7 @@ import com.corporation.model.Post;
 import com.corporation.model.Project;
 import com.corporation.model.User;
 import com.corporation.repository.PostRepository;
+import com.corporation.service.event.LikeEventPublisher;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,6 +36,9 @@ public class PostServiceTest {
 
     @Mock
     private ProjectService projectService;
+
+    @Mock
+    private LikeEventPublisher likeEventPublisher;
 
     @InjectMocks
     private PostService postService;
@@ -141,5 +145,31 @@ public class PostServiceTest {
         Page<PostDto> receivedPosts = postService.getUserPostsById(desireId, page, pageSize);
 
         Assertions.assertEquals(newUserPosts.map(postMapper::toDto), receivedPosts);
+    }
+
+    @Test
+    public void shouldAddLikeTiPost() {
+        long postId = 1;
+        long likedItUserId = 3;
+
+        Post mockPost = Post.builder()
+                .id(postId)
+                .build();
+        User mockUser = User.builder()
+                .id(likedItUserId)
+                .build();
+
+        Mockito.when(postRepository.findById(postId))
+                .thenReturn(Optional.of(mockPost));
+        Mockito.when(userService.findById(likedItUserId))
+                .thenReturn(mockUser);
+        Mockito.doNothing().when(likeEventPublisher)
+                .addLike(mockPost, mockUser);
+
+        postService.addLike(postId, likedItUserId);
+
+        Mockito.verify(postRepository).findById(postId);
+        Mockito.verify(userService).findById(likedItUserId);
+        Mockito.verify(likeEventPublisher).addLike(mockPost, mockUser);
     }
 }
