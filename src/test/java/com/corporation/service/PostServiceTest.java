@@ -4,9 +4,11 @@ import com.corporation.dto.PostDto;
 import com.corporation.exception.NotFoundEntityException;
 import com.corporation.mapper.PostMapper;
 import com.corporation.model.Post;
+import com.corporation.model.PostStatistics;
 import com.corporation.model.Project;
 import com.corporation.model.User;
 import com.corporation.repository.PostRepository;
+import com.corporation.repository.PostStatisticsRepository;
 import com.corporation.service.event.LikeEventPublisher;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -40,6 +42,9 @@ public class PostServiceTest {
     @Mock
     private LikeEventPublisher likeEventPublisher;
 
+    @Mock
+    private PostStatisticsRepository postStatisticsRepository;
+
     @InjectMocks
     private PostService postService;
 
@@ -62,6 +67,9 @@ public class PostServiceTest {
         User mockUser = User.builder()
                 .id(userId)
                 .build();
+        PostStatistics mockStats = PostStatistics.builder()
+                .postId(desiredPostId)
+                .build();
 
         Post receivablePost = postMapper.toEntity(mockPostDto);
         receivablePost.setId(desiredPostId);
@@ -70,6 +78,8 @@ public class PostServiceTest {
 
         Mockito.when(postRepository.save(postMapper.toEntity(mockPostDto)))
                 .thenReturn(receivablePost);
+        Mockito.when(postStatisticsRepository.save(mockStats))
+                .thenReturn(mockStats);
 
         PostDto receivedPostDto = postService.savePostDraft(mockPostDto);
 
@@ -148,7 +158,7 @@ public class PostServiceTest {
     }
 
     @Test
-    public void shouldAddLikeTiPost() {
+    public void shouldAddLikeToPost() {
         long postId = 1;
         long likedItUserId = 3;
 

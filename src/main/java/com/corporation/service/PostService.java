@@ -42,6 +42,7 @@ public class PostService {
         PostStatistics postStatistics = new PostStatistics();
         postStatistics.setPostId(post.getId());
         postStatisticsRepository.save(postStatistics);
+        post.setPostStatistics(postStatistics);
 
         return postMapper.toDto(post);
     }
