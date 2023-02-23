@@ -72,6 +72,7 @@ public class PostService {
                         String.format("Post %d does not exist", postId)));
     }
 
+    @Transactional
     public void addLike(long postId, long userId) {
         Post post = findById(postId);
         User user = userService.findById(userId);

@@ -2,6 +2,7 @@ package com.corporation.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapsId;
@@ -11,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @Builder
@@ -20,6 +22,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "post_statistics")
 public class PostStatistics {
     @Id
+    @JoinColumn(name = "post_id")
     private Long postId;
 
     @Column(name = "likes")
@@ -31,8 +34,9 @@ public class PostStatistics {
     @Column(name = "comment_amount")
     private long commentAmount;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     @JoinColumn(name = "post_id")
+    @ToString.Exclude
     private Post post;
 }

@@ -1,6 +1,5 @@
 package com.corporation.dto;
 
-import com.corporation.model.PostStatistics;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,7 +19,6 @@ public class PostDto {
     private boolean published;
     private long userId;
     private Long projectId;
-    private PostStatistics postStatistics;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private LocalDateTime publishedAt;
