@@ -47,12 +47,12 @@ class PostControllerTest {
                 .projectId(projectId)
                 .build();
 
-        Mockito.when(postService.savePostDraft(mockPostDto))
+        Mockito.when(postService.savePostDraft(mockPostDto, userId))
                 .thenReturn(mockPostDto);
 
-        PostDto receivedPostDto = postController.createPost(mockPostDto);
+        PostDto receivedPostDto = postController.createPost(mockPostDto, userId);
 
-        Mockito.verify(postService).savePostDraft(mockPostDto);
+        Mockito.verify(postService).savePostDraft(mockPostDto, userId);
 
         Assertions.assertEquals(userId, receivedPostDto.getUserId());
         Assertions.assertEquals(projectId, receivedPostDto.getProjectId());

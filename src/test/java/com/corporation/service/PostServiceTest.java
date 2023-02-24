@@ -67,7 +67,7 @@ public class PostServiceTest {
         Mockito.when(postRepository.save(postMapper.toEntity(mockPostDto)))
                 .thenReturn(receivablePost);
 
-        PostDto receivedPostDto = postService.savePostDraft(mockPostDto);
+        PostDto receivedPostDto = postService.savePostDraft(mockPostDto, userId);
 
         Assertions.assertEquals(desiredPostId, receivedPostDto.getId());
         Assertions.assertEquals(userId, receivedPostDto.getUserId());
@@ -79,7 +79,7 @@ public class PostServiceTest {
         Mockito.when(postRepository.save(postMapper.toEntity(mockPostDto)))
                 .thenReturn(receivablePost);
 
-        receivedPostDto = postService.savePostDraft(mockPostDto);
+        receivedPostDto = postService.savePostDraft(mockPostDto, userId);
 
         Assertions.assertNull(receivedPostDto.getProjectId());
     }
