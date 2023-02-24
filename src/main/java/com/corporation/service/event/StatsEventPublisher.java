@@ -15,6 +15,6 @@ public class StatsEventPublisher {
     }
 
     public void addLikeToPost(LikeEvent likeEvent) {
-
+        applicationEventPublisher.publishEvent(likeEvent);
     }
 }
