@@ -8,6 +8,7 @@ import com.corporation.model.Project;
 import com.corporation.model.User;
 import com.corporation.repository.PostRepository;
 import com.corporation.service.event.LikeEventPublisher;
+import com.corporation.service.event.StatsEventPublisher;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,6 +25,7 @@ public class PostService {
     private final UserService userService;
     private final ProjectService projectService;
     private final LikeEventPublisher likeEventPublisher;
+    private final StatsEventPublisher statsEventPublisher;
 
     public PostDto savePostDraft(PostDto postDto, long userId) {
         User user = userService.findById(userId);
@@ -36,8 +38,7 @@ public class PostService {
         post.setPublished(false);
         post = postRepository.save(post);
 
-
-
+        statsEventPublisher.createPostStatistics(post);
         return postMapper.toDto(post);
     }
 

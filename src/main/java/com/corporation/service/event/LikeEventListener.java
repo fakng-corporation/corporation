@@ -1,7 +1,7 @@
 package com.corporation.service.event;
 
 import com.corporation.model.service.Like;
-import com.corporation.service.LikeService;
+import com.corporation.service.StatisticsService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.context.event.EventListener;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 @AllArgsConstructor
 public class LikeEventListener {
-    private LikeService likeService;
+    private StatisticsService statisticsService;
 
     @EventListener
     @Transactional
@@ -19,6 +19,6 @@ public class LikeEventListener {
                 .post(likeEvent.getPost())
                 .user(likeEvent.getUser())
                 .build();
-        likeService.addLike(like);
+        statisticsService.addLike(like);
     }
 }
