@@ -1,5 +1,6 @@
 package com.corporation.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -20,6 +21,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "post_statistics")
 public class PostStatistics {
     @Id
+    @Column(name = "post_id")
     private long postId;
 
     @Column(name = "likes")
@@ -31,7 +33,7 @@ public class PostStatistics {
     @Column(name = "comment_amount")
     private long commentAmount;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @MapsId
     @JoinColumn(name = "post_id")
     private Post post;

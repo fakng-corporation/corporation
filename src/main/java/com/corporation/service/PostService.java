@@ -4,11 +4,12 @@ import com.corporation.dto.PostDto;
 import com.corporation.exception.NotFoundEntityException;
 import com.corporation.mapper.PostMapper;
 import com.corporation.model.Post;
+import com.corporation.model.PostStatistics;
 import com.corporation.model.Project;
 import com.corporation.model.User;
 import com.corporation.repository.PostRepository;
+import com.corporation.repository.PostStatsRepository;
 import com.corporation.service.event.LikeEventPublisher;
-import com.corporation.service.event.StatsEventPublisher;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,7 +26,7 @@ public class PostService {
     private final UserService userService;
     private final ProjectService projectService;
     private final LikeEventPublisher likeEventPublisher;
-    private final StatsEventPublisher statsEventPublisher;
+    private final PostStatsRepository postStatsRepository;
 
     public PostDto savePostDraft(PostDto postDto, long userId) {
         User user = userService.findById(userId);
@@ -38,7 +39,10 @@ public class PostService {
         post.setPublished(false);
         post = postRepository.save(post);
 
-        statsEventPublisher.createPostStatistics(post);
+        PostStatistics postStatistics = new PostStatistics();
+        post.setPostStatistics(postStatistics);
+        postStatsRepository.save(postStatistics);
+
         return postMapper.toDto(post);
     }
 
