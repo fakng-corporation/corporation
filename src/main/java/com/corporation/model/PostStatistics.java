@@ -3,9 +3,10 @@ package com.corporation.model;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -21,8 +22,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "post_statistics")
 public class PostStatistics {
     @Id
-    @Column(name = "post_id")
-    private long postId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
     @Column(name = "likes")
     private long likes;
@@ -34,7 +35,6 @@ public class PostStatistics {
     private long commentAmount;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @MapsId
-    @JoinColumn(name = "post_id")
+    @JoinColumn(name = "post_id", referencedColumnName = "id")
     private Post post;
 }

@@ -9,7 +9,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -65,12 +64,5 @@ public class Post {
     private LocalDateTime publishedAt;
 
     @OneToOne(mappedBy = "post", cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn
     private PostStatistics postStatistics;
-
-    public void setPostStatistics(PostStatistics postStatistics) {
-        this.postStatistics = postStatistics;
-        this.postStatistics.setPost(this);
-        this.postStatistics.setPostId(id);
-    }
 }

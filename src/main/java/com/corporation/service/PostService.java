@@ -8,8 +8,6 @@ import com.corporation.model.PostStatistics;
 import com.corporation.model.Project;
 import com.corporation.model.User;
 import com.corporation.repository.PostRepository;
-import com.corporation.repository.PostStatsRepository;
-import com.corporation.service.event.LikeEventPublisher;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,8 +23,6 @@ public class PostService {
     private final PostMapper postMapper;
     private final UserService userService;
     private final ProjectService projectService;
-    private final LikeEventPublisher likeEventPublisher;
-    private final PostStatsRepository postStatsRepository;
 
     public PostDto savePostDraft(PostDto postDto, long userId) {
         User user = userService.findById(userId);
@@ -37,11 +33,9 @@ public class PostService {
         post.setUser(user);
         post.setProject(project);
         post.setPublished(false);
-        post = postRepository.save(post);
-
         PostStatistics postStatistics = new PostStatistics();
         post.setPostStatistics(postStatistics);
-        postStatsRepository.save(postStatistics);
+        post = postRepository.save(post);
 
         return postMapper.toDto(post);
     }
@@ -69,12 +63,5 @@ public class PostService {
         return postRepository.findById(postId).orElseThrow(
                 () -> new NotFoundEntityException(
                         String.format("Post %d does not exist", postId)));
-    }
-
-    @Transactional
-    public void addLike(long postId, long userId) {
-        Post post = findById(postId);
-        User user = userService.findById(userId);
-        likeEventPublisher.addLike(post, user);
     }
 }

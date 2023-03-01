@@ -12,4 +12,9 @@ public interface PostStatsRepository extends CrudRepository<PostStatistics, Long
     @Query(nativeQuery = true, value = "UPDATE post_statistics SET likes = likes + 1 " +
             "WHERE post_id = :postId")
     void addLike(long postId);
+
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE post_statistics SET likes = likes - 1 " +
+            "WHERE post_id = :postId")
+    void deleteLike(long postId);
 }

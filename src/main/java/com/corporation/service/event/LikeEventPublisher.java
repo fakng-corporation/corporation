@@ -1,7 +1,5 @@
 package com.corporation.service.event;
 
-import com.corporation.model.Post;
-import com.corporation.model.User;
 import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -11,8 +9,11 @@ import org.springframework.stereotype.Service;
 public class LikeEventPublisher {
     private ApplicationEventPublisher applicationEventPublisher;
 
-    public void addLike(Post post, User user) {
-        LikeEvent likeEvent = new LikeEvent(post, user);
-        applicationEventPublisher.publishEvent(likeEvent);
+    public void addLike(long postId) {
+        applicationEventPublisher.publishEvent(new AddLikeEvent(postId));
+    }
+
+    public void deleteLike(long postId) {
+        applicationEventPublisher.publishEvent(new DeleteLikeEvent(postId));
     }
 }
