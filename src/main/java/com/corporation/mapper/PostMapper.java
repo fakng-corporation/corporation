@@ -15,9 +15,11 @@ public interface PostMapper {
 
     @Mapping(target = "user", ignore = true)
     @Mapping(target = "project", ignore = true)
+    @Mapping(target = "postStatistics", ignore = true)
     Post toEntity(PostDto postDto);
 
     @Mapping(target = "user", ignore = true)
     @Mapping(target = "project", ignore = true)
+    @Mapping(target = "postStatistics", ignore = true)
     void updateFromDto(PostDto postDto, @MappingTarget Post post);
 }
