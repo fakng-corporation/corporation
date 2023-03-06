@@ -21,14 +21,14 @@ public class StatisticsService {
 
     @Transactional
     public void addLike(long postId, long userId) {
-        Post post = postService.findById(postId);
-        User user = userService.findById(userId);
         Optional<Like> likeFromTable = likeRepository.findByPostIdAndUserId(postId, userId);
 
         if (likeFromTable.isPresent()) {
             likeRepository.delete(likeFromTable.get());
             likeEventPublisher.deleteLike(postId);
         } else {
+            Post post = postService.findById(postId);
+            User user = userService.findById(userId);
             Like like = Like.builder()
                     .post(post)
                     .user(user)
