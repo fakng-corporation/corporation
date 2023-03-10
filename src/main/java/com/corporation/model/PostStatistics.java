@@ -34,7 +34,7 @@ public class PostStatistics {
     @Column(name = "comment_amount")
     private long commentAmount;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "post_id", referencedColumnName = "id")
     private Post post;
 }
