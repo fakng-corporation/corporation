@@ -23,10 +23,10 @@ public class StatisticsService {
     public void addLike(long postId, long userId) {
         Optional<Like> likeFromTable = likeRepository.findByPostIdAndUserId(postId, userId);
 
-        if (likeFromTable.isPresent()) {
-            likeRepository.delete(likeFromTable.get());
+        likeFromTable.ifPresentOrElse(like -> {
+            likeRepository.delete(like);
             likeEventPublisher.deleteLike(postId);
-        } else {
+        }, () -> {
             Post post = postService.findById(postId);
             User user = userService.findById(userId);
             Like like = Like.builder()
@@ -36,6 +36,6 @@ public class StatisticsService {
             likeRepository.save(like);
 
             likeEventPublisher.addLike(postId);
-        }
+        });
     }
 }
