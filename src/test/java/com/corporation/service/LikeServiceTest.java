@@ -15,7 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
-public class StatisticsServiceTest {
+public class LikeServiceTest {
     @Mock
     private PostService postService;
     @Mock
@@ -26,7 +26,7 @@ public class StatisticsServiceTest {
     private LikeEventPublisher likeEventPublisher;
 
     @InjectMocks
-    private StatisticsService statisticsService;
+    private LikeService likeService;
 
     @Test
     public void shouldAddLikeOrDelete() {
@@ -39,7 +39,7 @@ public class StatisticsServiceTest {
         Mockito.when(likeRepository.findByPostIdAndUserId(postId, userId))
                 .thenReturn(mockOptLike);
 
-        statisticsService.addLike(postId, userId);
+        likeService.addLike(postId, userId);
 
         Mockito.verify(likeRepository).findByPostIdAndUserId(postId, userId);
         Mockito.verify(likeRepository).delete(mockOptLike.get());
@@ -51,7 +51,7 @@ public class StatisticsServiceTest {
         Mockito.when(likeRepository.findByPostIdAndUserId(postId, userId))
                 .thenReturn(mockOptLike);
 
-        statisticsService.addLike(postId, userId);
+        likeService.addLike(postId, userId);
 
         Post receivedPost = postService.findById(postId);
         User receivedUser = userService.findById(userId);

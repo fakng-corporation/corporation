@@ -1,6 +1,6 @@
 package com.corporation.controller;
 
-import com.corporation.service.StatisticsService;
+import com.corporation.service.LikeService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -9,19 +9,19 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class StatisticsControllerTest {
+public class LikeControllerTest {
     @Mock
-    private StatisticsService statisticsService;
+    private LikeService likeService;
     @InjectMocks
-    private StatisticsController statisticsController;
+    private LikeController likeController;
 
     @Test
     public void shouldAddLike() {
         long postId = 10;
         long userId = 1;
 
-        Mockito.doNothing().when(statisticsService).addLike(postId, userId);
-        statisticsController.addLike(postId, userId);
-        Mockito.verify(statisticsService).addLike(postId, userId);
+        Mockito.doNothing().when(likeService).addLike(postId, userId);
+        likeController.addLike(postId, userId);
+        Mockito.verify(likeService).addLike(postId, userId);
     }
 }

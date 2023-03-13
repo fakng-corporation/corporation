@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class StatisticsService {
+public class LikeService {
     private final PostService postService;
     private final UserService userService;
     private final LikeRepository likeRepository;
