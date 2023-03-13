@@ -11,7 +11,6 @@ public class PostEventPublisher {
     private ApplicationEventPublisher applicationEventPublisher;
 
     public void createPost(Post post) {
-        PostCreateEvent postEvent = new PostCreateEvent(post);
-        applicationEventPublisher.publishEvent(postEvent);
+        applicationEventPublisher.publishEvent(new PostCreateEvent(post));
     }
 }

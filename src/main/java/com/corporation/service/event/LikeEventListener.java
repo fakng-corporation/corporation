@@ -19,7 +19,7 @@ public class LikeEventListener {
 
     @EventListener
     @Transactional
-    public void deleteLikeEventListener(DeleteLikeEvent likeEvent) {
-        postStatsRepository.deleteLike(likeEvent.getPostId());
+    public void deleteLikeEventListener(DeleteLikeEvent deleteLikeEvent) {
+        postStatsRepository.deleteLike(deleteLikeEvent.getPostId());
     }
 }

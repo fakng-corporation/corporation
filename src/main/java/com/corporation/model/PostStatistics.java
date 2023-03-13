@@ -25,13 +25,13 @@ public class PostStatistics {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "likes")
+    @Column(name = "like")
     private long likes;
 
-    @Column(name = "views")
+    @Column(name = "view")
     private long views;
 
-    @Column(name = "comment_amount")
+    @Column(name = "comment")
     private long commentAmount;
 
     @OneToOne(cascade = CascadeType.MERGE)

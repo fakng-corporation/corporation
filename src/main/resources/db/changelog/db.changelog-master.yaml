@@ -38,4 +38,4 @@ databaseChangeLog:
   - include:
       file: db/changelog/alter-post-add-column-project-id.sql
   - include:
-      file: db/changelog/init-like.sql
+      file: db/changelog/init-statistics-and-like.sql
