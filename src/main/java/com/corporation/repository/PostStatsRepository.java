@@ -6,15 +6,18 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface PostStatsRepository extends CrudRepository<PostStatistics, Long> {
+
     @Modifying
-    @Query(nativeQuery = true, value = "UPDATE post_statistics SET likes = likes + 1 " +
-            "WHERE post_id = :postId")
+    @Query(nativeQuery = true, value = "UPDATE post_statistics SET \"like\" = \"like\" + 1 WHERE post_id = :postId")
     void addLike(long postId);
 
     @Modifying
-    @Query(nativeQuery = true, value = "UPDATE post_statistics SET likes = likes - 1 " +
-            "WHERE post_id = :postId")
+    @Query(nativeQuery = true, value = "UPDATE post_statistics SET \"like\" = \"like\" - 1 WHERE post_id = :postId")
     void deleteLike(long postId);
+
+    Optional<PostStatistics> findPostStatisticsByPostId(Long postId);
 }
