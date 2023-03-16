@@ -5,6 +5,7 @@ import com.corporation.mapper.PostMapper;
 import com.corporation.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,8 +26,9 @@ public class PostController {
     private final PostMapper postMapper;
 
     @PostMapping
-    public PostDto createPost(@RequestBody PostDto postDto) {
-        return postService.savePostDraft(postDto);
+    public PostDto createPost(@RequestBody PostDto postDto,
+                              @AuthenticationPrincipal(expression = "id") long userId) {
+        return postService.savePostDraft(postDto, userId);
     }
 
     @GetMapping("/user/{id}")

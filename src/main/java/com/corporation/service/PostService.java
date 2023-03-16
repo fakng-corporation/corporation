@@ -7,6 +7,7 @@ import com.corporation.model.Post;
 import com.corporation.model.Project;
 import com.corporation.model.User;
 import com.corporation.repository.PostRepository;
+import com.corporation.service.event.PostEventPublisher;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,9 +23,10 @@ public class PostService {
     private final PostMapper postMapper;
     private final UserService userService;
     private final ProjectService projectService;
+    private final PostEventPublisher postEventPublisher;
 
-    public PostDto savePostDraft(PostDto postDto) {
-        User user = userService.findById(postDto.getUserId());
+    public PostDto savePostDraft(PostDto postDto, long userId) {
+        User user = userService.findById(userId);
         Long projectId = postDto.getProjectId();
         Project project = projectId == null ? null : projectService.findById(projectId);
 
@@ -32,8 +34,10 @@ public class PostService {
         post.setUser(user);
         post.setProject(project);
         post.setPublished(false);
+        post = postRepository.save(post);
+        postEventPublisher.createPost(post);
 
-        return postMapper.toDto(postRepository.save(post));
+        return postMapper.toDto(post);
     }
 
     @Transactional
