@@ -1,6 +1,6 @@
 package com.corporation.service.event;
 
-import com.corporation.repository.PostStatsRepository;
+import com.corporation.repository.PostStatisticsRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.context.event.EventListener;
@@ -9,17 +9,17 @@ import org.springframework.stereotype.Service;
 @Service
 @AllArgsConstructor
 public class LikeEventListener {
-    private final PostStatsRepository postStatsRepository;
+    private final PostStatisticsRepository postStatisticsRepository;
 
     @EventListener
     @Transactional
-    public void addLikeEventListener(AddLikeEvent likeEvent) {
-        postStatsRepository.addLike(likeEvent.getPostId());
+    public void addLikeEventListener(AddLikeEvent addLikeEvent) {
+        postStatisticsRepository.addLike(addLikeEvent.getPostId());
     }
 
     @EventListener
     @Transactional
     public void deleteLikeEventListener(DeleteLikeEvent deleteLikeEvent) {
-        postStatsRepository.deleteLike(deleteLikeEvent.getPostId());
+        postStatisticsRepository.deleteLike(deleteLikeEvent.getPostId());
     }
 }

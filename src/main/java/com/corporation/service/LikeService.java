@@ -21,9 +21,9 @@ public class LikeService {
 
     @Transactional
     public void addLike(long postId, long userId) {
-        Optional<Like> likeFromTable = likeRepository.findByPostIdAndUserId(postId, userId);
+        Optional<Like> alreadyLiked = likeRepository.findByPostIdAndUserId(postId, userId);
 
-        likeFromTable.ifPresentOrElse(like -> {
+        alreadyLiked.ifPresentOrElse(like -> {
             likeRepository.delete(like);
             likeEventPublisher.deleteLike(postId);
         }, () -> {

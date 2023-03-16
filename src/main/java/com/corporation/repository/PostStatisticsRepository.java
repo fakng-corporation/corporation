@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface PostStatsRepository extends CrudRepository<PostStatistics, Long> {
+public interface PostStatisticsRepository extends CrudRepository<PostStatistics, Long> {
 
     @Modifying
     @Query(nativeQuery = true, value = "UPDATE post_statistics SET \"like\" = \"like\" + 1 WHERE post_id = :postId")

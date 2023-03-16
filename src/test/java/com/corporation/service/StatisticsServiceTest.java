@@ -2,7 +2,7 @@ package com.corporation.service;
 
 import com.corporation.mapper.PostStatisticsMapper;
 import com.corporation.model.PostStatistics;
-import com.corporation.repository.PostStatsRepository;
+import com.corporation.repository.PostStatisticsRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,7 +16,7 @@ import java.util.Optional;
 @ExtendWith(MockitoExtension.class)
 public class StatisticsServiceTest {
     @Mock
-    private PostStatsRepository postStatsRepository;
+    private PostStatisticsRepository postStatisticsRepository;
 
     @Mock
     private PostStatisticsMapper postStatisticsMapper;
@@ -29,7 +29,7 @@ public class StatisticsServiceTest {
         long postId = 1;
         Optional<PostStatistics> postStats = Optional.of(new PostStatistics());
 
-        Mockito.when(postStatsRepository.findPostStatisticsByPostId(postId))
+        Mockito.when(postStatisticsRepository.findPostStatisticsByPostId(postId))
                 .thenReturn(postStats);
         statisticsService.getPostStatistics(postId);
 

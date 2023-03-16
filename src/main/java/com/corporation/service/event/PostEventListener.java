@@ -1,7 +1,7 @@
 package com.corporation.service.event;
 
 import com.corporation.model.PostStatistics;
-import com.corporation.repository.PostStatsRepository;
+import com.corporation.repository.PostStatisticsRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.context.event.EventListener;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 @AllArgsConstructor
 public class PostEventListener {
-    private PostStatsRepository postStatsRepository;
+    private PostStatisticsRepository postStatisticsRepository;
 
     @EventListener
     @Transactional
@@ -18,6 +18,6 @@ public class PostEventListener {
         PostStatistics postStatistics = new PostStatistics();
         postStatistics.setPost(postEvent.getPost());
 
-        postStatsRepository.save(postStatistics);
+        postStatisticsRepository.save(postStatistics);
     }
 }
